@@ -1,0 +1,44 @@
+{
+    "inverurie": {
+        "title": "Inverurie",
+        "category": [
+            "towns"
+        ],
+        "body": "Inverurie is located in the valley of the River Don at the centre of Aberdeenshire and is known locally as the Capital of the Garioch. It sits between the River Don and the River Ury and is only 10 miles (16 km) from the imposing hill of Bennachie. The town centre is triangular and is dominated by the grand Town Hall built in 1862. In the middle of the 'square' (as it is known locally) is the Inverurie and District War Memorial, capped by a lone Gordon Highlander looking out over the town. The main shopping areas include the Market Place and West High Street which branches off from the centre towards the more residential part of the town. South of the River Don is the village of Port Elphinstone, which is part of the Royal Burgh of Inverurie and is so called due to the proximity of the Aberdeenshire Canal (Inverurie to Aberdeen) (now disused)."
+    },
+    "kemnay": {
+        "title": "Kemnay",
+        "category": [
+            "towns"
+        ],
+        "body": "Kemnay is popular with explorers of Aberdeenshire who can stay in numerous guest houses, hotels, and bed and breakfasts within the village. There are three pubs, the Laird's Throat, the Bennachie Lodge, and the Burnett Arms Hotel. Tourists also flock to Kemnay hoping to catch a glimpse of the elusive Dark Beast of Kemnay, known to stalk the surrounding countryside."
+    },
+    "kintore": {
+        "title": "Kintore",
+        "category": [
+            "towns"
+        ],
+        "body": "Kintore is a town and former royal burgh near Inverurie in Aberdeenshire, Scotland, now bypassed by the A96 road between Aberdeen and Inverness. The name Kintore comes from the Gaelic, Ceann Tòrr. Ceann means the head, or the end, and Tòrr means a round hill. So the name signifies that the town was at the head or end of a round hill. This probably refers to Tuach Hill to the south of the town"
+    },
+    "braemar": {
+        "title": "Braemar",
+        "category": [
+            "towns"
+        ],
+        "body": "The Gaelic Bràigh Mhàrr properly refers to the area of upper Marr (as it literally means), i.e. the area of Marr to the west of Aboyne, the village itself being Castleton of Braemar (Baile a' Chaisteil). The village used to be known as Cinn Drochaid (bridge end), while Baile a' Chaisteil only referred to the part of the village on the east bank of the river, the part on the west bank being known as Ach an Droighinn (thorn field)."
+    },
+    "ballater": {
+        "title": "Ballater",
+        "category": [
+            "towns"
+        ],
+        "body": "Ballater (Scottish Gaelic: Bealadair) is a burgh in Aberdeenshire, Scotland on the River Dee, immediately east of the Cairngorm Mountains. Situated at a height of 213 m (700 ft) in elevation, Ballater is a centre for hikers and known for its spring water, once said to cure scrofula."
+    },
+    "aberdeen": {
+        "title": "Aberdeen",
+        "category": [
+            "towns"
+        ],
+        "body": "Aberdeen received Royal Burgh status from King David I (1124–53),[9] transforming the city economically. The city's two universities, the University of Aberdeen, founded in 1495, and The Robert Gordon University, which was awarded university status in 1992, make Aberdeen the educational centre of the north-east. The traditional industries of fishing, paper-making, shipbuilding, and textiles have been overtaken by the oil industry and Aberdeen's seaport. Aberdeen Heliport is one of the busiest commercial heliports in the world[10] and the seaport is the largest in the north-east of Scotland.[11]"
+    }
+}
