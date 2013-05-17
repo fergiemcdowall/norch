@@ -37,6 +37,8 @@ var express = require('express')
   }
 
 
+//curl localhost:3000/search?q=aberdeen\&weight=%22category%22:10
+
   app.get('/search', function(req, res) {
     
     getVectorSet(req, 0, {});
@@ -161,6 +163,7 @@ var express = require('express')
   });
 
 
+//curl --form document=@lawrie.txt --form category=golfer --form hometown=aberdeen http://localhost:3000/indexer
 
   app.post('/indexer', function(req, res) {
     //use key if found, if no key is found set filename to be key.
