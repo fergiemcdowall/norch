@@ -118,7 +118,6 @@ var express = require('express')
 
       //ADD FIELDED SEARCH
 
-      //ADD FACETS
 
   //collate and collapse results
       if (resultSet.length > 0) {
@@ -163,23 +162,32 @@ var express = require('express')
   });
 
 
-//curl --form document=@lawrie.txt --form category=golfer --form hometown=aberdeen http://localhost:3000/indexer
+//curl --form document=@testdata.json http://localhost:3000/indexer
 
   app.post('/indexer', function(req, res) {
-    //use key if found, if no key is found set filename to be key.
+    var batch = JSON.parse(fs.readFileSync(req.files.document.path, 'utf8'));
+    for (docID in batch) {
+      console.log(docID);
+      indexDoc(docID, batch[docID]);
+    }
+    res.send('indexed');
+  });
+
+
+
+  function indexDoc(docID, doc) {
+   //use key if found, if no key is found set filename to be key.
     tfidf = new TfIdf();
-    var batch = [];
-    debugger;
-    var id = req.files.document.name;
-    var file = req.files.document.path;
+    var fieldBatch = [];
+    var id = docID;
 //DOCS
 //work out the vector for the uploaded file in the URL request
-    tfidf.addDocument(fs.readFileSync(file, 'utf8'), id);
+    tfidf.addDocument(doc.body, docID);
 
     //doc is the collection of vectors + fields for each document
     var doc = [];
     doc.push(tfidf);
-    doc.push({'fields':req.body});
+    doc.push({'fields':doc.body});
     //generate reverse index for file
     //FORMAT:
     //<keyword>~CONTENT~SEEVALUE~<docID>
@@ -188,34 +196,33 @@ var express = require('express')
         if (k != '__key') {
           var tokenKey = k + '~CONTENT~' + id;
           tfidf.documents[i]['__keyword'] = k;
-          batch.push({type:'put', key:tokenKey, value:JSON.stringify(doc)});
+          fieldBatch.push({type:'put', key:tokenKey, value:doc});
         }
       }
     }
   //FIELDS
   //work out the vector for each field in the URL request.
-    for (var URLParamKey in req.body) {
-      tfidf.addDocument(req.body[URLParamKey], id + '~' + URLParamKey);  
+//    for (var URLParamKey in req.body) {
+    for (fieldKey in doc) {
+      tfidf.addDocument(doc[fieldKey], id + '~' + fieldKey);  
       for (var k in tfidf.documents[tfidf.documents.length - 1]) {
         if (k != '__key') {
-          var tokenKey = k + '~' + URLParamKey + '~' + id;
+          var tokenKey = k + '~' + fieldKey + '~' + id;
           tfidf.documents[i]['__keyword'] = k;
-          batch.push({type:'put', key:tokenKey, value:JSON.stringify(doc)});
+          fieldBatch.push({type:'put', key:tokenKey, value:doc});
         }
       } 
     }
 debugger;
 
 //put key-values into database
-    reverseIndex.batch(batch, function (err) {
+    reverseIndex.batch(fieldBatch, function (err) {
       if (err) return console.log('Ooops!', err);
-      res.send('added ' + id + '\n');
+      return;
     });
+  }
 
-
-  });
-
-
+  
 
 
   http.createServer(app).listen(app.get('port'), function(){
