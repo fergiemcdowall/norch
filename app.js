@@ -8,7 +8,8 @@ var express = require('express')
   , fs = require('fs')
   , path = require('path')
   , levelup = require('levelup')
-  , natural = require('natural');
+  , natural = require('natural')
+  , norch = require('./norch.js');
 
 
 
@@ -78,6 +79,7 @@ var express = require('express')
       queryTerms = req.query['q'].split(' ');
       var docVectors = {'documents':[]};
       var facets = {};
+
       for (var k in docValues) {
         for (var j = 0; j < docValues[k][0].documents.length; j++) {
           //filter out metadata that doesnt contain query terms
@@ -86,7 +88,10 @@ var express = require('express')
           }
           //build up facets
           for (l in docValues[k][1]['fields']) {
-            if (!facets[l]) {
+            if (l == 'body') {
+              //dont treat body as metadata
+            }
+            else if (!facets[l]) {
               facets[l] = JSON.parse('{"' + docValues[k][1]['fields'][l] + '":1}');
             }
             else if (!facets[l][docValues[k][1]['fields'][l]]) {
@@ -97,6 +102,7 @@ var express = require('express')
             }
             debugger;
           }
+
         }
       }
       var tfidf = new TfIdf(docVectors);
@@ -156,73 +162,29 @@ var express = require('express')
         facets: facets
       };
       debugger; 
+
       res.send(response);
     }
 
   });
 
 
+
+
+
+
 //curl --form document=@testdata.json http://localhost:3000/indexer
 
   app.post('/indexer', function(req, res) {
     var batch = JSON.parse(fs.readFileSync(req.files.document.path, 'utf8'));
+    var indexer = norch.indexDoc;
     for (docID in batch) {
       console.log(docID);
-      indexDoc(docID, batch[docID]);
+      indexer(docID, batch[docID], reverseIndex);
     }
-    res.send('indexed');
+    res.send('indexed\n');
   });
 
-
-
-  function indexDoc(docID, doc) {
-   //use key if found, if no key is found set filename to be key.
-    tfidf = new TfIdf();
-    var fieldBatch = [];
-    var id = docID;
-//DOCS
-//work out the vector for the uploaded file in the URL request
-    tfidf.addDocument(doc.body, docID);
-
-    //doc is the collection of vectors + fields for each document
-    var doc = [];
-    doc.push(tfidf);
-    doc.push({'fields':doc.body});
-    //generate reverse index for file
-    //FORMAT:
-    //<keyword>~CONTENT~SEEVALUE~<docID>
-    for (var i = 0; i < tfidf.documents.length; i++) {
-      for (var k in tfidf.documents[i]) {
-        if (k != '__key') {
-          var tokenKey = k + '~CONTENT~' + id;
-          tfidf.documents[i]['__keyword'] = k;
-          fieldBatch.push({type:'put', key:tokenKey, value:doc});
-        }
-      }
-    }
-  //FIELDS
-  //work out the vector for each field in the URL request.
-//    for (var URLParamKey in req.body) {
-    for (fieldKey in doc) {
-      tfidf.addDocument(doc[fieldKey], id + '~' + fieldKey);  
-      for (var k in tfidf.documents[tfidf.documents.length - 1]) {
-        if (k != '__key') {
-          var tokenKey = k + '~' + fieldKey + '~' + id;
-          tfidf.documents[i]['__keyword'] = k;
-          fieldBatch.push({type:'put', key:tokenKey, value:doc});
-        }
-      } 
-    }
-debugger;
-
-//put key-values into database
-    reverseIndex.batch(fieldBatch, function (err) {
-      if (err) return console.log('Ooops!', err);
-      return;
-    });
-  }
-
-  
 
 
   http.createServer(app).listen(app.get('port'), function(){
