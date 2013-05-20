@@ -1,15 +1,24 @@
- 
-  exports.indexBatch = function(batchString, reverseIndex, callback) {
+  var  levelup = require('levelup')
+  , natural = require('natural')
+  , fs = require('fs');
+
+  var reverseIndex = levelup('./reverseIndex');
+  
+  TfIdf = natural.TfIdf,
+  tfidf = new natural.TfIdf();  //need this line?
+
+
+  exports.indexBatch = function(batchString, callback) {
     var batch = JSON.parse(batchString);
     for (docID in batch) {
       console.log(docID);
       indexDoc(docID, batch[docID], reverseIndex);
     }
-    callback('indexed callbackily\n');
+    callback('indexed\n');
   }
 
 
-  function indexDoc(docID, doc, reverseIndex) {
+  function indexDoc(docID, doc) {
    //use key if found, if no key is found set filename to be key.
     tfidf = new TfIdf();
     var fieldBatch = [];
@@ -57,7 +66,8 @@ debugger;
   }
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
-  exports.search = function (req, i, docValues, reverseIndex, callback) {
+  exports.search = function (req, callback) {
+
     getVectorSet(req, 0, {}, reverseIndex, function(msg) {
       callback(msg);
     });
