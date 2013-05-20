@@ -48,13 +48,10 @@ var express = require('express')
 
 //curl --form document=@testdata.json http://localhost:3000/indexer
   app.post('/indexer', function(req, res) {
-    var batch = JSON.parse(fs.readFileSync(req.files.document.path, 'utf8'));
-    var indexer = norch.indexDoc;
-    for (docID in batch) {
-      console.log(docID);
-      indexer(docID, batch[docID], reverseIndex);
-    }
-    res.send('indexed\n');
+    var batch = fs.readFileSync(req.files.document.path, 'utf8');
+    norch.indexBatch(batch, reverseIndex, function(msg) {
+      res.send(msg);
+    });
   });
 
 

@@ -1,6 +1,15 @@
  
+  exports.indexBatch = function(batchString, reverseIndex, callback) {
+    var batch = JSON.parse(batchString);
+    for (docID in batch) {
+      console.log(docID);
+      indexDoc(docID, batch[docID], reverseIndex);
+    }
+    callback('indexed callbackily\n');
+  }
 
-  exports.indexDoc = function(docID, doc, reverseIndex) {
+
+  function indexDoc(docID, doc, reverseIndex) {
    //use key if found, if no key is found set filename to be key.
     tfidf = new TfIdf();
     var fieldBatch = [];
