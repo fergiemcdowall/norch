@@ -8,7 +8,7 @@
   tfidf = new natural.TfIdf();  //need this line?
 
 
-  exports.indexBatch = function(batchString, callback) {
+  exports.index = function(batchString, callback) {
     var batch = JSON.parse(batchString);
     for (docID in batch) {
       console.log(docID);

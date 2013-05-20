@@ -40,7 +40,7 @@ var express = require('express')
 //curl --form document=@testdata.json http://localhost:3000/indexer
   app.post('/indexer', function(req, res) {
     var batch = fs.readFileSync(req.files.document.path, 'utf8');
-    norch.indexBatch(batch, function(msg) {
+    norch.index(batch, function(msg) {
       res.send(msg);
     });
   });
