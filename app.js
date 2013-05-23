@@ -29,9 +29,26 @@ if ('development' == app.get('env')) {
 }
 
 
+function getQuery(req) {
+  var q = {};
+  q['query'] = req.query['q'].split(' ');
+  q['weight'] = {};
+  var weightURLParam = req.query['w'].split(',');
+  for (var i = 0; i < weightURLParam.length; i++) {
+    var field = weightURLParam[i].split(':')[0];
+    console.log(weightURLParam[i]);
+    var weightFactor = weightURLParam[i].split(':')[1];
+    q['weight'][field] = weightFactor;
+  }
+  return q;
+}
+
+
+
 //curl localhost:3000/search?q=aberdeen\&weight=%22category%22:10
 app.get('/search', function(req, res) {
-  norch.search(req, function(msg) {
+  q = getQuery(req);
+  norch.search(q, function(msg) {
     res.send(msg);
   });
 });

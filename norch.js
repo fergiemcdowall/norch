@@ -54,7 +54,6 @@ function indexDoc(docID, doc) {
       }
     } 
   }
-  debugger;
 
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
@@ -64,15 +63,14 @@ function indexDoc(docID, doc) {
 }
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
-exports.search = function (req, callback) {
-
-  getVectorSet(req, 0, {}, reverseIndex, function(msg) {
+exports.search = function (q, callback) {
+  getVectorSet(q, 0, {}, reverseIndex, function(msg) {
     callback(msg);
   });
 }
 
-function getVectorSet (req, i, docValues, reverseIndex, callback) {
-  queryTerms = req.query['q'].split(' ');
+function getVectorSet (q, i, docValues, reverseIndex, callback) {
+  queryTerms = q['query'];
   reverseIndex.createReadStream({
     start:queryTerms[i] + "~",
     end:queryTerms[i] + "~~"}) 
@@ -92,11 +90,11 @@ function getVectorSet (req, i, docValues, reverseIndex, callback) {
     .on('end', function () {
       if (i < (queryTerms.length - 1)) {
         //evaluate the next least common term
-        getVectorSet(req, ++i, docValues, reverseIndex, callback);
+        getVectorSet(q, ++i, docValues, reverseIndex, callback);
       }
       else {
         //all least common terms evaluated- go to results
-        displayResults(req, docValues, function(msg) {
+        displayResults(q, docValues, function(msg) {
           callback(msg);
         });
       }
@@ -104,8 +102,8 @@ function getVectorSet (req, i, docValues, reverseIndex, callback) {
 }
 
 
-function displayResults(req, docValues, callback) {
-  queryTerms = req.query['q'].split(' ');
+function displayResults(q, docValues, callback) {
+  queryTerms = q['query'];
   var docVectors = {'documents':[]};
   var facets = {};
   for (var k in docValues) {
@@ -128,7 +126,6 @@ function displayResults(req, docValues, callback) {
         else {
           facets[l][docValues[k][1]['fields'][l]] = (facets[l][docValues[k][1]['fields'][l]] + 1);
         }
-        debugger;
       }
 
     }
@@ -136,9 +133,8 @@ function displayResults(req, docValues, callback) {
   var tfidf = new TfIdf(docVectors);
   var resultSet = [];
   var collatedResultSet = [];
-
   //carry out tfidf analysis, remove vectors with a score of 0
-  tfidf.tfidfs(queryTerms.join(' '), function(i, measure) {
+  tfidf.tfidfs(queryTerms, function(i, measure) {
     var keyParts = docVectors.documents[i].__key.split('~');
     resultSet.push([
       measure,
@@ -159,8 +155,8 @@ function displayResults(req, docValues, callback) {
     var runningScore = 0;
     var scoringExplanation = '';
     //?weight:field1:2,field2:4
-    var weighting = JSON.parse('{' + req.query['weight'] + '}');
-
+//    var weighting = JSON.parse('{' + req.query['weight'] + '}');
+      var weighting = q['weight'];
     for (var i = 0; i < resultsSortedOnID.length; i++) {
       score = resultSet[i][0];
       if (weighting[resultSet[i][4]]) {
@@ -183,12 +179,11 @@ function displayResults(req, docValues, callback) {
   }
 
   var response = {
-    query: queryTerms.join(' '),
+    query: queryTerms,
     //rawResultset: resultSet,
     resultset: collatedResultSet.sort(function(a,b){return b[1]-a[1]}),
     facets: facets
   };
-  debugger; 
 
   callback(response);
 }
