@@ -44,6 +44,12 @@ function getQuery(req) {
 }
 
 
+app.get('/dumpIndex', function(req, res) {
+  norch.dumpIndex(req.query['start'], req.query['stop'], function(msg) {
+    res.send(msg);
+  });
+});
+
 
 //curl localhost:3000/search?q=aberdeen\&weight=%22category%22:10
 app.get('/search', function(req, res) {

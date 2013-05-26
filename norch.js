@@ -6,6 +6,21 @@ var reverseIndex = levelup('./reverseIndex')
 , TfIdf = require('natural').TfIdf;
 
 
+exports.dumpIndex = function(start, stop, callback) {
+  var dump = '';
+  reverseIndex.createReadStream({
+    start:start + "~",
+    end:stop + "~~"})
+    .on('data', function(data) {
+      dump += data.key + '<br>'
+      + data.value + '<br><br>';
+    })
+    .on('end', function() {
+      callback(dump);
+    });
+}
+
+
 exports.index = function(batchString, callback) {
   var batch = JSON.parse(batchString);
   for (docID in batch) {
@@ -18,43 +33,26 @@ exports.index = function(batchString, callback) {
 
 function indexDoc(docID, doc) {
   //use key if found, if no key is found set filename to be key.
-  tfidf = new TfIdf();
   var fieldBatch = [];
   var id = docID;
-  //DOCS
-  //work out the vector for the uploaded file in the URL request
-  tfidf.addDocument(doc.body, docID);
-
-  //doc is the collection of vectors + fields for each document
-  var docVectors = [];
-  docVectors.push(tfidf);
-  docVectors.push({'fields':doc});
-  //generate reverse index for file
-  //FORMAT:
-  //<keyword>~CONTENT~SEEVALUE~<docID>
-  for (var i = 0; i < tfidf.documents.length; i++) {
-    for (var k in tfidf.documents[i]) {
-      if (k != '__key') {
-        var tokenKey = k + '~CONTENT~' + id;
-        tfidf.documents[i]['__keyword'] = k;
-        fieldBatch.push({type:'put', key:tokenKey, value:JSON.stringify(docVectors)});
-      }
-    }
-  }
-  //FIELDS
-  //work out the vector for each field in the URL request.
-  //    for (var URLParamKey in req.body) {
+  var value = {};
+  value['fields'] = doc;
   for (fieldKey in doc) {
-    tfidf.addDocument(doc[fieldKey], id + '~' + fieldKey);  
+    tfidf = new TfIdf();
+    tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
     for (var k in tfidf.documents[tfidf.documents.length - 1]) {
       if (k != '__key') {
         var tokenKey = k + '~' + fieldKey + '~' + id;
-        tfidf.documents[i]['__keyword'] = k;
-        fieldBatch.push({type:'put', key:tokenKey, value:JSON.stringify(docVectors)});
+        tfidfx = new TfIdf();
+        tfidfx.addDocument(doc[fieldKey], tokenKey);
+        value['vector'] = tfidfx['documents'][0];
+        fieldBatch.push
+        ({type:'put',
+          key:tokenKey,
+          value:JSON.stringify(value)});
       }
-    } 
+    }
   }
-
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
     if (err) return console.log('Ooops!', err);
@@ -62,39 +60,46 @@ function indexDoc(docID, doc) {
   });
 }
 
+
+
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
-  getVectorSet(q, 0, {}, reverseIndex, function(msg) {
+  getVectorSet(q, 0, [], {}, reverseIndex, function(msg) {
     callback(msg);
   });
 }
 
-function getVectorSet (q, i, docValues, reverseIndex, callback) {
+
+
+
+function getVectorSet (q, i, vectorSet, docSet, reverseIndex, callback) {
   queryTerms = q['query'];
   reverseIndex.createReadStream({
     start:queryTerms[i] + "~",
     end:queryTerms[i] + "~~"}) 
     .on('data', function (data) {
       console.log(data.key);
+      var val = JSON.parse(data.value);
       //remove documents that dont contain all queryTerms
       hasAllTerms = true;
       for (var j = 0; j < queryTerms.length; j++){
-        if (data.value.indexOf(queryTerms[j]) == -1) {
+        if (!val.vector.hasOwnProperty(queryTerms[j].toLowerCase())) {
           hasAllTerms = false;
         }          
       }
       if (hasAllTerms) {
-        docValues[data.key] = JSON.parse(data.value);
+        vectorSet.push(val.vector);
+        docSet[data.key] = val.fields;
       }
     })
     .on('end', function () {
       if (i < (queryTerms.length - 1)) {
         //evaluate the next least common term
-        getVectorSet(q, ++i, docValues, reverseIndex, callback);
+        getVectorSet(q, ++i, vectorSet, docSet, reverseIndex, callback);
       }
       else {
         //all least common terms evaluated- go to results
-        displayResults(q, docValues, function(msg) {
+        displayResults(q, vectorSet, docSet, function(msg) {
           callback(msg);
         });
       }
@@ -102,85 +107,74 @@ function getVectorSet (q, i, docValues, reverseIndex, callback) {
 }
 
 
-function displayResults(q, docValues, callback) {
+function displayResults(q, vectorSet, docSet, callback) {
   queryTerms = q['query'];
-  var docVectors = {'documents':[]};
+  var docVectors = {'documents':vectorSet};
   var facets = {};
-  for (var k in docValues) {
-    for (var j = 0; j < docValues[k][0].documents.length; j++) {
-      //filter out metadata that doesnt contain query terms
-      if (queryTerms.indexOf(docValues[k][0].documents[j]['__keyword']) != -1) {
-        docVectors.documents.push(docValues[k][0].documents[j]);
-      }
-      //build up facets
-      for (l in docValues[k][1]['fields']) {
-        if (l == 'body') {
-          //dont treat body as metadata
-        }
-        else if (!facets[l]) {
-          facets[l] = JSON.parse('{"' + docValues[k][1]['fields'][l] + '":1}');
-        }
-        else if (!facets[l][docValues[k][1]['fields'][l]]) {
-          facets[l][docValues[k][1]['fields'][l]] = 1;
-        }
-        else {
-          facets[l][docValues[k][1]['fields'][l]] = (facets[l][docValues[k][1]['fields'][l]] + 1);
-        }
-      }
 
-    }
-  }
   var tfidf = new TfIdf(docVectors);
   var resultSet = [];
   var collatedResultSet = [];
   //carry out tfidf analysis, remove vectors with a score of 0
   tfidf.tfidfs(queryTerms, function(i, measure) {
-    var keyParts = docVectors.documents[i].__key.split('~');
+    var key = docVectors.documents[i].__key;
+    var keyParts = key.split('~');
     resultSet.push([
-      measure,
-      docVectors.documents[i].__key,
+      keyParts[2],
+      keyParts[1],
       keyParts[0],
-      docVectors.documents[i].__keyword,
-      keyParts[1]]);
+      key,
+      measure]);
   });
   //no results
-
 
   //ADD FIELDED SEARCH
 
 
   //collate and collapse results
   if (resultSet.length > 0) {
-    resultsSortedOnID = resultSet.sort(function(a, b) { return (a[2] < b[2] ? -1 : (a[2] > b[2] ? 1 : 0)); });
-    var runningScore = 0;
-    var scoringExplanation = '';
-    //?weight:field1:2,field2:4
-//    var weighting = JSON.parse('{' + req.query['weight'] + '}');
-      var weighting = q['weight'];
+    resultsSortedOnID = resultSet.sort(function(a, b) {
+      return (a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0));
+    });
+
+//    var runningScore = 0;
+    var weighting = q['weight'];
+    var scoringExplanation = new Array();
     for (var i = 0; i < resultsSortedOnID.length; i++) {
-      score = resultSet[i][0];
-      if (weighting[resultSet[i][4]]) {
-        score = score*weighting[resultSet[i][4]];
-        scoringExplanation += resultSet[i][4] + ' is weighted by a factor of ' + weighting[resultSet[i][4]] + '; ';
+      var docID = resultSet[i][0];
+      var score;
+      var unweightedScore = resultSet[i][4];
+      var fieldName = resultSet[i][1];
+      var weight = 1;
+      if (weighting[fieldName]) {
+        weight = weighting[fieldName];
+        score = unweightedScore*weight;
       }
-      runningScore += score;
-      scoringExplanation += resultSet[i][1] + ' yields ' + score + ' for ' + resultSet[i][3] + '; ';
-      if (i == (resultsSortedOnID.length - 1)) { 
-        collatedResultSet.push([resultSet[i][2], runningScore, scoringExplanation]);
+      scoringExplanation.push([fieldName, unweightedScore, weight]);
+      if (i == (resultsSortedOnID.length - 1)) {
+        var runningScore = 0;
+        for (var j = 0; j < scoringExplanation.length; j++) {
+          runningScore = runningScore + (scoringExplanation[j][1]*scoringExplanation[j][2])
+        }
+        collatedResultSet.push([docID, runningScore, scoringExplanation]);
+        scoringExplanation = new Array();
+        //facet
+        debugger;
       }
-      else if (resultsSortedOnID[i][2] == resultsSortedOnID[i + 1][2]) {     //do nothing
-      }
-      else {
-        collatedResultSet.push([resultSet[i][2], runningScore, scoringExplanation]);
-        runningScore = 0;
-        scoringExplanation = '';
+      else if (docID != resultsSortedOnID[i + 1][0]){
+        var runningScore = 0;
+        for (var j = 0; j < scoringExplanation.length; j++) {
+          runningScore = runningScore + (scoringExplanation[j][1]*scoringExplanation[j][2])
+        }
+        collatedResultSet.push([docID, runningScore, scoringExplanation]);
+        scoringExplanation = new Array();  
       }
     }
   }
 
   var response = {
     query: queryTerms,
-    //rawResultset: resultSet,
+//    rawResultset: resultSet,
     resultset: collatedResultSet.sort(function(a,b){return b[1]-a[1]}),
     facets: facets
   };
