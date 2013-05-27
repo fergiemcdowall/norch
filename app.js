@@ -37,10 +37,17 @@ function getQuery(req) {
   var weightURLParam = req.query['w'].split(',');
   for (var i = 0; i < weightURLParam.length; i++) {
     var field = weightURLParam[i].split(':')[0];
-    console.log(weightURLParam[i]);
     var weightFactor = weightURLParam[i].split(':')[1];
     q['weight'][field] = weightFactor;
   }
+  q['filter'] = {};
+  var filterURLParam = req.query['filter'].split(',');
+  for (var i = 0; i < filterURLParam.length; i++) {
+    var field = filterURLParam[i].split(':')[0];
+    var filterValue = filterURLParam[i].split(':')[1];
+    q['filter'][field] = filterValue;
+  }
+  console.log(q);
   return q;
 }
 

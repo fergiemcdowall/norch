@@ -82,12 +82,22 @@ function getVectorSet (q, i, vectorSet, docSet, reverseIndex, callback) {
       var val = JSON.parse(data.value);
       //remove documents that dont contain all queryTerms
       hasAllTerms = true;
+      //apply filters
+      satisfiesFilter = true;
       for (var j = 0; j < queryTerms.length; j++){
         if (!val.vector.hasOwnProperty(queryTerms[j].toLowerCase())) {
           hasAllTerms = false;
-        }          
+        }
       }
-      if (hasAllTerms) {
+      for (filterField in q.filter) {
+        if (!val.fields[filterField]) {
+          satisfiesFilter = false;            
+        }
+        else if (val.fields[filterField] != q.filter[filterField]) {
+          satisfiesFilter = false;
+        } 
+      }
+      if (hasAllTerms && satisfiesFilter) {
         vectorSet.push(val.vector);
         docSet[data.key] = val.fields;
       }
@@ -130,9 +140,6 @@ function displayResults(q, vectorSet, docSet, callback) {
   });
   //no results
 
-  //ADD FIELDED SEARCH
-
-
   //collate and collapse results
   if (resultSet.length > 0) {
     resultsSortedOnID = resultSet.sort(function(a, b) {
@@ -164,19 +171,32 @@ function displayResults(q, vectorSet, docSet, callback) {
         var fieldDesc = {}
         var runningScore = 0;
         for (var j = 0; j < scoringExplanation.length; j++) {
-          debugger;
           fieldDesc[scoringExplanation[j][0]] =
-            {'value': docSet[fieldKey]['body'],
-             'tfidf': scoringExplanation[j][1],
-             'weight': scoringExplanation[j][2],
-             'score': (scoringExplanation[j][1]*scoringExplanation[j][2])};
+//            {'value': docSet[fieldKey][scoringExplanation[j][0]],
+//             'tfidf': scoringExplanation[j][1],
+//             'weight': scoringExplanation[j][2],
+//             'score': (scoringExplanation[j][1]*scoringExplanation[j][2])};
           runningScore = runningScore 
             + (scoringExplanation[j][1]*scoringExplanation[j][2])
         }
         for (field in docSet[fieldKey]) {
+          console.log(field);
+          fieldDesc[field] =
+            {'value': docSet[fieldKey][field],
+             'tfidf': 0,
+             'weight': 0,
+             'score': 0};
+          for (var j = 0; j < scoringExplanation.length; j++) {
+            if (scoringExplanation[j].indexOf(field) != -1) {
+              fieldDesc[field] =
+                {'value': docSet[fieldKey][scoringExplanation[j][0]],
+                 'tfidf': scoringExplanation[j][1],
+                 'weight': scoringExplanation[j][2],
+                 'score': (scoringExplanation[j][1]*scoringExplanation[j][2])};         
+            }
+          }
+          debugger;
           if (q['facets'].indexOf(field) != -1) {
-            console.log(docSet[fieldKey][field]);
-            debugger;
             if (facets[field][docSet[fieldKey][field]]) {
               facets[field][docSet[fieldKey][field]] =
                 (facets[field][docSet[fieldKey][field]] + 1);
