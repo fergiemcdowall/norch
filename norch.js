@@ -161,11 +161,18 @@ function displayResults(q, vectorSet, docSet, callback) {
         pushToResultset();
       }
       function pushToResultset() {
+        var fieldDesc = {}
         var runningScore = 0;
         for (var j = 0; j < scoringExplanation.length; j++) {
-          runningScore = runningScore + (scoringExplanation[j][1]*scoringExplanation[j][2])
+          debugger;
+          fieldDesc[scoringExplanation[j][0]] =
+            {'value': docSet[fieldKey]['body'],
+             'tfidf': scoringExplanation[j][1],
+             'weight': scoringExplanation[j][2],
+             'score': (scoringExplanation[j][1]*scoringExplanation[j][2])};
+          runningScore = runningScore 
+            + (scoringExplanation[j][1]*scoringExplanation[j][2])
         }
-        var fieldDesc = {}
         for (field in docSet[fieldKey]) {
           if (q['facets'].indexOf(field) != -1) {
             console.log(docSet[fieldKey][field]);
@@ -177,21 +184,21 @@ function displayResults(q, vectorSet, docSet, callback) {
             else {
               facets[field][docSet[fieldKey][field]] = 1;
             }
-            debugger;
           }
         }
         collatedResultSet.push([docID,
                                 runningScore,
-                                scoringExplanation,
-                                docSet[fieldKey]]);
+//                                scoringExplanation,
+//                                docSet[fieldKey],
+                                fieldDesc]);
         scoringExplanation = new Array();
       }
     }
   }
 
   var response = {
-    query: queryTerms,
-    rawResultset: resultSet,
+    query: q,
+//    rawResultset: resultSet,
     resultset: collatedResultSet.sort(function(a,b){return b[1]-a[1]}),
     facets: facets
   };
