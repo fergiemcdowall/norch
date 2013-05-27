@@ -111,7 +111,9 @@ function displayResults(q, vectorSet, docSet, callback) {
   queryTerms = q['query'];
   var docVectors = {'documents':vectorSet};
   var facets = {};
-
+  for (var i = 0; i < q['facets'].length; i++) {
+    facets[q['facets'][i]] = {};
+  }
   var tfidf = new TfIdf(docVectors);
   var resultSet = [];
   var collatedResultSet = [];
@@ -145,6 +147,7 @@ function displayResults(q, vectorSet, docSet, callback) {
       var score;
       var unweightedScore = resultSet[i][4];
       var fieldName = resultSet[i][1];
+      var fieldKey = resultSet[i][3];
       var weight = 1;
       if (weighting[fieldName]) {
         weight = weighting[fieldName];
@@ -152,29 +155,43 @@ function displayResults(q, vectorSet, docSet, callback) {
       }
       scoringExplanation.push([fieldName, unweightedScore, weight]);
       if (i == (resultsSortedOnID.length - 1)) {
-        var runningScore = 0;
-        for (var j = 0; j < scoringExplanation.length; j++) {
-          runningScore = runningScore + (scoringExplanation[j][1]*scoringExplanation[j][2])
-        }
-        collatedResultSet.push([docID, runningScore, scoringExplanation]);
-        scoringExplanation = new Array();
-        //facet
-        debugger;
+        pushToResultset();
       }
       else if (docID != resultsSortedOnID[i + 1][0]){
+        pushToResultset();
+      }
+      function pushToResultset() {
         var runningScore = 0;
         for (var j = 0; j < scoringExplanation.length; j++) {
           runningScore = runningScore + (scoringExplanation[j][1]*scoringExplanation[j][2])
         }
-        collatedResultSet.push([docID, runningScore, scoringExplanation]);
-        scoringExplanation = new Array();  
+        var fieldDesc = {}
+        for (field in docSet[fieldKey]) {
+          if (q['facets'].indexOf(field) != -1) {
+            console.log(docSet[fieldKey][field]);
+            debugger;
+            if (facets[field][docSet[fieldKey][field]]) {
+              facets[field][docSet[fieldKey][field]] =
+                (facets[field][docSet[fieldKey][field]] + 1);
+            }
+            else {
+              facets[field][docSet[fieldKey][field]] = 1;
+            }
+            debugger;
+          }
+        }
+        collatedResultSet.push([docID,
+                                runningScore,
+                                scoringExplanation,
+                                docSet[fieldKey]]);
+        scoringExplanation = new Array();
       }
     }
   }
 
   var response = {
     query: queryTerms,
-//    rawResultset: resultSet,
+    rawResultset: resultSet,
     resultset: collatedResultSet.sort(function(a,b){return b[1]-a[1]}),
     facets: facets
   };

@@ -32,6 +32,7 @@ if ('development' == app.get('env')) {
 function getQuery(req) {
   var q = {};
   q['query'] = req.query['q'].split(' ');
+  q['facets'] = req.query['f'].split(',');
   q['weight'] = {};
   var weightURLParam = req.query['w'].split(',');
   for (var i = 0; i < weightURLParam.length; i++) {
