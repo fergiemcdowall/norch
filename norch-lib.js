@@ -24,7 +24,7 @@ exports.dumpIndex = function(start, stop, callback) {
 exports.index = function(batchString, callback) {
   var batch = JSON.parse(batchString);
   for (docID in batch) {
-    console.log(docID);
+//    console.log(docID);
     indexDoc(docID, batch[docID], reverseIndex);
   }
   callback('indexed\n');
@@ -78,7 +78,7 @@ function getVectorSet (q, i, vectorSet, docSet, reverseIndex, callback) {
     start:queryTerms[i] + "~",
     end:queryTerms[i] + "~~"}) 
     .on('data', function (data) {
-      console.log(data.key);
+//      console.log(data.key);
       var val = JSON.parse(data.value);
       //remove documents that dont contain all queryTerms
       hasAllTerms = true;
@@ -185,7 +185,7 @@ function displayResults(q, vectorSet, docSet, callback) {
             + (scoringExplanation[j][1]*scoringExplanation[j][2])
         }
         for (field in docSet[fieldKey]) {
-          console.log(field);
+//          console.log(field);
           fieldDesc[field] =
             {'value': docSet[fieldKey][field],
              'tfidf': 0,
@@ -233,7 +233,9 @@ function displayResults(q, vectorSet, docSet, callback) {
     query: q,
     resultSetMetaData: resultSetMetaData,
 //    rawResultset: resultSet,
-    resultset: collatedResultSet.sort(function(a,b){return b[1]-a[1]}),
+    resultset: collatedResultSet.sort(function(a,b){
+      return b[1]-a[1]
+    }).slice(0, 20),
     facets: facets
   };
 
