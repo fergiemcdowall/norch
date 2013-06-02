@@ -121,8 +121,10 @@ function displayResults(q, vectorSet, docSet, callback) {
   queryTerms = q['query'];
   var docVectors = {'documents':vectorSet};
   var facets = {};
-  for (var i = 0; i < q['facets'].length; i++) {
-    facets[q['facets'][i]] = {};
+  if (q['facets']) {
+    for (var i = 0; i < q['facets'].length; i++) {
+      facets[q['facets'][i]] = {};
+    }
   }
   var tfidf = new TfIdf(docVectors);
   var resultSet = [];
@@ -147,7 +149,10 @@ function displayResults(q, vectorSet, docSet, callback) {
     });
 
 //    var runningScore = 0;
-    var weighting = q['weight'];
+    var weighting = new Array();
+    if (q['weight']) {
+      weighting = q['weight'];
+    }
     var scoringExplanation = new Array();
     for (var i = 0; i < resultsSortedOnID.length; i++) {
       var docID = resultSet[i][0];
@@ -192,17 +197,20 @@ function displayResults(q, vectorSet, docSet, callback) {
                 {'value': docSet[fieldKey][scoringExplanation[j][0]],
                  'tfidf': scoringExplanation[j][1],
                  'weight': scoringExplanation[j][2],
-                 'score': (scoringExplanation[j][1]*scoringExplanation[j][2])};         
+                 'score': (scoringExplanation[j][1]*scoringExplanation[j][2])};
             }
           }
+          if (facets[field]) {
           debugger;
-          if (q['facets'].indexOf(field) != -1) {
-            if (facets[field][docSet[fieldKey][field]]) {
-              facets[field][docSet[fieldKey][field]] =
-                (facets[field][docSet[fieldKey][field]] + 1);
-            }
-            else {
-              facets[field][docSet[fieldKey][field]] = 1;
+            var metaTagsThisDoc = docSet[fieldKey][field];
+            for (var l = 0; l < metaTagsThisDoc.length; l++) {
+              if (facets[field][metaTagsThisDoc[l]]) {
+                facets[field][metaTagsThisDoc[l]] =
+                  (facets[field][metaTagsThisDoc[l]] + 1);
+              }
+              else {
+                facets[field][metaTagsThisDoc[l]] = 1;
+              }
             }
           }
         }
@@ -216,8 +224,14 @@ function displayResults(q, vectorSet, docSet, callback) {
     }
   }
 
+
+  var resultSetMetaData = {};
+  resultSetMetaData['totalHits'] = collatedResultSet.length;
+
+
   var response = {
     query: q,
+    resultSetMetaData: resultSetMetaData,
 //    rawResultset: resultSet,
     resultset: collatedResultSet.sort(function(a,b){return b[1]-a[1]}),
     facets: facets

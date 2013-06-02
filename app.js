@@ -31,21 +31,27 @@ if ('development' == app.get('env')) {
 
 function getQuery(req) {
   var q = {};
-  q['query'] = req.query['q'].split(' ');
-  q['facets'] = req.query['f'].split(',');
-  q['weight'] = {};
-  var weightURLParam = req.query['w'].split(',');
-  for (var i = 0; i < weightURLParam.length; i++) {
-    var field = weightURLParam[i].split(':')[0];
-    var weightFactor = weightURLParam[i].split(':')[1];
-    q['weight'][field] = weightFactor;
+  q['query'] = req.query['q'].toLowerCase().split(' ');
+  if (req.query['f']) {
+    q['facets'] = req.query['f'].toLowerCase().split(',');
   }
-  q['filter'] = {};
-  var filterURLParam = req.query['filter'].split(',');
-  for (var i = 0; i < filterURLParam.length; i++) {
-    var field = filterURLParam[i].split(':')[0];
-    var filterValue = filterURLParam[i].split(':')[1];
-    q['filter'][field] = filterValue;
+  if (req.query['w']) {
+    q['weight'] = {};
+    var weightURLParam = req.query['w'].toLowerCase().split(',');
+    for (var i = 0; i < weightURLParam.length; i++) {
+      var field = weightURLParam[i].split(':')[0];
+      var weightFactor = weightURLParam[i].split(':')[1];
+      q['weight'][field] = weightFactor;
+    }
+  }
+  if (req.query['filter']) {
+    q['filter'] = {};
+    var filterURLParam = req.query['filter'].toLowerCase().split(',');
+    for (var i = 0; i < filterURLParam.length; i++) {
+      var field = filterURLParam[i].split(':')[0];
+      var filterValue = filterURLParam[i].split(':')[1];
+      q['filter'][field] = filterValue;
+    }
   }
   console.log(q);
   return q;
