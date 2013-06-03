@@ -2,7 +2,7 @@
 
 Norch is an experimental search engine built with Node.js and LevelDB
 
-The name Norch is a contraction of *NO*de sea*RCH*
+The name Norch is a contraction of " **No** de Sea **rch** "
 
 ##What Norch does
 
