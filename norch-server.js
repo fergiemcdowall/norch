@@ -7,7 +7,7 @@ var express = require('express')
 , http = require('http')
 , path = require('path')
 , fs = require('fs')
-, norch = require('./norch.js');
+, norch = require('./norch-lib.js');
 
 var app = express();
 

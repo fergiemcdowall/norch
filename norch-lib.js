@@ -24,7 +24,7 @@ exports.dumpIndex = function(start, stop, callback) {
 exports.index = function(batchString, callback) {
   var batch = JSON.parse(batchString);
   for (docID in batch) {
-//    console.log(docID);
+    console.log(docID);
     indexDoc(docID, batch[docID], reverseIndex);
   }
   callback('indexed\n');
