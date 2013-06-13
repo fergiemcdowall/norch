@@ -47,16 +47,15 @@ Norch indexes data that is in the format
 
 ##Searching
 
-Search is available on
-
-    http://localhost:3000/search
+Search is available on [http://localhost.com:3000/search](http://localhost.com:3000/search)
 
 ##Search parameters
 
 ###q
 **(Required)** For "query". The search term.
 
-    http://localhost:3000/search?q=
+[http://localhost:3000/search?q=](http://localhost:3000/search?q=)
+
 
 ###f
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
