@@ -65,6 +65,8 @@ Search is available on [http://localhost.com:3000/search](http://localhost.com:3
 ###filter
 **(Optional)** For "filter". Use this option to limit your search to the given field
 
+[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain)
+
 ####w
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
 
