@@ -54,7 +54,7 @@ Search is available on [http://localhost.com:3000/search](http://localhost.com:3
 ###q
 **(Required)** For "query". The search term.
 
-[http://localhost:3000/search?q=](http://localhost:3000/search?q=)
+[http://localhost:3000/search?q=moscow](http://localhost:3000/search?q=moscow)
 
 
 ###f
