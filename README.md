@@ -60,6 +60,8 @@ Search is available on [http://localhost.com:3000/search](http://localhost.com:3
 ###f
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
 
+[http://localhost:3000/search?q=moscow&f=topics](http://localhost:3000/search?q=moscow&f=topics)
+
 ###filter
 **(Optional)** For "filter". Use this option to limit your search to the given field
 
