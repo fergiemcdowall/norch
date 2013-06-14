@@ -40,12 +40,24 @@ function indexDoc(docID, doc) {
   for (fieldKey in doc) {
     tfidf = new TfIdf();
     tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
-    for (var k in tfidf.documents[tfidf.documents.length - 1]) {
+    docVector = tfidf.documents[tfidf.documents.length - 1];
+    var highestFrequencyCount = 0;
+    for (var k in docVector) {
+      if (docVector[k] > highestFrequencyCount)
+        highestFrequencyCount = docVector[k];
+    }
+    for (var k in docVector) {
       if (k != '__key') {
-        var tokenKey = k + '~' + fieldKey + '~' + id;
+        var tokenKey = k + '~' 
+          + docVector[k] + '~'
+          + highestFrequencyCount + '~'
+          + (docVector[k] / highestFrequencyCount) + '~'
+          + fieldKey + "~"
+          + id;
         tfidfx = new TfIdf();
         tfidfx.addDocument(doc[fieldKey], tokenKey);
         value['vector'] = tfidfx['documents'][0];
+        console.log(tokenKey);
         fieldBatch.push
         ({type:'put',
           key:tokenKey,
@@ -53,6 +65,7 @@ function indexDoc(docID, doc) {
       }
     }
   }
+  debugger;
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
     if (err) return console.log('Ooops!', err);
