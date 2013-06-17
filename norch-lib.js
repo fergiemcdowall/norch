@@ -48,11 +48,11 @@ function indexDoc(docID, doc) {
     }
     for (var k in docVector) {
       if (k != '__key') {
-        var tokenKey = k + '~' 
+        var tokenKey = k + '~'
+          + fieldKey + "~"
           + docVector[k] + '~'
           + highestFrequencyCount + '~'
           + (docVector[k] / highestFrequencyCount) + '~'
-          + fieldKey + "~"
           + id;
         tfidfx = new TfIdf();
         tfidfx.addDocument(doc[fieldKey], tokenKey);
