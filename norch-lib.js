@@ -2,6 +2,8 @@ var fs = require('fs')
 , levelup = require('levelup')
 , natural = require('natural');
 
+var totalDocs = 1000;
+
 var reverseIndex = levelup('./reverseIndex')
 , TfIdf = require('natural').TfIdf;
 
@@ -77,11 +79,69 @@ function indexDoc(docID, doc) {
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
-  getVectorSet(q, 0, [], {}, reverseIndex, function(msg) {
+  getVectorSetX(q, 0, [], {}, [], reverseIndex, function(msg) {
     callback(msg);
   });
 }
 
+
+
+
+function getVectorSetX (q, i, vectorSet, docSet, idf, reverseIndex, callback) {
+  queryTerms = q['query'];
+  var idfCount = 0;
+  reverseIndex.createReadStream({
+    start:queryTerms[i] + "~",
+    end:queryTerms[i] + "~~"}) 
+    .on('data', function (data) {
+      idfCount++;
+      var splitKey = data.key.split('~');
+      //console.log(splitKey);
+      var docID = splitKey[5];
+      var fieldName = splitKey[1];
+      var tf = splitKey[4];
+      if (i == 0) {
+        docSet[docID] = {};
+        docSet[docID]['matchedTerms'] = {};
+        docSet[docID]['matchedTerms'][queryTerms[i]] = {};
+        docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;
+      }
+      //check to see if last term was a hit (docSet[docID] is set)
+      else if (docSet[docID]) {
+        docSet[docID]['matchedTerms'][queryTerms[i]] = {};
+        docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;        
+      }
+    })
+    .on('end', function () {
+      idf[i] = Math.log(totalDocs / idfCount);
+      if (i < (queryTerms.length - 1)) {
+        //evaluate the next least common term
+        getVectorSetX(q, ++i, vectorSet, docSet, idf, reverseIndex, callback);
+      }
+      else {
+        //generate resultset with tfidf
+        for (j in docSet) {
+          var totalMatchedTerms = Object.keys(docSet[j]['matchedTerms']).length;
+          if (totalMatchedTerms < queryTerms.length) {
+            delete docSet[j];
+          }
+          else {
+            
+          }
+        }
+        console.log(docSet);
+        console.log(idf);
+       
+        //all least common terms evaluated- go to results
+/*
+        displayResults(q, vectorSet, docSet, function(msg) {
+          callback(msg);
+        });
+*/
+        
+      }
+    })
+}
 
 
 
