@@ -59,7 +59,7 @@ function indexDoc(docID, doc) {
         tfidfx = new TfIdf();
         tfidfx.addDocument(doc[fieldKey], tokenKey);
         value['vector'] = tfidfx['documents'][0];
-        console.log(tokenKey);
+//        console.log(tokenKey);
         fieldBatch.push
         ({type:'put',
           key:tokenKey,
@@ -79,7 +79,7 @@ function indexDoc(docID, doc) {
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
-  getVectorSetX(q, 0, [], {}, [], reverseIndex, function(msg) {
+  getSearchResults(q, 0, [], {}, {}, reverseIndex, function(msg) {
     callback(msg);
   });
 }
@@ -87,8 +87,8 @@ exports.search = function (q, callback) {
 
 
 
-function getVectorSetX (q, i, vectorSet, docSet, idf, reverseIndex, callback) {
-  queryTerms = q['query'];
+function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback) {
+  var queryTerms = q['query'];
   var idfCount = 0;
   reverseIndex.createReadStream({
     start:queryTerms[i] + "~",
@@ -113,35 +113,53 @@ function getVectorSetX (q, i, vectorSet, docSet, idf, reverseIndex, callback) {
       }
     })
     .on('end', function () {
-      idf[i] = Math.log(totalDocs / idfCount);
+      idf[queryTerms[i]] = Math.log(totalDocs / idfCount);
       if (i < (queryTerms.length - 1)) {
         //evaluate the next least common term
-        getVectorSetX(q, ++i, vectorSet, docSet, idf, reverseIndex, callback);
+        getSearchResults(q, ++i, vectorSet, docSet, idf, reverseIndex, callback);
       }
       else {
         //generate resultset with tfidf
+        var resultSet = {};
+        resultSet['idf'] = idf;
+        resultSet['query'] = queryTerms;
+        resultSet['hits'] = [];
         for (j in docSet) {
           var totalMatchedTerms = Object.keys(docSet[j]['matchedTerms']).length;
           if (totalMatchedTerms < queryTerms.length) {
-            delete docSet[j];
+//            delete docSet[j];
           }
           else {
-            
+            hit = docSet[j];
+            hit['id'] = j;
+            var score = 0;
+            for (k in idf) {
+              var searchTerm = k;
+              var IDF = idf[k];
+              var documentHitFields = hit['matchedTerms'][k];
+              for (l in documentHitFields) {
+                var TF = documentHitFields[l];
+                score += (TF * IDF);
+              }
+              hit['score'] = score;
+            }            
+            resultSet['hits'].push(hit);
           }
         }
-        console.log(docSet);
-        console.log(idf);
-       
-        //all least common terms evaluated- go to results
-/*
-        displayResults(q, vectorSet, docSet, function(msg) {
-          callback(msg);
-        });
-*/
-        
+        //array sort function
+        function compare(a,b) {
+          if (a.score < b.score)
+            return 1;
+          if (a.score > b.score)
+            return -1;
+          return 0;
+        }
+        resultSet.hits = resultSet.hits.sort(compare).slice(0,20);
+        callback(resultSet);
       }
     })
 }
+
 
 
 
