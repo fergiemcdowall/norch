@@ -89,6 +89,9 @@ exports.search = function (q, callback) {
 
 function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback) {
   var queryTerms = q['query'];
+  var offset = parseInt(q['offset']);
+  var pageSize = parseInt(q['pagesize']);
+  var weight = q['weight'];
   var idfCount = 0;
   reverseIndex.createReadStream({
     start:queryTerms[i] + "~",
@@ -122,7 +125,8 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
         //generate resultset with tfidf
         var resultSet = {};
         resultSet['idf'] = idf;
-        resultSet['query'] = queryTerms;
+        resultSet['query'] = q;
+        resultSet['totalHits'] = 0;
         resultSet['hits'] = [];
         for (j in docSet) {
           var totalMatchedTerms = Object.keys(docSet[j]['matchedTerms']).length;
@@ -138,8 +142,13 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
               var IDF = idf[k];
               var documentHitFields = hit['matchedTerms'][k];
               for (l in documentHitFields) {
+                //weighting
+                var W = 1;
+                if (weight[l]) {
+                  W = parseInt(weight[l]);
+                }
                 var TF = documentHitFields[l];
-                score += (TF * IDF);
+                score += (TF * IDF * W);
               }
               hit['score'] = score;
             }            
@@ -154,7 +163,9 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
             return -1;
           return 0;
         }
-        resultSet.hits = resultSet.hits.sort(compare).slice(0,20);
+        resultSet['totalHits'] = resultSet.hits.length;
+        resultSet.hits = resultSet.hits.sort(compare)
+          .slice(offset, (offset + pageSize));
         callback(resultSet);
       }
     })

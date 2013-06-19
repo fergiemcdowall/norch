@@ -32,6 +32,16 @@ if ('development' == app.get('env')) {
 function getQuery(req) {
   var q = {};
   q['query'] = req.query['q'].toLowerCase().split(' ');
+  if (req.query['offset']) {
+    q['offset'] = req.query['offset'];
+  } else {
+    q['offset'] = 0;
+  }
+  if (req.query['pagesize']) {
+    q['pagesize'] = req.query['pagesize'];
+  } else {
+    q['pagesize'] = 10;
+  }
   if (req.query['f']) {
     q['facets'] = req.query['f'].toLowerCase().split(',');
   }
