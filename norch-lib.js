@@ -23,32 +23,35 @@ exports.dumpIndex = function(start, stop, callback) {
 }
 
 
-exports.index = function(batchString, callback) {
+exports.index = function(batchString, facets, callback) {
   var batch = JSON.parse(batchString);
   for (docID in batch) {
     console.log(docID);
-    indexDoc(docID, batch[docID], reverseIndex);
+    indexDoc(docID, batch[docID], facets);
   }
   callback('indexed\n');
 }
 
 
-function indexDoc(docID, doc) {
+function indexDoc(docID, doc, facets) {
   //use key if found, if no key is found set filename to be key.
   var fieldBatch = [];
   var id = docID;
   var value = {};
   value['fields'] = {};
 
-  for (var field in doc) {
-    if( Object.prototype.toString.call(doc[field]) === '[object Array]' ) {
-      value['fields'][field] = doc[field];
-    } else {
-      value['fields'][field] = doc[field].substring(0, 100);
-    }
+  var facetValues;
+  if (doc[facets[0]]) {
+    facetValues = doc[facets[0]];
   }
+debugger;
   
   for (fieldKey in doc) {
+    if( Object.prototype.toString.call(doc[fieldKey]) === '[object Array]' ) {
+      value['fields'][fieldKey] = doc[fieldKey];
+    } else {
+      value['fields'][fieldKey] = doc[fieldKey].substring(0, 100);
+    }
     tfidf = new TfIdf();
     tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
     docVector = tfidf.documents[tfidf.documents.length - 1];
@@ -60,19 +63,35 @@ function indexDoc(docID, doc) {
     for (var k in docVector) {
       if (k != '__key') {
         var tokenKey = k + '~'
+          + 'NO~FACETING~'
           + fieldKey + "~"
           + docVector[k] + '~'
           + highestFrequencyCount + '~'
           + (docVector[k] / highestFrequencyCount) + '~'
           + id;
-        tfidfx = new TfIdf();
-        tfidfx.addDocument(doc[fieldKey], tokenKey);
-        value['vector'] = tfidfx['documents'][0];
-//        console.log(tokenKey);
-        fieldBatch.push
-        ({type:'put',
+        
+        //        console.log(tokenKey);
+        fieldBatch.push({
+          type:'put',
           key:tokenKey,
           value:JSON.stringify(value)});
+        
+        for (var j = 0; j < facetValues.length; j++) { 
+          var tokenKey = k + '~'
+            + facets[0] + '~'
+            + facetValues[j] + '~'
+            + fieldKey + "~"
+            + docVector[k] + '~'
+            + highestFrequencyCount + '~'
+            + (docVector[k] / highestFrequencyCount) + '~'
+            + id;
+          
+          //        console.log(tokenKey);
+          fieldBatch.push({
+            type:'put',
+            key:tokenKey,
+            value:JSON.stringify(value)});
+        }
       }
     }
   }
@@ -106,15 +125,15 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
   }
   var idfCount = 0;
   reverseIndex.createReadStream({
-    start:queryTerms[i] + "~",
-    end:queryTerms[i] + "~~"}) 
+    start:queryTerms[i] + "~NO~FACETING~",
+    end:queryTerms[i] + "~NO~FACETING~~"}) 
     .on('data', function (data) {
       idfCount++;
       var splitKey = data.key.split('~');
       //console.log(splitKey);
-      var docID = splitKey[5];
-      var fieldName = splitKey[1];
-      var tf = splitKey[4];
+      var docID = splitKey[7];
+      var fieldName = splitKey[3];
+      var tf = splitKey[6];
       //first term in the query string?
       if (i == 0) {
         docSet[docID] = {};

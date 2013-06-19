@@ -86,12 +86,18 @@ app.get('/search', function(req, res) {
 
 
 //curl --form document=@testdata.json http://localhost:3000/indexer
+//--form facetOn=topics
 app.post('/indexer', function(req, res) {
+  var facets = [];
+  if (Object.prototype.toString.call(req.body.facetOn) === '[object Array]') {
+    facets = req.body.facetOn;
+  } else {
+    facets.push(req.body.facetOn);
+  }
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
-  norch.index(batch, function(msg) {
-    console.log(msg);
+  norch.index(batch, facets, function(msg) {
+    res.send(msg);
   });
-  res.send('indexing');
 });
 
 
