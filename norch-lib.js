@@ -38,7 +38,16 @@ function indexDoc(docID, doc) {
   var fieldBatch = [];
   var id = docID;
   var value = {};
-  value['fields'] = doc;
+  value['fields'] = {};
+
+  for (var field in doc) {
+    if( Object.prototype.toString.call(doc[field]) === '[object Array]' ) {
+      value['fields'][field] = doc[field];
+    } else {
+      value['fields'][field] = doc[field].substring(0, 100);
+    }
+  }
+  
   for (fieldKey in doc) {
     tfidf = new TfIdf();
     tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
@@ -91,7 +100,10 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
   var queryTerms = q['query'];
   var offset = parseInt(q['offset']);
   var pageSize = parseInt(q['pagesize']);
-  var weight = q['weight'];
+  var weight = {};
+  if (q['weight']) {
+    weight = q['weight'];
+  }
   var idfCount = 0;
   reverseIndex.createReadStream({
     start:queryTerms[i] + "~",
@@ -103,16 +115,19 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
       var docID = splitKey[5];
       var fieldName = splitKey[1];
       var tf = splitKey[4];
+      //first term in the query string?
       if (i == 0) {
         docSet[docID] = {};
         docSet[docID]['matchedTerms'] = {};
         docSet[docID]['matchedTerms'][queryTerms[i]] = {};
         docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;
+        docSet[docID]['document'] = JSON.parse(data.value).fields;
       }
       //check to see if last term was a hit (docSet[docID] is set)
       else if (docSet[docID]) {
         docSet[docID]['matchedTerms'][queryTerms[i]] = {};
-        docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;        
+        docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;
+        docSet[docID]['document'] = JSON.parse(data.value).fields;
       }
     })
     .on('end', function () {

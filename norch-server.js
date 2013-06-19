@@ -47,6 +47,7 @@ function getQuery(req) {
   }
   if (req.query['w']) {
     q['weight'] = {};
+    console.log(q['weight']);
     var weightURLParam = req.query['w'].toLowerCase().split(',');
     for (var i = 0; i < weightURLParam.length; i++) {
       var field = weightURLParam[i].split(':')[0];
@@ -88,8 +89,9 @@ app.get('/search', function(req, res) {
 app.post('/indexer', function(req, res) {
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
   norch.index(batch, function(msg) {
-    res.send(msg);
+    console.log(msg);
   });
+  res.send('indexing');
 });
 
 
