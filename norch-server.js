@@ -57,11 +57,11 @@ function getQuery(req) {
   }
   if (req.query['filter']) {
     q['filter'] = {};
-    var filterURLParam = req.query['filter'].toLowerCase().split(',');
+    var filterURLParam = req.query['filter'].toLowerCase().split(';');
     for (var i = 0; i < filterURLParam.length; i++) {
       var field = filterURLParam[i].split(':')[0];
-      var filterValue = filterURLParam[i].split(':')[1];
-      q['filter'][field] = filterValue;
+      var filterValues = (filterURLParam[i].split(':')[1]).split(',');
+      q['filter'][field] = filterValues;
     }
   }
   console.log(q);

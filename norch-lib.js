@@ -40,18 +40,21 @@ function indexDoc(docID, doc, facets) {
   var value = {};
   value['fields'] = {};
 
-  var facetValues;
+  var facetValues = {};
   if (doc[facets[0]]) {
     facetValues = doc[facets[0]];
   }
 debugger;
-  
+
   for (fieldKey in doc) {
     if( Object.prototype.toString.call(doc[fieldKey]) === '[object Array]' ) {
       value['fields'][fieldKey] = doc[fieldKey];
     } else {
       value['fields'][fieldKey] = doc[fieldKey].substring(0, 100);
     }
+  }
+  
+  for (fieldKey in doc) {
     tfidf = new TfIdf();
     tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
     docVector = tfidf.documents[tfidf.documents.length - 1];
@@ -107,16 +110,34 @@ debugger;
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
-  getSearchResults(q, 0, [], {}, {}, reverseIndex, function(msg) {
+  //terms to look up in the reverse index
+  var indexKeys = [];
+  if (q['filter']) {
+    for (var i = 0; i < q['query'].length; i++) {
+      for (var j in q['filter']) {
+        var filterArray = q['filter'][j];
+        for (var k = 0; k < filterArray.length; k++) {
+          indexKeys.push(q['query'][i] + '~'
+                         + j + '~' + filterArray[k]);
+        }
+      }
+    }
+  } else {
+    for (var i = 0; i < q['query'].length; i++) {
+      indexKeys.push(q['query'][i] + '~NO~FACETING');
+    }
+  }
+  console.log(indexKeys);
+
+  getSearchResults(q, 0, {}, {}, indexKeys, function(msg) {
     callback(msg);
   });
 }
 
 
-
-
-function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback) {
+function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
   var queryTerms = q['query'];
+  var thisQueryTerm = indexKeys[i].split('~')[0];
   var offset = parseInt(q['offset']);
   var pageSize = parseInt(q['pagesize']);
   var weight = {};
@@ -125,8 +146,8 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
   }
   var idfCount = 0;
   reverseIndex.createReadStream({
-    start:queryTerms[i] + "~NO~FACETING~",
-    end:queryTerms[i] + "~NO~FACETING~~"}) 
+    start:indexKeys[i] + "~",
+    end:indexKeys[i] + "~~"})
     .on('data', function (data) {
       idfCount++;
       var splitKey = data.key.split('~');
@@ -138,24 +159,35 @@ function getSearchResults (q, i, vectorSet, docSet, idf, reverseIndex, callback)
       if (i == 0) {
         docSet[docID] = {};
         docSet[docID]['matchedTerms'] = {};
-        docSet[docID]['matchedTerms'][queryTerms[i]] = {};
-        docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;
+        docSet[docID]['matchedTerms'][thisQueryTerm] = {};
+        docSet[docID]['matchedTerms'][thisQueryTerm][fieldName] = tf;
         docSet[docID]['document'] = JSON.parse(data.value).fields;
       }
       //check to see if last term was a hit (docSet[docID] is set)
       else if (docSet[docID]) {
-        docSet[docID]['matchedTerms'][queryTerms[i]] = {};
-        docSet[docID]['matchedTerms'][queryTerms[i]][fieldName] = tf;
+        docSet[docID]['matchedTerms'][thisQueryTerm] = {};
+        docSet[docID]['matchedTerms'][thisQueryTerm][fieldName] = tf;
         docSet[docID]['document'] = JSON.parse(data.value).fields;
       }
     })
     .on('end', function () {
-      idf[queryTerms[i]] = Math.log(totalDocs / idfCount);
-      if (i < (queryTerms.length - 1)) {
+      //move this line
+      if (idf[thisQueryTerm]) { 
+        idf[thisQueryTerm] = (idf[thisQueryTerm] + idfCount);
+      } else {
+        idf[thisQueryTerm] = idfCount;
+      }
+
+      if (i < (indexKeys.length - 1)) {
         //evaluate the next least common term
-        getSearchResults(q, ++i, vectorSet, docSet, idf, reverseIndex, callback);
+        getSearchResults(q, ++i, docSet, idf, indexKeys, callback);
       }
       else {
+        //idf generation in here
+        for (var k = 0; k < idf.length; k++) {
+          idf[k] = Math.log(totalDocs / idf[k]);
+        }
+        console.log(idf);
         //generate resultset with tfidf
         var resultSet = {};
         resultSet['idf'] = idf;
