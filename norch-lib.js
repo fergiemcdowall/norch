@@ -194,8 +194,9 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
         resultSet['query'] = q;
         resultSet['totalHits'] = 0;
         resultSet['facets'] = {};
+        var facetFields = [];
         if (q['facets']) {
-          var facetFields = q['facets'];
+          facetFields = q['facets'];
           for (var m = 0; m < facetFields.length; m++) {
             resultSet['facets'][facetFields[m]] = {};
           }
