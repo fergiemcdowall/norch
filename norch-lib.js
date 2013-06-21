@@ -193,8 +193,17 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
         resultSet['idf'] = idf;
         resultSet['query'] = q;
         resultSet['totalHits'] = 0;
+        resultSet['facets'] = {};
+        if (q['facets']) {
+          var facetFields = q['facets'];
+          for (var m = 0; m < facetFields.length; m++) {
+            resultSet['facets'][facetFields[m]] = {};
+          }
+        }
         resultSet['hits'] = [];
+
         for (j in docSet) {
+          debugger;
           var totalMatchedTerms = Object.keys(docSet[j]['matchedTerms']).length;
           if (totalMatchedTerms < queryTerms.length) {
 //            delete docSet[j];
@@ -217,7 +226,19 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
                 score += (TF * IDF * W);
               }
               hit['score'] = score;
-            }            
+            }
+            //faceting
+            for (var m = 0; m < facetFields.length; m++) {
+              if (hit.document[facetFields[m]]) {
+                var documentFacetTags = hit.document[facetFields[m]];
+                for (var n = 0; n < documentFacetTags.length; n++) {
+                  if (!resultSet.facets[facetFields[m]][documentFacetTags[n]]) {
+                    resultSet.facets[facetFields[m]][documentFacetTags[n]] = 0;
+                  }
+                  resultSet.facets[facetFields[m]][documentFacetTags[n]]++;
+                }
+              }
+            }
             resultSet['hits'].push(hit);
           }
         }
