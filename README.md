@@ -25,7 +25,7 @@ Navigate to the directory where you installed Norch and type
 
     node norch-server
 
-Et voil√°. Norch is now running locally on your machine. The default port of 3000 can be modified if required.
+Et voil·. Norch is now running locally on your machine. The default port of 3000 can be modified if required.
 
 ##Indexing
 Once you have set up Norch, you can get some content into it. Norch comes with some test data in the directory "testdata"
@@ -54,15 +54,37 @@ Search is available on [http://localhost.com:3000/search](http://localhost.com:3
 ###q
 **(Required)** For "query". The search term.
 
-[http://localhost:3000/search?q=](http://localhost:3000/search?q=)
+Usage:
+
+    q=<query term>
+
+[http://localhost:3000/search?q=moscow](http://localhost:3000/search?q=moscow)
 
 
 ###f
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
 
+Usage:
+
+    f=<field to facet on>
+
+[http://localhost:3000/search?q=moscow&f=topics](http://localhost:3000/search?q=moscow&f=topics)
+
 ###filter
 **(Optional)** For "filter". Use this option to limit your search to the given field
 
+Usage:
+
+    filter=<field to filter on>
+
+[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain)
+
 ####w
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
+
+Usage:
+
+    w=<field name>:<weight (factor)>
+
+[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&w=title:10](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&w=title:10)
 
