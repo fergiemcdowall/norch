@@ -76,6 +76,11 @@ app.get('/dumpIndex', function(req, res) {
 });
 
 
+app.get('/', function(req, res) {
+  res.send('Welcome to Norch');
+});
+
+
 //curl localhost:3000/search?q=aberdeen\&weight=%22category%22:10
 app.get('/search', function(req, res) {
   q = getQuery(req);
