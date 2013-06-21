@@ -79,7 +79,28 @@ Usage:
 
 [http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain)
 
-####w
+###offset
+
+**(Optional)** The index in the resultSet that the server
+  returns. Userful for paging.
+
+Usage:
+
+    offset=<start index>
+
+[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5)
+
+###pagesize
+
+**(Optional)** defines the size of the resultset (defaults to 20)
+
+Usage:
+
+    pagesize=<size of resultset>
+
+[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5&pagesize=5)
+
+###w
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
 
 Usage:
