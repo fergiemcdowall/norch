@@ -79,6 +79,10 @@ Usage:
 
 [http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain)
 
+Multiple filters:
+[http://localhost:3000/search?q=oil&f=places,topics,organisations&filter=topics:plywood,crude;places:indonesia](http://localhost:3000/search?q=oil&f=places,topics,organisations&filter=topics:plywood,crude;places:indonesia)
+
+
 ###offset
 
 **(Optional)** The index in the resultSet that the server

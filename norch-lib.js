@@ -44,7 +44,6 @@ function indexDoc(docID, doc, facets) {
   if (doc[facets[0]]) {
     facetValues = doc[facets[0]];
   }
-debugger;
 
   for (fieldKey in doc) {
     if( Object.prototype.toString.call(doc[fieldKey]) === '[object Array]' ) {
@@ -65,24 +64,20 @@ debugger;
     }
     for (var k in docVector) {
       if (k != '__key') {
-        var tokenKey = k + '~'
-          + 'NO~FACETING~'
-          + fieldKey + "~"
-          + docVector[k] + '~'
-          + highestFrequencyCount + '~'
-          + (docVector[k] / highestFrequencyCount) + '~'
-          + id;
-        
-        //        console.log(tokenKey);
-        fieldBatch.push({
-          type:'put',
-          key:tokenKey,
-          value:JSON.stringify(value)});
-        
-        for (var j = 0; j < facetValues.length; j++) { 
+
+        var facetIndexKey = ['NO~FACETING'];
+        for (var l = 0; l < facets.length; l++) {
+          debugger;
+          if (doc[facets[l]]) {
+            var thisFacetValue = doc[facets[l]];
+            for (var m = 0; m < thisFacetValue.length; m++) {
+              facetIndexKey.push(facets[l] + '~' + thisFacetValue[m]);
+            }
+          } 
+        }
+        for (var l = 0; l < facetIndexKey.length; l++) {
           var tokenKey = k + '~'
-            + facets[0] + '~'
-            + facetValues[j] + '~'
+            + facetIndexKey[l] + '~'
             + fieldKey + "~"
             + docVector[k] + '~'
             + highestFrequencyCount + '~'
@@ -98,7 +93,6 @@ debugger;
       }
     }
   }
-  debugger;
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
     if (err) return console.log('Ooops!', err);
@@ -144,11 +138,13 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
   if (q['weight']) {
     weight = q['weight'];
   }
+//  console.log(indexKeys);
   var idfCount = 0;
   reverseIndex.createReadStream({
     start:indexKeys[i] + "~",
     end:indexKeys[i] + "~~"})
     .on('data', function (data) {
+      console.log(indexKeys[i]);
       idfCount++;
       var splitKey = data.key.split('~');
       //console.log(splitKey);
@@ -156,7 +152,7 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
       var fieldName = splitKey[3];
       var tf = splitKey[6];
       //first term in the query string?
-      if (i == 0) {
+      if (thisQueryTerm == queryTerms[0]) {
         docSet[docID] = {};
         docSet[docID]['matchedTerms'] = {};
         docSet[docID]['matchedTerms'][thisQueryTerm] = {};
@@ -164,7 +160,7 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
         docSet[docID]['document'] = JSON.parse(data.value).fields;
       }
       //check to see if last term was a hit (docSet[docID] is set)
-      else if (docSet[docID]) {
+      else if (docSet[docID] != null) {
         docSet[docID]['matchedTerms'][thisQueryTerm] = {};
         docSet[docID]['matchedTerms'][thisQueryTerm][fieldName] = tf;
         docSet[docID]['document'] = JSON.parse(data.value).fields;
@@ -177,9 +173,8 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
       } else {
         idf[thisQueryTerm] = idfCount;
       }
-
+      
       if (i < (indexKeys.length - 1)) {
-        //evaluate the next least common term
         getSearchResults(q, ++i, docSet, idf, indexKeys, callback);
       }
       else {
@@ -187,7 +182,7 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
         for (var k = 0; k < idf.length; k++) {
           idf[k] = Math.log(totalDocs / idf[k]);
         }
-        console.log(idf);
+//        console.log(idf);
         //generate resultset with tfidf
         var resultSet = {};
         resultSet['idf'] = idf;
@@ -203,11 +198,32 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
         }
         resultSet['hits'] = [];
 
+        docSetLoop:
         for (j in docSet) {
-          debugger;
+
+          //deal with filtering
+          for (var k in q.filter) {
+            var filterIsPresent = false;
+            for (var l = 0; l < q.filter[k].length; l++) {
+              debugger;
+              //if the filter field is missing- drop hit
+              if (docSet[j].document[k] === undefined)
+                continue docSetLoop;
+              //if the filter value is present- mark as true
+              if (docSet[j].document[k].indexOf(q.filter[k][l]) != -1)
+                filterIsPresent = true
+            }
+            //if this is still false, the hit did not contain the
+            //right filter field value anywhere in the filter field
+            //array
+            if (!filterIsPresent) {
+              continue docSetLoop;
+            }
+          }
+
           var totalMatchedTerms = Object.keys(docSet[j]['matchedTerms']).length;
           if (totalMatchedTerms < queryTerms.length) {
-//            delete docSet[j];
+            continue docSetLoop;
           }
           else {
             hit = docSet[j];
