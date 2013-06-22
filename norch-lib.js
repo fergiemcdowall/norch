@@ -121,7 +121,6 @@ exports.search = function (q, callback) {
       indexKeys.push(q['query'][i] + '~NO~FACETING');
     }
   }
-  console.log(indexKeys);
 
   getSearchResults(q, 0, {}, {}, indexKeys, function(msg) {
     callback(msg);
@@ -144,7 +143,6 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
     start:indexKeys[i] + "~",
     end:indexKeys[i] + "~~"})
     .on('data', function (data) {
-      console.log(indexKeys[i]);
       idfCount++;
       var splitKey = data.key.split('~');
       //console.log(splitKey);
