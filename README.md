@@ -25,7 +25,7 @@ Navigate to the directory where you installed Norch and type
 
     node norch-server
 
-Et voilá. Norch is now running locally on your machine. The default port of 3000 can be modified if required.
+Et voilï¿½. Norch is now running locally on your machine. The default port of 3000 can be modified if required.
 
 ##Indexing
 Once you have set up Norch, you can get some content into it. Norch comes with some test data in the directory "testdata"
@@ -80,6 +80,7 @@ Usage:
 [http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain)
 
 Multiple filters:
+
 [http://localhost:3000/search?q=oil&f=places,topics,organisations&filter=topics:plywood,crude;places:indonesia](http://localhost:3000/search?q=oil&f=places,topics,organisations&filter=topics:plywood,crude;places:indonesia)
 
 
