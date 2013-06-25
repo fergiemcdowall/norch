@@ -14,8 +14,6 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
@@ -55,14 +53,9 @@ function getQuery(req) {
       q['weight'][field] = weightFactor;
     }
   }
+  //&filter[topics][]=cocoa&filter[places][]=usa
   if (req.query['filter']) {
-    q['filter'] = {};
-    var filterURLParam = req.query['filter'].toLowerCase().split(';');
-    for (var i = 0; i < filterURLParam.length; i++) {
-      var field = filterURLParam[i].split(':')[0];
-      var filterValues = (filterURLParam[i].split(':')[1]).split(',');
-      q['filter'][field] = filterValues;
-    }
+    q['filter'] = req.query.filter;
   }
   console.log(q);
   return q;
@@ -76,7 +69,7 @@ app.get('/dumpIndex', function(req, res) {
 });
 
 
-app.get('/', function(req, res) {
+app.get('/searchgui', function(req, res) {
   res.send('Welcome to Norch');
 });
 
