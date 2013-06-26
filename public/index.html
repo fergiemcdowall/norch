@@ -27,18 +27,19 @@
 
 
   <script type="text/x-handlebars" id="hit">
-  {{hit.title}}
+  <b>{{hit.title}}</b>
   <br>
   {{hit.body}}
   <br>
   {{hit.date}}
   <br>
+  <br>
   </script>
 
   <script type="text/x-handlebars" id="filter">
-  <span onclick="search('{{removeLink}}');">
+  <a style="color:red" href="javascript:search('{{removeLink}}');">
     {{filter}}:{{filterValue}}&times;
-  </span>
+  </a>
   <br>
   </script>
   
@@ -46,9 +47,9 @@
   <b>{{name}}</b>
   <br>
   {{#eachProperty facet}}
-    <span onclick="search('{{../url}}{{property}}');">
+    <a href="javascript:search('{{../url}}{{property}}');">
     {{property}}
-    </span>({{value}})<br>
+    </a>({{value}})<br>
   {{/eachProperty }}
   <br>
   </script>
