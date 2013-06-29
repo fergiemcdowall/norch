@@ -5,6 +5,7 @@ var fs = require('fs')
 var totalDocs = 1000;
 
 var reverseIndex = levelup('./reverseIndex')
+, stopwords = require('natural').stopwords
 , TfIdf = require('natural').TfIdf;
 
 
@@ -104,32 +105,49 @@ function indexDoc(docID, doc, facets) {
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
+
+
+debugger;
+  var tq = Object.create(q);
+
+  //remove stopwords
+  tq['query'] = [];
+  for (var k = 0; k < q['query'].length; k++) {
+    console.log(q['query'][k] + ' : '+ stopwords.indexOf(q['query'][k]));
+    if (stopwords.indexOf(q['query'][k]) == -1) {
+      tq['query'].push(q['query'][k]);
+    }
+  }
+  
+  debugger;
   //terms to look up in the reverse index
   var indexKeys = [];
   if (q['filter']) {
-    for (var i = 0; i < q['query'].length; i++) {
+    for (var i = 0; i < tq['query'].length; i++) {
       for (var j in q['filter']) {
         var filterArray = q['filter'][j];
         for (var k = 0; k < filterArray.length; k++) {
-          indexKeys.push(q['query'][i] + '~'
+          indexKeys.push(tq['query'][i] + '~'
                          + j + '~' + filterArray[k]);
         }
       }
     }
   } else {
-    for (var i = 0; i < q['query'].length; i++) {
-      indexKeys.push(q['query'][i] + '~NO~FACETING');
+    for (var i = 0; i < tq['query'].length; i++) {
+      indexKeys.push(tq['query'][i] + '~NO~FACETING');
     }
   }
 
-  getSearchResults(q, 0, {}, {}, indexKeys, function(msg) {
+
+  getSearchResults(q, tq, 0, {}, {}, indexKeys, function(msg) {
     callback(msg);
   });
 }
 
 
-function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
-  var queryTerms = q['query'];
+function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
+  var queryTerms = tq['query'];
+
   var thisQueryTerm = indexKeys[i].split('~')[0];
   var offset = parseInt(q['offset']);
   var pageSize = parseInt(q['pagesize']);
@@ -173,7 +191,7 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
       }
       
       if (i < (indexKeys.length - 1)) {
-        getSearchResults(q, ++i, docSet, idf, indexKeys, callback);
+        getSearchResults(q, tq, ++i, docSet, idf, indexKeys, callback);
       }
       else {
         //idf generation in here
@@ -185,6 +203,7 @@ function getSearchResults (q, i, docSet, idf, indexKeys, callback) {
         var resultSet = {};
         resultSet['idf'] = idf;
         resultSet['query'] = q;
+        resultSet['transformedQuery'] = tq;
         resultSet['totalHits'] = 0;
         resultSet['facets'] = {};
         var facetFields = [];
