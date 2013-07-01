@@ -2,7 +2,10 @@ var fs = require('fs')
 , levelup = require('levelup')
 , natural = require('natural');
 
-var totalDocs = 1000;
+//initialised by calling calibrate function
+var totalDocs;
+var availableFacets = [];
+var totalIndexedFields = 0;
 
 var reverseIndex = levelup('./reverseIndex')
 , stopwords = require('natural').stopwords
@@ -20,6 +23,42 @@ exports.indexPeek = function(start, stop, callback) {
     })
     .on('end', function() {
       callback(dump);
+    });
+}
+
+
+exports.calibrate = function(callback) {
+  var totalIndexedDocs = [];
+  var availableFilters = [];
+  console.log('calibrating...');
+  reverseIndex.createReadStream({
+    start: 'DOCUMENT~',
+    end: 'DOCUMENT~~'})
+    .on('data', function(data) {
+//      console.log(data.key);
+      totalIndexedFields++;
+      totalIndexedDocs[data.key.split('~')[1]] = data.key.split('~')[1];
+    })
+    .on('close', function() {
+      totalDocs = totalIndexedFields;
+      reverseIndex.createReadStream({
+        start: 'REVERSEINDEX~',
+        end: 'REVERSEINDEX~~'})
+        .on('data', function(data) {
+          if (data.key.split('~')[2] != 'NO') {
+            availableFilters[data.key.split('~')[2]] = data.key.split('~')[2];
+          }
+        })
+        .on('close', function() {
+          console.log('...calibrated.');
+          console.log('totalIndexedFields: ' + totalIndexedFields);
+          console.log('totalIndexedDocs: ' + totalIndexedDocs.length);
+          for(var o in availableFilters) {
+            availableFacets.push(availableFilters[o]);
+          }
+          totalDocs = totalIndexedDocs.length;
+          console.log('default facets: ' + availableFacets);
+        });
     });
 }
 
@@ -100,7 +139,8 @@ function indexDoc(docID, doc, facets) {
           } 
         }
         for (var l = 0; l < facetIndexKey.length; l++) {
-          var tokenKey = k + '~'
+          var tokenKey = 'REVERSEINDEX~'
+            + k + '~'
             + facetIndexKey[l] + '~'
             + fieldKey + "~"
             + docVector[k] + '~'
@@ -138,21 +178,18 @@ function indexDoc(docID, doc, facets) {
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
-
-
-debugger;
   var tq = Object.create(q);
 
   //remove stopwords
   tq['query'] = [];
   for (var k = 0; k < q['query'].length; k++) {
-    console.log(q['query'][k] + ' : '+ stopwords.indexOf(q['query'][k]));
+//    console.log(q['query'][k] + ' : '+ stopwords.indexOf(q['query'][k]));
     if (stopwords.indexOf(q['query'][k]) == -1) {
       tq['query'].push(q['query'][k]);
     }
   }
-  
-  debugger;
+
+
   //terms to look up in the reverse index
   var indexKeys = [];
   if (q['filter']) {
@@ -170,7 +207,6 @@ debugger;
       indexKeys.push(tq['query'][i] + '~NO~FACETING');
     }
   }
-
 
   getSearchResults(q, tq, 0, {}, {}, indexKeys, function(msg) {
     callback(msg);
@@ -191,15 +227,15 @@ function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
 //  console.log(indexKeys);
   var idfCount = 0;
   reverseIndex.createReadStream({
-    start:indexKeys[i] + "~",
-    end:indexKeys[i] + "~~"})
+    start: 'REVERSEINDEX~' + indexKeys[i] + '~',
+    end: 'REVERSEINDEX~' + indexKeys[i] + '~~'})
     .on('data', function (data) {
       idfCount++;
       var splitKey = data.key.split('~');
       //console.log(splitKey);
-      var docID = splitKey[7];
-      var fieldName = splitKey[3];
-      var tf = splitKey[6];
+      var docID = splitKey[8];
+      var fieldName = splitKey[4];
+      var tf = splitKey[7];
       //first term in the query string?
       if (thisQueryTerm == queryTerms[0]) {
         docSet[docID] = {};
@@ -216,7 +252,7 @@ function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
       }
     })
     .on('end', function () {
-      //move this line
+      //move this line?
       if (idf[thisQueryTerm]) { 
         idf[thisQueryTerm] = (idf[thisQueryTerm] + idfCount);
       } else {
@@ -228,10 +264,11 @@ function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
       }
       else {
         //idf generation in here
-        for (var k = 0; k < idf.length; k++) {
-          idf[k] = Math.log(totalDocs / idf[k]);
+
+        for (var k in idf) {
+          idf[k] = Math.log(totalIndexedFields / idf[k]);
         }
-//        console.log(idf);
+
         //generate resultset with tfidf
         var resultSet = {};
         resultSet['idf'] = idf;
@@ -240,12 +277,18 @@ function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
         resultSet['totalHits'] = 0;
         resultSet['facets'] = {};
         var facetFields = [];
-        if (q['facets']) {
+
+        if (q['facets']){
           facetFields = q['facets'];
-          for (var m = 0; m < facetFields.length; m++) {
-            resultSet['facets'][facetFields[m]] = {};
-          }
         }
+        else {
+          facetFields = availableFacets; 
+        }
+        
+        for (var m = 0; m < facetFields.length; m++) {
+          resultSet['facets'][facetFields[m]] = {};
+        }
+
         resultSet['hits'] = [];
 
         docSetLoop:

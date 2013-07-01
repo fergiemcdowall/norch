@@ -4,9 +4,12 @@ var filterTemplate = Handlebars.compile($("#filter").html());
 
 
 
-$("#search").keyup(function(){  
-  search(window.location.search.substring(1).replace(/(q=)[^\&]+/,
-                                                     '$1' + $('#search').val()));
+$("#search").keyup(function(){
+  var params = window.location.search.substring(1);
+  if (params.indexOf('q=') == -1) {
+    params += 'q=ussr';
+  }
+  search(params.replace(/(q=)[^\&]+/, '$1' + $('#search').val()));
 });
 
 

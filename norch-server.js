@@ -21,6 +21,11 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+norch.calibrate(function(msg) {
+  console.log('calibrated');
+});
+
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
@@ -29,7 +34,11 @@ if ('development' == app.get('env')) {
 
 function getQuery(req) {
   var q = {};
-  q['query'] = req.query['q'].toLowerCase().split(' ');
+  q['query'] = "*";
+  if (req.query['q']) {
+    console.log('booya');
+    q['query'] = req.query['q'].toLowerCase().split(' ');
+  }
   if (req.query['offset']) {
     q['offset'] = req.query['offset'];
   } else {
@@ -60,6 +69,15 @@ function getQuery(req) {
   console.log(q);
   return q;
 }
+
+
+app.get('/', function(req, res) {
+  res.sendfile('public/search.html');
+});
+
+app.get('/README.md', function(req, res) {
+  res.sendfile('README.md');
+});
 
 
 app.get('/indexPeek', function(req, res) {
@@ -101,7 +119,9 @@ app.post('/indexer', function(req, res) {
   }
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
   norch.index(batch, facets, function(msg) {
-    res.send(msg);
+    norch.calibrate(function(msg) {
+      res.send(msg);
+    });
   });
 });
 
