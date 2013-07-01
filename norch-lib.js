@@ -8,7 +8,7 @@ var reverseIndex = levelup('./reverseIndex')
 , TfIdf = require('natural').TfIdf;
 
 
-exports.dumpIndex = function(start, stop, callback) {
+exports.indexPeek = function(start, stop, callback) {
   var dump = '';
   reverseIndex.createReadStream({
     start:start + "~",
@@ -31,6 +31,29 @@ exports.index = function(batchString, facets, callback) {
   }
   callback('indexed\n');
 }
+
+exports.deleteDoc = function(docID, callback) {
+  var delBatch = [];
+  reverseIndex.createReadStream({
+    start: 'DOCUMENT~' + docID + '~',
+    end: 'DOCUMENT~' + docID + '~~'})
+    .on('data', function(data) {
+      var deleteKeys = JSON.parse(data.value);
+      for (var i = 0; i < deleteKeys.length; i++) {
+        delBatch.push({
+          type: 'del',
+          key: deleteKeys[i]});
+      }
+    })
+    .on('end', function() {
+      reverseIndex.batch(delBatch, function (err) {
+        if (err) return console.log('Ooops!', err);
+        return;
+      });
+      callback('deleted ' + docID);
+    });
+}
+
 
 
 function indexDoc(docID, doc, facets) {
@@ -62,9 +85,9 @@ function indexDoc(docID, doc, facets) {
       if (docVector[k] > highestFrequencyCount)
         highestFrequencyCount = docVector[k];
     }
+    var deleteKeys = [];
     for (var k in docVector) {
       if (k != '__key') {
-
         var facetIndexKey = ['NO~FACETING'];
         for (var l = 0; l < facets.length; l++) {
           debugger;
@@ -83,16 +106,26 @@ function indexDoc(docID, doc, facets) {
             + highestFrequencyCount + '~'
             + (docVector[k] / highestFrequencyCount) + '~'
             + id;
-          
-          //        console.log(tokenKey);
           fieldBatch.push({
             type:'put',
             key:tokenKey,
             value:JSON.stringify(value)});
+          deleteKeys.push(tokenKey);
         }
       }
     }
+    //dump references so that docs can be deleted
+    var docDeleteIndexKey = 'DOCUMENT~' + id + '~' + fieldKey;
+    deleteKeys.push(docDeleteIndexKey);
+    fieldBatch.push({
+      type: 'put',
+      key: docDeleteIndexKey,
+      value: JSON.stringify(deleteKeys)});
   }
+
+  
+
+
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
     if (err) return console.log('Ooops!', err);

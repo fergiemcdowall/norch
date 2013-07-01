@@ -62,8 +62,15 @@ function getQuery(req) {
 }
 
 
-app.get('/dumpIndex', function(req, res) {
-  norch.dumpIndex(req.query['start'], req.query['stop'], function(msg) {
+app.get('/indexPeek', function(req, res) {
+  norch.indexPeek(req.query['start'], req.query['stop'], function(msg) {
+    res.send(msg);
+  });
+});
+
+
+app.get('/delete', function(req, res) {
+  norch.deleteDoc(req.query['docID'], function(msg) {
     res.send(msg);
   });
 });
