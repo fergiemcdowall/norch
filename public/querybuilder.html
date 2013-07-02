@@ -25,9 +25,39 @@
   <h1>Query Builder</h1>
   <br>
   
+  <form action="/search" method="GET" id="qbform">
+    <p>
+      <input type="text" placeholder="query" name="q" value="">
+    </p>
+    <p>
+      <input type="text" placeholder="facets" name="facets" value="">
+    </p>
+    <p>
+      <input type="text" placeholder="filter" name="filter" value="">
+    </p>
+    <p>
+      <input type="text" placeholder="offset" name="offset" value="">
+    </p>
+    <p>
+      <input type="text" placeholder="pagesize" name="pagesize" value="">
+    </p>
+    <p>
+      <input type="text" placeholder="weight" name="weight" value="">
+    </p>
+    <button type="submit" class="btn btn-large">Search!</button>
+  </form>
+
+
   <script src="js/libs/jquery-1.9.1.js"></script>
-  <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
-  <script src="js/app.js"></script>
+  <script>
+    $('#qbform').submit(function() {
+      $(this).find('input').each(function(index) {
+        if($(this).val().length == 0) {
+          $(this).attr('disabled', true);
+        }
+      });
+    });
+  </script>
   
 </body>
 </html>

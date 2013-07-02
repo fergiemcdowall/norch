@@ -63,6 +63,7 @@ function getQuery(req) {
   }
   //&filter[topics][]=cocoa&filter[places][]=usa
   if (req.query['filter']) {
+    debugger;
     q['filter'] = req.query.filter;
   }
   console.log(q);
