@@ -6,10 +6,24 @@ var fs = require('fs')
 var totalDocs;
 var availableFacets = [];
 var totalIndexedFields = 0;
+var reverseIndexSize = 0;
+var indexedFieldNames = [];
 
 var reverseIndex = levelup('./reverseIndex')
 , stopwords = require('natural').stopwords
 , TfIdf = require('natural').TfIdf;
+
+
+
+exports.indexData = function(callback) {
+  var indexData = {};
+  indexData.totalDocs = totalDocs;
+  indexData.availableFacets = availableFacets;
+  indexData.totalIndexedFields = totalIndexedFields;
+  indexData.reverseIndexSize = reverseIndexSize;
+  indexData.searchableFields = indexedFieldNames;
+  callback(indexData);
+}
 
 
 exports.indexPeek = function(start, stop, callback) {
@@ -19,7 +33,7 @@ exports.indexPeek = function(start, stop, callback) {
     end:stop + "~~"})
     .on('data', function(data) {
       dump += data.key + '<br>'
-      + data.value + '<br><br>';
+        + data.value + '<br><br>';
     })
     .on('end', function() {
       callback(dump);
@@ -30,33 +44,47 @@ exports.indexPeek = function(start, stop, callback) {
 exports.calibrate = function(callback) {
   var totalIndexedDocs = [];
   var availableFilters = [];
+  var indexedFieldNamesX = [];
   console.log('calibrating...');
   reverseIndex.createReadStream({
     start: 'DOCUMENT~',
     end: 'DOCUMENT~~'})
     .on('data', function(data) {
-//      console.log(data.key);
       totalIndexedFields++;
       totalIndexedDocs[data.key.split('~')[1]] = data.key.split('~')[1];
+      indexedFieldNamesX[data.key.split('~')[2]] = data.key.split('~')[2];
     })
     .on('close', function() {
-      totalDocs = totalIndexedFields;
+//      totalDocs = totalIndexedFields;
+
+      for(var o in indexedFieldNamesX) {
+        if (indexedFieldNames.indexOf(indexedFieldNamesX[o]) == -1) {
+          indexedFieldNames.push(indexedFieldNamesX[o]);
+        }
+      }
+
+
       reverseIndex.createReadStream({
         start: 'REVERSEINDEX~',
         end: 'REVERSEINDEX~~'})
         .on('data', function(data) {
+          reverseIndexSize++;
           if (data.key.split('~')[2] != 'NO') {
             availableFilters[data.key.split('~')[2]] = data.key.split('~')[2];
           }
         })
         .on('close', function() {
-          console.log('...calibrated.');
-          console.log('totalIndexedFields: ' + totalIndexedFields);
-          console.log('totalIndexedDocs: ' + totalIndexedDocs.length);
           for(var o in availableFilters) {
-            availableFacets.push(availableFilters[o]);
+            if (availableFacets.indexOf(availableFilters[o]) == -1) {
+              availableFacets.push(availableFilters[o]);
+            }
           }
           totalDocs = totalIndexedDocs.length;
+          console.log('...calibrated.');
+          console.log('totalIndexedFields: ' + totalIndexedFields);
+          console.log('indexedFieldNames: ' + indexedFieldNames);
+          console.log('totalIndexedDocs: ' + totalDocs);
+          console.log('reverseIndexSize: ' + reverseIndexSize);
           console.log('default facets: ' + availableFacets);
         });
     });
@@ -178,6 +206,8 @@ function indexDoc(docID, doc, facets) {
 
 //rewrite so that exports.search returns a value instead of proviking a res.send()
 exports.search = function (q, callback) {
+  //this must be set to true for a query to be carried out
+  var canSearch = true;
   var tq = Object.create(q);
 
   //remove stopwords
@@ -188,7 +218,9 @@ exports.search = function (q, callback) {
       tq['query'].push(q['query'][k]);
     }
   }
-
+  if (tq['query'].length == 0) {
+    canSearch = false;
+  }
 
   //terms to look up in the reverse index
   var indexKeys = [];
@@ -208,9 +240,12 @@ exports.search = function (q, callback) {
     }
   }
 
-  getSearchResults(q, tq, 0, {}, {}, indexKeys, function(msg) {
-    callback(msg);
-  });
+  if (canSearch) {
+    getSearchResults(q, tq, 0, {}, {}, indexKeys, function(msg) {
+      callback(msg);
+    });
+  }
+  else callback('no results');
 }
 
 
@@ -320,7 +355,7 @@ function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
           }
           else {
             hit = docSet[j];
-            hit['id'] = j;
+            hit['document']['id'] = j;
             var score = 0;
             for (k in idf) {
               var searchTerm = k;

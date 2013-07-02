@@ -61,14 +61,14 @@ Usage:
 [http://localhost:3000/search?q=moscow](http://localhost:3000/search?q=moscow)
 
 
-###f
+###facets
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
 
 Usage:
 
-    f=<field to facet on>
+    facets=<field to facet on>
 
-[http://localhost:3000/search?q=moscow&f=topics](http://localhost:3000/search?q=moscow&f=topics)
+[http://localhost:3000/search?q=moscow&facets=topics](http://localhost:3000/search?q=moscow&facets=topics)
 
 ###filter
 **(Optional)** For "filter". Use this option to limit your search to the given field
@@ -77,7 +77,7 @@ Usage:
 
     filter=<field to filter on>
 
-[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain)
+[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain)
 
 Multiple filters:
 
@@ -93,7 +93,7 @@ Usage:
 
     offset=<start index>
 
-[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5)
+[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5)
 
 ###pagesize
 
@@ -103,14 +103,14 @@ Usage:
 
     pagesize=<size of resultset>
 
-[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&offset=5&pagesize=5)
+[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5&pagesize=5)
 
-###w
+###weight
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
 
 Usage:
 
-    w=<field name>:<weight (factor)>
+    weight=<field name>:<weight (factor)>
 
-[http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&w=title:10](http://localhost:3000/search?q=moscow&f=topics&filter=topics:grain&w=title:10)
+[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight=title:10](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight=title:10)
 

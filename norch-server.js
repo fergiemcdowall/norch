@@ -36,7 +36,6 @@ function getQuery(req) {
   var q = {};
   q['query'] = "*";
   if (req.query['q']) {
-    console.log('booya');
     q['query'] = req.query['q'].toLowerCase().split(' ');
   }
   if (req.query['offset']) {
@@ -49,13 +48,13 @@ function getQuery(req) {
   } else {
     q['pagesize'] = 10;
   }
-  if (req.query['f']) {
-    q['facets'] = req.query['f'].toLowerCase().split(',');
+  if (req.query['facets']) {
+    q['facets'] = req.query['facets'].toLowerCase().split(',');
   }
-  if (req.query['w']) {
+  if (req.query['weight']) {
     q['weight'] = {};
     console.log(q['weight']);
-    var weightURLParam = req.query['w'].toLowerCase().split(',');
+    var weightURLParam = req.query['weight'].toLowerCase().split(',');
     for (var i = 0; i < weightURLParam.length; i++) {
       var field = weightURLParam[i].split(':')[0];
       var weightFactor = weightURLParam[i].split(':')[1];
@@ -75,6 +74,13 @@ app.get('/', function(req, res) {
   res.sendfile('public/search.html');
 });
 
+app.get('/calibrate', function(req, res) {
+  norch.calibrate(function(msg) {
+    console.log('calibrated');
+  });
+});
+
+
 app.get('/README.md', function(req, res) {
   res.sendfile('README.md');
 });
@@ -87,8 +93,15 @@ app.get('/indexPeek', function(req, res) {
 });
 
 
-app.get('/delete', function(req, res) {
-  norch.deleteDoc(req.query['docID'], function(msg) {
+app.get('/indexData', function(req, res) {
+  norch.indexData(function(msg) {
+    res.send(msg);
+  });
+});
+
+
+app.post('/delete', function(req, res) {
+  norch.deleteDoc(req.body.docID, function(msg) {
     res.send(msg);
   });
 });
@@ -111,14 +124,13 @@ app.get('/search', function(req, res) {
 //curl --form document=@testdata.json http://localhost:3000/indexer
 //--form facetOn=topics
 app.post('/indexer', function(req, res) {
-  var facets = [];
-  if (Object.prototype.toString.call(req.body.facetOn) === '[object Array]') {
-    facets = req.body.facetOn;
-  } else {
-    facets.push(req.body.facetOn);
+  var filters = [];
+  if (req.body.filterOn) {
+    filters = req.body.filterOn.split(',');
   }
+  
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
-  norch.index(batch, facets, function(msg) {
+  norch.index(batch, filters, function(msg) {
     norch.calibrate(function(msg) {
       res.send(msg);
     });

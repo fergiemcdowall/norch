@@ -30,6 +30,7 @@ function search(urlParams) {
   $.getJSON("http://localhost:3000/search?" + urlParams, function(result){
     $("#resultset").empty();
     $("#facets").empty();
+    $("#resultSetStrapLine").html('<h4>' + result.totalHits + ' hits</h4>');
     var activeFilters = 
       decodeURIComponent($.param({filter:result['query']['filter']}));
     var activeFilterArray = [];
