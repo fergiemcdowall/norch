@@ -70,8 +70,8 @@
       $('#filter').append('<input type="text" placeholder="'
                           + filterName + '" name="' + filterName + '" value="">');
     }
-    for (var i = 0; i < result.searchableFields.length; i++) {
-      var sfName = 'weight[' + result.searchableFields[i] + '][]'
+    for (var i = 0; i < result.indexedFieldNames.length; i++) {
+      var sfName = 'weight[' + result.indexedFieldNames[i] + '][]'
       $('#weight').append('<input type="text" placeholder="'
                           + sfName + '" name="' + sfName + '" value="">');
     }

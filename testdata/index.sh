@@ -22,4 +22,4 @@ curl --form document=@reuters-018.json http://localhost:3000/indexer --form filt
 curl --form document=@reuters-019.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
 curl --form document=@reuters-020.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
 curl --form document=@reuters-021.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
-
+curl http://localhost:3000/calibrate

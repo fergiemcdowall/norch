@@ -4,20 +4,19 @@ var fs = require('fs')
 
 //Calibration values
 //precalculate index metadata to save time ewith every query
-var indexMetaDataGlobal = {};
 
 //Arbitrary defaults
-var maxStringFieldLength = 10000;
+var maxStringFieldLength = 100;  //this has a really big effect on performance for some reason...
 var maxMetadataFieldLength = 20;
 
-var reverseIndex = levelup('./reverseIndex')
+var reverseIndex = levelup('./norchindex')
 , stopwords = require('natural').stopwords
 , TfIdf = require('natural').TfIdf;
 
 
 
 exports.indexData = function(callback) {
-  callback(indexMetaDataGlobal);
+  callback(readMetaDataGlobal());
 }
 
 
@@ -40,8 +39,7 @@ exports.calibrate = function(callback) {
   countDocuments({}, function(indexDocData) {
     countReverseIndex(indexDocData, function(newIndexMetaData) {
       indexMetaDataGlobal = newIndexMetaData;
-      console.log(indexMetaDataGlobal);
-      callback('calibrated');
+      callback(newIndexMetaData);
     });
   });
 }
@@ -49,19 +47,20 @@ exports.calibrate = function(callback) {
 
 countDocuments = function(indexMetaData, callback) {
   indexMetaData['totalIndexedFields'] = 0;
-  indexMetaData['indexedFieldNames'] = []
+  indexMetaData['indexedFieldNames'] = new Array();
   indexMetaData['totalDocs'] = 0;
   //throwaway arrays
-  var indexedFieldNamesX = [];
-  var totalIndexedDocs = [];
+  var indexedFieldNamesX = new Array();
+  var totalIndexedDocsTmp = new Array();
 
   console.log('calibrating...');
   reverseIndex.createReadStream({
     start: 'DOCUMENT~',
     end: 'DOCUMENT~~'})
     .on('data', function(data) {
+      console.log(data.key);
       indexMetaData['totalIndexedFields']++;
-      totalIndexedDocs[data.key.split('~')[1]] = data.key.split('~')[1];
+      totalIndexedDocsTmp.push(data.key.split('~')[1]);
       indexedFieldNamesX[data.key.split('~')[2]] = data.key.split('~')[2];
     })
     .on('end', function() {
@@ -70,9 +69,20 @@ countDocuments = function(indexMetaData, callback) {
           indexMetaData['indexedFieldNames'].push(indexedFieldNamesX[o]);
         }
       }
-      indexMetaData['totalDocs'] = totalIndexedDocs.length;
+      indexMetaData['totalDocs'] = arrNoDupe(totalIndexedDocsTmp).length;
       callback(indexMetaData);
     });  
+}
+
+//take an array and returns a similar array with no duplicates
+function arrNoDupe(a) {
+    var temp = {};
+    for (var i = 0; i < a.length; i++)
+        temp[a[i]] = true;
+    var r = [];
+    for (var k in temp)
+        r.push(k);
+    return r;
 }
 
 countReverseIndex = function(indexMetaData, callback) {
@@ -83,6 +93,7 @@ countReverseIndex = function(indexMetaData, callback) {
     start: 'REVERSEINDEX~',
     end: 'REVERSEINDEX~~'})
     .on('data', function(data) {
+      console.log(data.key);
       indexMetaData['reverseIndexSize']++;
       if (data.key.split('~')[2] != 'NO') {
         availableFacets[data.key.split('~')[2]] = data.key.split('~')[2];
@@ -100,11 +111,22 @@ countReverseIndex = function(indexMetaData, callback) {
 
 
 exports.index = function(batchString, filters, callback) {
+  var indexMetaDataGlobal;
+  if (indexMetaDataGlobal == undefined) {
+    indexMetaDataGlobal = readMetaDataGlobal();
+  }
+  for (var i = 0; i < filters.length; i++) {
+    if (indexMetaDataGlobal['availableFacets'].indexOf(filters[i]) == -1) {
+      indexMetaDataGlobal['availableFacets'].push(filters[i]);
+    }
+  }
   var batch = JSON.parse(batchString);
   for (docID in batch) {
+    indexMetaDataGlobal['totalDocs']++;
     console.log('indexing ' + docID);
-    indexDoc(docID, batch[docID], filters);
+    indexDoc(docID, batch[docID], filters, indexMetaDataGlobal);
   }
+  writeMetaDataGlobal(indexMetaDataGlobal);
   callback('indexed\n');
 }
 
@@ -130,9 +152,32 @@ exports.deleteDoc = function(docID, callback) {
     });
 }
 
+function readMetaDataGlobal() {
+  var obj;
+  try {
+    obj = JSON.parse(fs.readFileSync('norchindex.json'));
+  }
+  catch (e) {
+    obj = {};
+    obj['totalIndexedFields'] = 0;
+    obj['indexedFieldNames'] = [];
+    obj['totalDocs'] = 0;
+    obj['reverseIndexSize'] = 0;
+    obj['availableFacets'] = [];
+  }
+  console.log(obj);
+  return obj;
+}
+
+function writeMetaDataGlobal(obj) {
+  fs.writeFileSync('norchindex.json', JSON.stringify(obj));
+  return;
+}
+
 
 //TODO: clean up confusion between filters and factets
-function indexDoc(docID, doc, facets) {
+function indexDoc(docID, doc, facets, indexMetaDataGlobal) {
+  debugger;
   //use key if found, if no key is found set filename to be key.
   var fieldBatch = [];
   var id = docID;
@@ -153,6 +198,9 @@ function indexDoc(docID, doc, facets) {
   }
 
   for (fieldKey in doc) {
+    if (indexMetaDataGlobal['indexedFieldNames'].indexOf(fieldKey) == -1) {
+      indexMetaDataGlobal['indexedFieldNames'].push(fieldKey);
+    }
     tfidf = new TfIdf();
     tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
     docVector = tfidf.documents[tfidf.documents.length - 1];
@@ -183,6 +231,7 @@ function indexDoc(docID, doc, facets) {
             + highestFrequencyCount + '~'
             + (docVector[k] / highestFrequencyCount) + '~'
             + id;
+          indexMetaDataGlobal['reverseIndexSize']++;
           fieldBatch.push({
             type:'put',
             key:tokenKey,
@@ -194,15 +243,13 @@ function indexDoc(docID, doc, facets) {
     //dump references so that docs can be deleted
     var docDeleteIndexKey = 'DOCUMENT~' + id + '~' + fieldKey;
     deleteKeys.push(docDeleteIndexKey);
+    //update metadata
+    indexMetaDataGlobal['totalIndexedFields']++;
     fieldBatch.push({
       type: 'put',
       key: docDeleteIndexKey,
       value: JSON.stringify(deleteKeys)});
   }
-
-  
-
-
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
     if (err) return console.log('Ooops!', err);

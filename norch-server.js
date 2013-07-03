@@ -21,10 +21,12 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
 norch.calibrate(function(msg) {
-  console.log('start up calibration completed');
+  console.log('startup calibration completed');
+  console.log(msg);
 });
-
+*/
 
 // development only
 if ('development' == app.get('env')) {
@@ -122,16 +124,16 @@ app.get('/search', function(req, res) {
 //curl --form document=@testdata.json http://localhost:3000/indexer
 //--form facetOn=topics
 app.post('/indexer', function(req, res) {
+  console.log('requested indexer');
   var filters = [];
   if (req.body.filterOn) {
     filters = req.body.filterOn.split(',');
   }
-  
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
   norch.index(batch, filters, function(msg) {
-    norch.calibrate(function(msg) {
+//    norch.calibrate(function(msg) {
       res.send(msg);
-    });
+//    });
   });
 });
 
