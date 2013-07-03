@@ -3,7 +3,7 @@
 Norch is an experimental search engine built with Node.js and LevelDB. The name Norch is a contraction of " **No** de Sea **rch** "
 
 ###Homepage
-https://github.com/fergiemcdowall/Norch
+http://fergiemcdowall.github.io/Norch 
 
 ###Download
 Currently Norch is best obtained using Git. Run the following command to clone the git repository for Norch:
