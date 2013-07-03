@@ -30,6 +30,7 @@ function search(urlParams) {
   $.getJSON("http://localhost:3000/search?" + urlParams, function(result){
     $("#resultset").empty();
     $("#facets").empty();
+    $("#resultSetStrapLine").empty();
     if (result.totalHits > 0) {
       $("#resultSetStrapLine").html('<h4>' + result.totalHits
                                     + ' hits</h4>');

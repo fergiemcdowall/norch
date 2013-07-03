@@ -6,8 +6,11 @@ var fs = require('fs')
 //precalculate index metadata to save time ewith every query
 
 //Arbitrary defaults
-var maxStringFieldLength = 100;  //this has a really big effect on performance for some reason...
+var maxStringFieldLength = 300;  //this has a really big effect on performance for some reason...
 var maxMetadataFieldLength = 20;
+
+//only use this global for fast reads when searching- NEVER WRITE TO IT
+var indexMetaDataGlobal = readMetaDataGlobal();
 
 var reverseIndex = levelup('./norchindex')
 , stopwords = require('natural').stopwords
@@ -170,6 +173,7 @@ function readMetaDataGlobal() {
 }
 
 function writeMetaDataGlobal(obj) {
+  indexMetaDataGlobal = obj;
   fs.writeFileSync('norchindex.json', JSON.stringify(obj));
   return;
 }
@@ -177,7 +181,6 @@ function writeMetaDataGlobal(obj) {
 
 //TODO: clean up confusion between filters and factets
 function indexDoc(docID, doc, facets, indexMetaDataGlobal) {
-  debugger;
   //use key if found, if no key is found set filename to be key.
   var fieldBatch = [];
   var id = docID;
@@ -214,7 +217,6 @@ function indexDoc(docID, doc, facets, indexMetaDataGlobal) {
       if (k != '__key') {
         var facetIndexKey = ['NO~FACETING'];
         for (var l = 0; l < facets.length; l++) {
-          debugger;
           if (doc[facets[l]]) {
             var thisFacetValue = doc[facets[l]];
             for (var m = 0; m < thisFacetValue.length; m++) {
@@ -233,9 +235,10 @@ function indexDoc(docID, doc, facets, indexMetaDataGlobal) {
             + id;
           indexMetaDataGlobal['reverseIndexSize']++;
           fieldBatch.push({
-            type:'put',
-            key:tokenKey,
+            type: 'put',
+            key: tokenKey,
             value:JSON.stringify(value)});
+//            value: 'placeholder'});
           deleteKeys.push(tokenKey);
         }
       }
@@ -250,6 +253,8 @@ function indexDoc(docID, doc, facets, indexMetaDataGlobal) {
       key: docDeleteIndexKey,
       value: JSON.stringify(deleteKeys)});
   }
+
+
   //put key-values into database
   reverseIndex.batch(fieldBatch, function (err) {
     if (err) return console.log('Ooops!', err);
@@ -389,7 +394,6 @@ function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
           for (var k in q.filter) {
             var filterIsPresent = false;
             for (var l = 0; l < q.filter[k].length; l++) {
-              debugger;
               //if the filter field is missing- drop hit
               if (docSet[j].document[k] === undefined)
                 continue docSetLoop;
