@@ -2,12 +2,13 @@ var fs = require('fs')
 , levelup = require('levelup')
 , natural = require('natural');
 
-//initialised by calling calibrate function
-var totalDocs;
-var availableFacets = [];
-var totalIndexedFields = 0;
-var reverseIndexSize = 0;
-var indexedFieldNames = [];
+//Calibration values
+//precalculate index metadata to save time ewith every query
+var indexMetaDataGlobal = {};
+
+//Arbitrary defaults
+var maxStringFieldLength = 10000;
+var maxMetadataFieldLength = 20;
 
 var reverseIndex = levelup('./reverseIndex')
 , stopwords = require('natural').stopwords
@@ -16,13 +17,7 @@ var reverseIndex = levelup('./reverseIndex')
 
 
 exports.indexData = function(callback) {
-  var indexData = {};
-  indexData.totalDocs = totalDocs;
-  indexData.availableFacets = availableFacets;
-  indexData.totalIndexedFields = totalIndexedFields;
-  indexData.reverseIndexSize = reverseIndexSize;
-  indexData.searchableFields = indexedFieldNames;
-  callback(indexData);
+  callback(indexMetaDataGlobal);
 }
 
 
@@ -42,60 +37,73 @@ exports.indexPeek = function(start, stop, callback) {
 
 
 exports.calibrate = function(callback) {
-  var totalIndexedDocs = [];
-  var availableFilters = [];
+  countDocuments({}, function(indexDocData) {
+    countReverseIndex(indexDocData, function(newIndexMetaData) {
+      indexMetaDataGlobal = newIndexMetaData;
+      console.log(indexMetaDataGlobal);
+      callback('calibrated');
+    });
+  });
+}
+
+
+countDocuments = function(indexMetaData, callback) {
+  indexMetaData['totalIndexedFields'] = 0;
+  indexMetaData['indexedFieldNames'] = []
+  indexMetaData['totalDocs'] = 0;
+  //throwaway arrays
   var indexedFieldNamesX = [];
+  var totalIndexedDocs = [];
+
   console.log('calibrating...');
   reverseIndex.createReadStream({
     start: 'DOCUMENT~',
     end: 'DOCUMENT~~'})
     .on('data', function(data) {
-      totalIndexedFields++;
+      indexMetaData['totalIndexedFields']++;
       totalIndexedDocs[data.key.split('~')[1]] = data.key.split('~')[1];
       indexedFieldNamesX[data.key.split('~')[2]] = data.key.split('~')[2];
     })
-    .on('close', function() {
-//      totalDocs = totalIndexedFields;
-
+    .on('end', function() {
       for(var o in indexedFieldNamesX) {
-        if (indexedFieldNames.indexOf(indexedFieldNamesX[o]) == -1) {
-          indexedFieldNames.push(indexedFieldNamesX[o]);
+        if (indexMetaData['indexedFieldNames'].indexOf(indexedFieldNamesX[o]) == -1) {
+          indexMetaData['indexedFieldNames'].push(indexedFieldNamesX[o]);
         }
       }
+      indexMetaData['totalDocs'] = totalIndexedDocs.length;
+      callback(indexMetaData);
+    });  
+}
 
-
-      reverseIndex.createReadStream({
-        start: 'REVERSEINDEX~',
-        end: 'REVERSEINDEX~~'})
-        .on('data', function(data) {
-          reverseIndexSize++;
-          if (data.key.split('~')[2] != 'NO') {
-            availableFilters[data.key.split('~')[2]] = data.key.split('~')[2];
-          }
-        })
-        .on('close', function() {
-          for(var o in availableFilters) {
-            if (availableFacets.indexOf(availableFilters[o]) == -1) {
-              availableFacets.push(availableFilters[o]);
-            }
-          }
-          totalDocs = totalIndexedDocs.length;
-          console.log('...calibrated.');
-          console.log('totalIndexedFields: ' + totalIndexedFields);
-          console.log('indexedFieldNames: ' + indexedFieldNames);
-          console.log('totalIndexedDocs: ' + totalDocs);
-          console.log('reverseIndexSize: ' + reverseIndexSize);
-          console.log('default facets: ' + availableFacets);
-        });
-    });
+countReverseIndex = function(indexMetaData, callback) {
+  var availableFacets = [];
+  indexMetaData['reverseIndexSize'] = 0;
+  indexMetaData['availableFacets'] = [];
+  reverseIndex.createReadStream({
+    start: 'REVERSEINDEX~',
+    end: 'REVERSEINDEX~~'})
+    .on('data', function(data) {
+      indexMetaData['reverseIndexSize']++;
+      if (data.key.split('~')[2] != 'NO') {
+        availableFacets[data.key.split('~')[2]] = data.key.split('~')[2];
+      }
+    })
+    .on('close', function() {
+      for(var o in availableFacets) {
+        if (indexMetaData['availableFacets'].indexOf(availableFacets[o]) == -1) {
+          indexMetaData['availableFacets'].push(availableFacets[o]);
+        }
+      }
+      callback(indexMetaData);
+    }); 
 }
 
 
-exports.index = function(batchString, facets, callback) {
+exports.index = function(batchString, filters, callback) {
   var batch = JSON.parse(batchString);
   for (docID in batch) {
-    console.log(docID);
-    indexDoc(docID, batch[docID], facets);
+    console.log('indexing ' + docID);
+    indexDoc(docID, batch[docID], filters);
   }
   callback('indexed\n');
 }
@@ -123,7 +131,7 @@ exports.deleteDoc = function(docID, callback) {
 }
 
 
-
+//TODO: clean up confusion between filters and factets
 function indexDoc(docID, doc, facets) {
   //use key if found, if no key is found set filename to be key.
   var fieldBatch = [];
@@ -140,10 +148,10 @@ function indexDoc(docID, doc, facets) {
     if( Object.prototype.toString.call(doc[fieldKey]) === '[object Array]' ) {
       value['fields'][fieldKey] = doc[fieldKey];
     } else {
-      value['fields'][fieldKey] = doc[fieldKey].substring(0, 100);
+      value['fields'][fieldKey] = doc[fieldKey].substring(0, maxStringFieldLength);
     }
   }
-  
+
   for (fieldKey in doc) {
     tfidf = new TfIdf();
     tfidf.addDocument(doc[fieldKey], fieldKey + '~' + id);
@@ -251,7 +259,8 @@ exports.search = function (q, callback) {
 
 function getSearchResults (q, tq, i, docSet, idf, indexKeys, callback) {
   var queryTerms = tq['query'];
-
+  var totalIndexedFields = indexMetaDataGlobal['totalIndexedFields'];
+  var availableFacets = indexMetaDataGlobal['availableFacets'];
   var thisQueryTerm = indexKeys[i].split('~')[0];
   var offset = parseInt(q['offset']);
   var pageSize = parseInt(q['pagesize']);

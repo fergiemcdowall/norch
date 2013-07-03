@@ -14,35 +14,40 @@
     <div class="navbar-inner">
       <a class="brand" href="/">Norch</a>
       <ul class="nav">
-        <li><a href="about.html">Help</a></li>
-        <li class="active"><a href="querybuilder.html">Query Builder</a></li>
         <li><a href="search.html">Search</a></li>
+        <li class="active"><a href="querybuilder.html">Query Builder</a></li>
         <li><a href="add.html">Add</a></li>
         <li><a href="delete.html">Delete</a></li>
+        <li><a href="about.html">Help</a></li>
       </ul>
     </div>
   </div>
   <h1>Query Builder</h1>
-  <br>
-  
+  <p>
+  See <a href="https://github.com/fergiemcdowall/Norch">https://github.com/fergiemcdowall/Norch</a> for more info
+  </p>
   <form action="/search" method="GET" id="qbform">
     <p>
+      Queryterms<br>
       <input type="text" placeholder="query" name="q" value="">
     </p>
     <p>
+      Facets (if left blank- all facets shown)<br>
       <input type="text" placeholder="facets" name="facets" value="">
     </p>
-    <p>
-      <input type="text" placeholder="filter" name="filter" value="">
+    <p id="filter">
+      Filters<br>
     </p>
     <p>
+      Where to start from in the resultset<br>
       <input type="text" placeholder="offset" name="offset" value="">
     </p>
     <p>
+      Number of results returned<br>
       <input type="text" placeholder="pagesize" name="pagesize" value="">
     </p>
-    <p>
-      <input type="text" placeholder="weight" name="weight" value="">
+    <p id="weight">
+      Relevancy adjustment by field weighting<br>
     </p>
     <button type="submit" class="btn btn-large">Search!</button>
   </form>
@@ -57,6 +62,20 @@
         }
       });
     });
+  </script>
+  <script>
+  $.getJSON('http://localhost:3000/indexData', function(result){
+    for (var i = 0; i < result.availableFacets.length; i++) {
+      var filterName = 'filter[' + result.availableFacets[i] + '][]'
+      $('#filter').append('<input type="text" placeholder="'
+                          + filterName + '" name="' + filterName + '" value="">');
+    }
+    for (var i = 0; i < result.searchableFields.length; i++) {
+      var sfName = 'weight[' + result.searchableFields[i] + '][]'
+      $('#weight').append('<input type="text" placeholder="'
+                          + sfName + '" name="' + sfName + '" value="">');
+    }
+  });
   </script>
   
 </body>

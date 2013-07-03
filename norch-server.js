@@ -22,7 +22,7 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 norch.calibrate(function(msg) {
-  console.log('calibrated');
+  console.log('start up calibration completed');
 });
 
 
@@ -33,6 +33,10 @@ if ('development' == app.get('env')) {
 
 
 function getQuery(req) {
+  //default values
+  var offsetDefault = 0;
+  var pagesizeDefault = 10;
+
   var q = {};
   q['query'] = "*";
   if (req.query['q']) {
@@ -41,29 +45,21 @@ function getQuery(req) {
   if (req.query['offset']) {
     q['offset'] = req.query['offset'];
   } else {
-    q['offset'] = 0;
+    q['offset'] = offsetDefault;
   }
   if (req.query['pagesize']) {
     q['pagesize'] = req.query['pagesize'];
   } else {
-    q['pagesize'] = 10;
+    q['pagesize'] = pagesizeDefault;
   }
   if (req.query['facets']) {
     q['facets'] = req.query['facets'].toLowerCase().split(',');
   }
   if (req.query['weight']) {
-    q['weight'] = {};
-    console.log(q['weight']);
-    var weightURLParam = req.query['weight'].toLowerCase().split(',');
-    for (var i = 0; i < weightURLParam.length; i++) {
-      var field = weightURLParam[i].split(':')[0];
-      var weightFactor = weightURLParam[i].split(':')[1];
-      q['weight'][field] = weightFactor;
-    }
+    q['weight'] = req.query.weight;
   }
   //&filter[topics][]=cocoa&filter[places][]=usa
   if (req.query['filter']) {
-    debugger;
     q['filter'] = req.query.filter;
   }
   console.log(q);
@@ -75,9 +71,10 @@ app.get('/', function(req, res) {
   res.sendfile('public/search.html');
 });
 
+
 app.get('/calibrate', function(req, res) {
   norch.calibrate(function(msg) {
-    console.log('calibrated');
+    res.send(msg);
   });
 });
 
