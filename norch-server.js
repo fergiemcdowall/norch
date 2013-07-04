@@ -131,7 +131,6 @@ app.post('/indexer', function(req, res) {
   }
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
   norch.index(batch, filters, function(msg) {
-    global.gc();
 //    norch.calibrate(function(msg) {
       res.send(msg);
 //    });
