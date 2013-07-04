@@ -135,12 +135,19 @@ exports.index = function(batchString, filters, callback) {
 
 exports.deleteDoc = function(docID, callback) {
   var delBatch = [];
+  var meta = readMetaDataGlobal();
+  //record deleted doc
+  meta['totalDocs']--;
   reverseIndex.createReadStream({
     start: 'DOCUMENT~' + docID + '~',
     end: 'DOCUMENT~' + docID + '~~'})
     .on('data', function(data) {
+      //record deleted field
+      meta['totalIndexedFields']--;
       var deleteKeys = JSON.parse(data.value);
       for (var i = 0; i < deleteKeys.length; i++) {
+        //record deleted reverse index entry
+        meta['reverseIndexSize']--;
         delBatch.push({
           type: 'del',
           key: deleteKeys[i]});
@@ -151,6 +158,7 @@ exports.deleteDoc = function(docID, callback) {
         if (err) return console.log('Ooops!', err);
         return;
       });
+      writeMetaDataGlobal(meta);
       callback('deleted ' + docID);
     });
 }
