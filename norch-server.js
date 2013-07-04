@@ -7,7 +7,7 @@ var express = require('express')
 , http = require('http')
 , path = require('path')
 , fs = require('fs')
-, norch = require('./norch-lib.js');
+, norch = require('search-index');
 
 var app = express();
 
@@ -131,6 +131,7 @@ app.post('/indexer', function(req, res) {
   }
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
   norch.index(batch, filters, function(msg) {
+    global.gc();
 //    norch.calibrate(function(msg) {
       res.send(msg);
 //    });
