@@ -7,6 +7,16 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 
 **Github:** https://github.com/fergiemcdowall/norch
 
+#Features
+
+* Full text search
+* Stopword removal
+* Faceting
+* Filtering
+* Relevance weighting (tf-idf)
+* Field weighting
+* Paging (offset and resultset length)
+
 ##Download
 
 **git:**
