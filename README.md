@@ -8,8 +8,13 @@ http://fergiemcdowall.github.io/norch
 
 ##Download
 
-**GIT:** git clone https://github.com/fergiemcdowall/norch
-**HTTP:** http://fergiemcdowall.github.io/norch/
+**GIT:**
+
+    git clone https://github.com/fergiemcdowall/norch
+
+**HTTP:**
+
+http://fergiemcdowall.github.io/norch/
 
 ##Installing Norch
 
