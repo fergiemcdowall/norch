@@ -110,9 +110,13 @@ Usage:
 
 Usage:
 
-    weight=<field name>:<weight (factor)>
+    weight[<field name>][]:<weight (factor)>
 
-[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight=title:10](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight=title:10)
+[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10)
+
+Multiple field weights:
+
+[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10&weight[body][]=2)
 
 
 
