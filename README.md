@@ -3,23 +3,21 @@
 Norch is an experimental search engine built with [Node.js](http://nodejs.org/) and
 [Search-index](https://github.com/fergiemcdowall/search-index). The name Norch is a contraction of " **No** de Sea **rch** "
 
-##Homepage
-http://fergiemcdowall.github.io/norch 
+**Homepage:** http://fergiemcdowall.github.io/norch 
+
+**Github:** https://github.com/fergiemcdowall/norch
 
 ##Download
 
-**GIT:**
+**git:**
 
     git clone https://github.com/fergiemcdowall/norch
 
-**HTTP:**
+**http:**
 
-http://fergiemcdowall.github.io/norch/
+http://fergiemcdowall.github.io/norch
 
 ##Installing Norch
-
-*Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
-(localhost). Once Norch is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
 
 Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Norch can be installed by running the following command which will download and install all dependencies:
 
@@ -29,7 +27,11 @@ If everything went to plan- Norch should now be installed on your machine
 
 #Operation
 
+*Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
+(localhost). Once Norch is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
+
 ##Start your Norch server
+
 Navigate to the directory where you installed Norch and type
 
     node norch-server
