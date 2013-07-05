@@ -150,6 +150,17 @@ Multiple field weights:
 
 [http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10&weight[body][]=2)
 
+#Known Issues
+
+Norch is new software and as such should be regarded as a work in progress. Administrators should be aware of the
+following:
+
+ * **Indexing:** Heavy indexing (>200 docs per second) is generally OK, but the server will briefly "pause" shortly afterwards
+ * **The GUI (scrolling)** the default GUI is very much a temporary measure. The instant search function is flaky and currently
+ there is no support for scrolling
+
+Indexing and GUI is the current focus of development
+
 #License
 
 Search-index is released under the MIT license:
