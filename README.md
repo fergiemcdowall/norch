@@ -9,7 +9,7 @@ http://fergiemcdowall.github.io/Norch
 ##Download
 Currently Norch is best obtained using Git. Run the following command to clone the git repository for Norch:
 
-    git clone https://github.com/fergiemcdowall/Norch
+    git clone https://github.com/fergiemcdowall/norch
     
 ##Installing Norch
 
