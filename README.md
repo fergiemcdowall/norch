@@ -11,11 +11,15 @@ Currently Norch is best obtained using Git. Run the following command to clone t
     git clone https://github.com/fergiemcdowall/Norch
     
 ###Installing Norch
+
+*Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
+(localhost). Once Norch is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
+
 Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Norch can be installed by running the following command which will download and install all dependencies:
 
     npm install
 
-If everything went to plan- Norch should now be installed on your machine at http://localhost:3000/.
+If everything went to plan- Norch should now be installed on your machine at [http://localhost:3000/](http://localhost:3000/).
     
 
 ##Operation
