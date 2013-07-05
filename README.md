@@ -180,7 +180,7 @@ Indexing and GUI is the current focus of development
 
 #License
 
-Search-index is released under the MIT license:
+Norch is released under the MIT license:
 
 Copyright (c) 2013 Fergus McDowall
 
