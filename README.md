@@ -64,7 +64,7 @@ strings or simple arrays.
 
 ##Indexing parameters
 
-###facetOn
+###filterOn
 
 Example
 
