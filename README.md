@@ -4,13 +4,13 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 [Search-index](https://github.com/fergiemcdowall/search-index). The name Norch is a contraction of " **No** de Sea **rch** "
 
 ##Homepage
-http://fergiemcdowall.github.io/Norch 
+http://fergiemcdowall.github.io/norch 
 
 ##Download
-Currently Norch is best obtained using Git. Run the following command to clone the git repository for Norch:
 
-    git clone https://github.com/fergiemcdowall/norch
-    
+**GIT:** git clone https://github.com/fergiemcdowall/norch
+**HTTP:** http://fergiemcdowall.github.io/norch/
+
 ##Installing Norch
 
 *Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
