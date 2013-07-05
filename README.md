@@ -19,8 +19,7 @@ Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that the
 
     npm install
 
-If everything went to plan- Norch should now be installed on your machine at [http://localhost:3000/](http://localhost:3000/).
-    
+If everything went to plan- Norch should now be installed on your machine
 
 ##Operation
 
@@ -29,7 +28,8 @@ Navigate to the directory where you installed Norch and type
 
     node norch-server
 
-W00t! Norch is now running locally on your machine. The default port of 3000 can be modified if required.
+Hurrah! Norch is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
+and marvel. The default port of 3000 can be modified if required.
 
 ##Indexing
 Once you have set up Norch, you can get some content into it. Norch comes with some test data in the directory "testdata"
