@@ -1,7 +1,7 @@
 #Norch
 
-Norch is an experimental search engine built with Node.js, [LevelUp](https://github.com/rvagg/node-levelup) and
-[Natural](https://github.com/NaturalNode/natural). The name Norch is a contraction of " **No** de Sea **rch** "
+Norch is an experimental search engine built with [Node.js](http://nodejs.org/) and
+[Search-index](https://github.com/fergiemcdowall/search-index). The name Norch is a contraction of " **No** de Sea **rch** "
 
 ##Homepage
 http://fergiemcdowall.github.io/Norch 
