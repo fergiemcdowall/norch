@@ -15,7 +15,7 @@ Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that the
 
     npm install
 
-If everything went to plan- Norch chould now be installed on your machine.
+If everything went to plan- Norch should now be installed on your machine at http://localhost:3000/.
     
 
 ##Operation
