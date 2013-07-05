@@ -7,21 +7,26 @@ var express = require('express')
 , http = require('http')
 , path = require('path')
 , fs = require('fs')
-, norch = require('./norch-lib.js');
+, norch = require('search-index');
 
 var app = express();
 
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
+/*
+norch.calibrate(function(msg) {
+  console.log('startup calibration completed');
+  console.log(msg);
+});
+*/
 
 // development only
 if ('development' == app.get('env')) {
@@ -30,38 +35,80 @@ if ('development' == app.get('env')) {
 
 
 function getQuery(req) {
+  //default values
+  var offsetDefault = 0;
+  var pagesizeDefault = 10;
+
   var q = {};
-  q['query'] = req.query['q'].toLowerCase().split(' ');
-  if (req.query['f']) {
-    q['facets'] = req.query['f'].toLowerCase().split(',');
+  q['query'] = "*";
+  if (req.query['q']) {
+    q['query'] = req.query['q'].toLowerCase().split(' ');
   }
-  if (req.query['w']) {
-    q['weight'] = {};
-    var weightURLParam = req.query['w'].toLowerCase().split(',');
-    for (var i = 0; i < weightURLParam.length; i++) {
-      var field = weightURLParam[i].split(':')[0];
-      var weightFactor = weightURLParam[i].split(':')[1];
-      q['weight'][field] = weightFactor;
-    }
+  if (req.query['offset']) {
+    q['offset'] = req.query['offset'];
+  } else {
+    q['offset'] = offsetDefault;
   }
+  if (req.query['pagesize']) {
+    q['pagesize'] = req.query['pagesize'];
+  } else {
+    q['pagesize'] = pagesizeDefault;
+  }
+  if (req.query['facets']) {
+    q['facets'] = req.query['facets'].toLowerCase().split(',');
+  }
+  if (req.query['weight']) {
+    q['weight'] = req.query.weight;
+  }
+  //&filter[topics][]=cocoa&filter[places][]=usa
   if (req.query['filter']) {
-    q['filter'] = {};
-    var filterURLParam = req.query['filter'].toLowerCase().split(',');
-    for (var i = 0; i < filterURLParam.length; i++) {
-      var field = filterURLParam[i].split(':')[0];
-      var filterValue = filterURLParam[i].split(':')[1];
-      q['filter'][field] = filterValue;
-    }
+    q['filter'] = req.query.filter;
   }
   console.log(q);
   return q;
 }
 
 
-app.get('/dumpIndex', function(req, res) {
-  norch.dumpIndex(req.query['start'], req.query['stop'], function(msg) {
+app.get('/', function(req, res) {
+  res.sendfile('public/search.html');
+});
+
+
+app.get('/calibrate', function(req, res) {
+  norch.calibrate(function(msg) {
     res.send(msg);
   });
+});
+
+
+app.get('/README.md', function(req, res) {
+  res.sendfile('README.md');
+});
+
+
+app.get('/indexPeek', function(req, res) {
+  norch.indexPeek(req.query['start'], req.query['stop'], function(msg) {
+    res.send(msg);
+  });
+});
+
+
+app.get('/indexData', function(req, res) {
+  norch.indexData(function(msg) {
+    res.send(msg);
+  });
+});
+
+
+app.post('/delete', function(req, res) {
+  norch.deleteDoc(req.body.docID, function(msg) {
+    res.send(msg);
+  });
+});
+
+
+app.get('/searchgui', function(req, res) {
+  res.send('Welcome to Norch');
 });
 
 
@@ -75,10 +122,18 @@ app.get('/search', function(req, res) {
 
 
 //curl --form document=@testdata.json http://localhost:3000/indexer
+//--form facetOn=topics
 app.post('/indexer', function(req, res) {
+  console.log('requested indexer');
+  var filters = [];
+  if (req.body.filterOn) {
+    filters = req.body.filterOn.split(',');
+  }
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
-  norch.index(batch, function(msg) {
-    res.send(msg);
+  norch.index(batch, filters, function(msg) {
+//    norch.calibrate(function(msg) {
+      res.send(msg);
+//    });
   });
 });
 
