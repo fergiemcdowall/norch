@@ -2,15 +2,15 @@
 
 Norch is an experimental search engine built with Node.js and LevelDB. The name Norch is a contraction of " **No** de Sea **rch** "
 
-###Homepage
+##Homepage
 http://fergiemcdowall.github.io/Norch 
 
-###Download
+##Download
 Currently Norch is best obtained using Git. Run the following command to clone the git repository for Norch:
 
     git clone https://github.com/fergiemcdowall/Norch
     
-###Installing Norch
+##Installing Norch
 
 *Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
 (localhost). Once Norch is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
@@ -21,9 +21,9 @@ Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that the
 
 If everything went to plan- Norch should now be installed on your machine
 
-##Operation
+#Operation
 
-###Start your Norch server
+##Start your Norch server
 Navigate to the directory where you installed Norch and type
 
     node norch-server
@@ -32,13 +32,16 @@ Hurrah! Norch is now running locally on your machine. Head over to [http://local
 and marvel. The default port of 3000 can be modified if required.
 
 ##Indexing
-Once you have set up Norch, you can get some content into it. Norch comes with some test data in the directory "testdata"
+Once you have set up Norch, you can get some content into it. Norch comes with a JSONified version of the venerable
+Reuters-21578 test dataset in the directory "testdata". To index this data cd into the directory "testdata" and run
+the following command (note that one data file can contain an arbitralily large number of documents)
 
-cd into the directory "testdata" and run the following command to index 1000 documents of the reuters test data set (note that one data file can contain an arbitralily large number of documents)
+    curl --form document=@reuters-000.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
 
-    curl --form document=@reuters-000.json http://localhost:3000/indexer
+If you are on a unix machine (including mac OSX), you can also run /index.sh in order to read in the entire dataset
+of 21 batch files.
 
-Norch indexes data that is in the format
+Generally Norch indexes data that is in the format
 
 ```javascript
 {
@@ -55,7 +58,25 @@ Norch indexes data that is in the format
 }
 ```
 
-##Searching
+That is to say an object containing a list of key:values where the key is the document ID and the values are a futher
+list of key:values that define the fields. Fields can be called anything other than 'ID'. Field values can be either
+strings or simple arrays.
+
+##Indexing parameters
+
+###facetOn
+
+Example
+
+```
+ --form filterOn=places,topics,organisations
+```
+
+filterOn is an array of fields that can be used to filter search results. Each defined field must be an array field in
+the document. filterOn will not work with string fields.
+
+
+#Searching
 
 Search is available on [http://localhost.com:3000/search](http://localhost.com:3000/search)
 
