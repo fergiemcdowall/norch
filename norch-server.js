@@ -139,5 +139,21 @@ app.post('/indexer', function(req, res) {
 
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log();
+  console.log('      ___           ___           ___           ___           ___     ');
+  console.log('     /__/\\         /  /\\         /  /\\         /  /\\         /__/\\     ');
+  console.log('     \\  \\:\\       /  /::\\       /  /::\\       /  /:/         \\  \\:\\    ');
+  console.log('      \\  \\:\\     /  /:/\\:\\     /  /:/\\:\\     /  /:/           \\__\\:\\   ');
+  console.log('  _____\\__\\:\\   /  /:/  \\:\\   /  /:/~/:/    /  /:/  ___   ___ /  /::\\  ');
+  console.log(' /__/::::::::\\ /__/:/ \\__\\:\\ /__/:/ /:/___ /__/:/  /  /\\ /__/\\  /:/\\:\\ ');
+  console.log(' \\  \\:\\~~\\~~\\/ \\  \\:\\ /  /:/ \\  \\:\\/:::::/ \\  \\:\\ /  /:/ \\  \\:\\/:/__\\/ ');
+  console.log('  \\  \\:\\  ~~~   \\  \\:\\  /:/   \\  \\::/~~~~   \\  \\:\\  /:/   \\  \\::/      ');
+  console.log('   \\  \\:\\        \\  \\:\\/:/     \\  \\:\\        \\  \\:\\/:/     \\  \\:\\      ');
+  console.log('    \\  \\:\\        \\  \\::/       \\  \\:\\        \\  \\::/       \\  \\:\\     ');
+  console.log('     \\__\\/         \\__\\/         \\__\\/         \\__\\/         \\__\\/     ')
+  console.log();
+  console.log('http://fergiemcdowall.github.io/Norch                 MIT license, 2013');
+  console.log();
+  console.log('Norch server listening on port ' + app.get('port'));
+  console.log();
 });
