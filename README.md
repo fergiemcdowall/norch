@@ -75,13 +75,13 @@ Usage:
 
 Usage:
 
-    filter=<field to filter on>
+    filter[<filter field>][]=<value>
 
-[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain)
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain)
 
 Multiple filters:
 
-[http://localhost:3000/search?q=oil&f=places,topics,organisations&filter=topics:plywood,crude;places:indonesia](http://localhost:3000/search?q=oil&f=places,topics,organisations&filter=topics:plywood,crude;places:indonesia)
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr)
 
 
 ###offset
