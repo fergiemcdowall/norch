@@ -38,10 +38,16 @@ Norch indexes data that is in the format
 
 ```javascript
 {
-    'doc1':{'title':'A really interesting document',
-            'body':'This is a really interesting document'},
-    'doc2':{'title':'Another interesting document',
-            'body':'This is another really interesting document that is a bit different'}
+  'doc1':{
+    'title':'A really interesting document',
+    'body':'This is a really interesting document',
+    'metadata':['red', 'potato']
+  },
+  'doc2':{
+    'title':'Another interesting document',
+    'body':'This is another really interesting document that is a bit different',
+    'metadata':['yellow', 'potato']
+  }
 }
 ```
 
