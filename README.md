@@ -142,7 +142,7 @@ Usage:
 
     offset=<start index>
 
-[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5)
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5)
 
 ###pagesize
 
@@ -152,7 +152,7 @@ Usage:
 
     pagesize=<size of resultset>
 
-[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&offset=5&pagesize=5)
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5)
 
 ###weight
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
@@ -161,11 +161,11 @@ Usage:
 
     weight[<field name>][]:<weight (factor)>
 
-[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10)
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10)
 
 Multiple field weights:
 
-[http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topicss&filter=topics:grain&weight[title][]=10&weight[body][]=2)
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
 
 #Known Issues
 
