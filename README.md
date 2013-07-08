@@ -172,7 +172,6 @@ Multiple field weights:
 Norch is new software and as such should be regarded as a work in progress. Administrators should be aware of the
 following:
 
- * **Indexing:** Heavy indexing (>200 docs per second) is generally OK, but the server will briefly "pause" shortly afterwards
  * **The GUI (scrolling)** the default GUI is very much a temporary measure. The instant search function is flaky and currently
  there is no support for scrolling
 
