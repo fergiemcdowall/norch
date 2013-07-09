@@ -40,7 +40,7 @@ function search(urlParams) {
     var activeFilterArray = [];
     for (var i in result['query']['filter']) {
       var removeFilterLink = 
-        urlParams.replace('filter[' + i + '][]='
+        urlParams.replace('&filter[' + i + '][]='
                           + result['query']['filter'][i], '');
       console.log(removeFilterLink);
       $("#facets").append
