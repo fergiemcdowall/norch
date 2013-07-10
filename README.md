@@ -13,8 +13,9 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 * Stopword removal
 * Faceting
 * Filtering
-* Relevance weighting (tf-idf)
+* Fielded search
 * Field weighting
+* Relevance weighting (tf-idf)
 * Paging (offset and resultset length)
 
 ##Download
@@ -101,7 +102,7 @@ Search is available on [http://localhost.com:3000/search](http://localhost.com:3
 ##Search parameters
 
 ###q
-**(Required)** For "query". The search term.
+**(Required)** For "query". The search term. Asterisk (````*```) returns everything.
 
 Usage:
 
@@ -109,6 +110,13 @@ Usage:
 
 [http://localhost:3000/search?q=moscow](http://localhost:3000/search?q=moscow)
 
+###searchFields
+
+Search on specified fields. Ignore text that exists in other fields.
+
+    searchFields=<comma seperated lists of fields to search in>
+    
+[http://localhost:3000/search?q=plans&searchFields[]=body](http://localhost:3000/search?q=plans&searchFields[]=body)
 
 ###facets
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
