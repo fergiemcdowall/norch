@@ -102,7 +102,7 @@ Search is available on [http://localhost.com:3000/search](http://localhost.com:3
 ##Search parameters
 
 ###q
-**(Required)** For "query". The search term. Asterisk (````*```) returns everything.
+**(Required)** For "query". The search term. Asterisk (```*```) returns everything.
 
 Usage:
 
