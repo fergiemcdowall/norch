@@ -44,6 +44,9 @@ function getQuery(req) {
   if (req.query['q']) {
     q['query'] = req.query['q'].toLowerCase().split(' ');
   }
+  if (req.query['searchFields']) {
+    q['searchFields'] = req.query.searchFields;
+  }
   if (req.query['offset']) {
     q['offset'] = req.query['offset'];
   } else {
@@ -130,10 +133,8 @@ app.post('/indexer', function(req, res) {
     filters = req.body.filterOn.split(',');
   }
   var batch = fs.readFileSync(req.files.document.path, 'utf8');
-  norch.index(batch, filters, function(msg) {
-//    norch.calibrate(function(msg) {
-      res.send(msg);
-//    });
+  norch.index(batch, req.files.document.name, filters, function(msg) {
+    res.send(msg);
   });
 });
 
