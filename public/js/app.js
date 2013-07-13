@@ -23,8 +23,9 @@ $(document).ready(function() {
                               value:context[prop]});
     return ret;
   });
-  if ($('#search').val() != '') {
-    search(window.location.search.substring(1));
+  var urlParams = window.location.search.substring(1);
+  if (urlParams != '') {
+    search(urlParams);
   }
 });
 
