@@ -9,7 +9,9 @@ $("#search").keyup(function(){
   if (params.indexOf('q=') == -1) {
     params += 'q=ussr';
   }
-  search(params.replace(/(q=)[^\&]+/, '$1' + $('#search').val()));
+  if ($('#search').val() != '') {
+    search(params.replace(/(q=)[^\&]+/, '$1' + $('#search').val()));
+  }
 });
 
 
@@ -21,7 +23,10 @@ $(document).ready(function() {
                               value:context[prop]});
     return ret;
   });
-  search(window.location.search.substring(1));
+  var urlParams = window.location.search.substring(1);
+  if (urlParams != '') {
+    search(urlParams);
+  }
 });
 
 
