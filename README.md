@@ -114,7 +114,7 @@ Usage:
 
 Search on specified fields. Ignore text that exists in other fields.
 
-    searchFields=<comma seperated lists of fields to search in>
+    searchFields[]=<field to search in>
     
 [http://localhost:3000/search?q=plans&searchFields[]=body](http://localhost:3000/search?q=plans&searchFields[]=body)
 
