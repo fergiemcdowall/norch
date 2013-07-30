@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -132,9 +131,11 @@ app.post('/indexer', function(req, res) {
   if (req.body.filterOn) {
     filters = req.body.filterOn.split(',');
   }
-  var batch = fs.readFileSync(req.files.document.path, 'utf8');
-  norch.index(batch, req.files.document.name, filters, function(msg) {
-    res.send(msg);
+  fs.readFile(req.files.document.path, {'encoding': 'utf8'}, function(err, batch) {
+    if(err) return res.send(500, 'Error reading document');
+    norch.index(batch, req.files.document.name, filters, function(msg) {
+      res.send(msg);
+    });
   });
 });
 
