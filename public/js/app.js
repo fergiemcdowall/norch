@@ -32,7 +32,7 @@ $(document).ready(function() {
 
 function search(urlParams) {
   console.log(urlParams);
-  $.getJSON("http://localhost:3000/search?" + urlParams, function(result){
+  $.getJSON("/search?" + urlParams, function(result){
     $("#resultset").empty();
     $("#facets").empty();
     $("#resultSetStrapLine").empty();
