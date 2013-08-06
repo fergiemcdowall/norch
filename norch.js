@@ -52,9 +52,9 @@ function getQuery(req) {
     q['offset'] = offsetDefault;
   }
   if (req.query['pagesize']) {
-    q['pagesize'] = req.query['pagesize'];
+    q['pageSize'] = req.query['pagesize'];
   } else {
-    q['pagesize'] = pagesizeDefault;
+    q['pageSize'] = pagesizeDefault;
   }
   if (req.query['facets']) {
     q['facets'] = req.query['facets'].toLowerCase().split(',');
