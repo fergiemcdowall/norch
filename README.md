@@ -3,9 +3,9 @@
 Norch is an experimental search engine built with [Node.js](http://nodejs.org/) and
 [Search-index](https://github.com/fergiemcdowall/search-index). The name Norch is a contraction of " **No** de Sea **rch** "
 
-**Homepage:** http://fergiemcdowall.github.io/norch 
+**Homepage:** http://www.norch.net/ 
 
-**Github:** https://github.com/fergiemcdowall/norch
+**Github:** https://github.com/fergiemcdowall/norch/
 
 #Features
 
