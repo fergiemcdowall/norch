@@ -6,13 +6,21 @@ var express = require('express')
 , http = require('http')
 , path = require('path')
 , fs = require('fs')
-, norch = require('search-index');
+, norch = require('search-index')
+, program = require('commander');;
 
 var app = express();
 
+program
+  .version('0.2.1')
+  .option('-p, --port <port>', 'specify the port, defaults to 3000', Number, 3000)
+  .option('-h, --home <home>', 'specify the home directory, stores the index and settings, defaults to ./norch', String, './norch')
+  .parse(process.argv);
+
+norch.init({home: program.home});
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', program.port);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
@@ -157,5 +165,6 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('http://fergiemcdowall.github.io/Norch                 MIT license, 2013');
   console.log();
   console.log('Norch server listening on port ' + app.get('port'));
+  console.log('Norch home is ' + program.home);
   console.log();
 });
