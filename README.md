@@ -45,7 +45,7 @@ If everything went to plan- Norch should now be installed on your machine
 
 Navigate to the directory where you installed Norch and type
 
-    node norch-server
+    node norch
 
 Hurrah! Norch is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
 and marvel. The default port of 3000 can be modified if required.
