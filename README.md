@@ -36,6 +36,16 @@ Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that the
 
 If everything went to plan- Norch should now be installed on your machine
 
+## Developing/Installing on Norch inside of the Vagrant box
+
+1. Install [VirtualBox](https://www.virtualbox.org/)
+2. Install [Vagrant](http://www.vagrantup.com/)
+3. `vagrant up`
+4. `vagrant ssh`
+5. `npm install`
+
+__Note:__ when starting Norch insde a Vagrant VM you must spesify the norch home directory, see Commandline options.
+
 #Operation
 
 *Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
@@ -46,6 +56,23 @@ If everything went to plan- Norch should now be installed on your machine
 Navigate to the directory where you installed Norch and type
 
     node norch
+
+### Commandline options
+
+```
+  $ node norch --help
+
+  Usage: norch [options]
+
+  Options:
+
+      -h, --help         output usage information
+      -V, --version      output the version number
+      -p, --port <port>  specify the port, defaults to 3000
+      -h, --home <home>  specify the home directory, stores the index and settings, defaults to ./norch
+```
+
+When running norch inside of a vagrant VM (virtualbox) the home directory cannot be in a shared folder. I recommend having home point to `/home/vagrant/norch
 
 Hurrah! Norch is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
 and marvel. The default port of 3000 can be modified if required.
