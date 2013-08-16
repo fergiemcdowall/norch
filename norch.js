@@ -2,13 +2,12 @@
  * Module dependencies.
  */
 
-var express = require('express')
-, http = require('http')
-, path = require('path')
-, fs = require('fs')
-, norch = require('search-index');
-
-var app = express();
+var express = require('express'), 
+    http = require('http'),
+    path = require('path'),
+    fs = require('fs'),
+    norch = require('search-index'),
+    app = express();
 
 
 // all environments
@@ -35,10 +34,9 @@ if ('development' == app.get('env')) {
 
 function getQuery(req) {
   //default values
-  var offsetDefault = 0;
-  var pagesizeDefault = 10;
-
-  var q = {};
+  var offsetDefault = 0,
+      pagesizeDefault = 10,
+      q = {};
   q['query'] = "*";
   if (req.query['q']) {
     q['query'] = req.query['q'].toLowerCase().split(' ');
@@ -116,7 +114,7 @@ app.get('/searchgui', function(req, res) {
 
 //curl localhost:3000/search?q=aberdeen\&weight=%22category%22:10
 app.get('/search', function(req, res) {
-  q = getQuery(req);
+  var q = getQuery(req);
   norch.search(q, function(msg) {
     res.send(msg);
   });
@@ -152,7 +150,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('  \\  \\:\\  ~~~   \\  \\:\\  /:/   \\  \\::/~~~~   \\  \\:\\  /:/   \\  \\::/      ');
   console.log('   \\  \\:\\        \\  \\:\\/:/     \\  \\:\\        \\  \\:\\/:/     \\  \\:\\      ');
   console.log('    \\  \\:\\        \\  \\::/       \\  \\:\\        \\  \\::/       \\  \\:\\     ');
-  console.log('     \\__\\/         \\__\\/         \\__\\/         \\__\\/         \\__\\/     ')
+  console.log('     \\__\\/         \\__\\/         \\__\\/         \\__\\/         \\__\\/     ');
   console.log();
   console.log('http://fergiemcdowall.github.io/Norch                 MIT license, 2013');
   console.log();
