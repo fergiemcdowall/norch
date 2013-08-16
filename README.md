@@ -203,12 +203,12 @@ Indexing and GUI is the current focus of development
 
 #Virtualisation
 
-Norch comes set up for virtualisation, which can be useful for testing Norch on another operating system, and also for simulating clusters.
-
-## Setting up a virtual machine with VirtualBox and Vagrant
+Norch comes set up for virtualisation, which can be useful for testing Norch on another operating system
 
 VirtualBox is the virtualisation software that allows a 'host' operating system to run a 'guest' operation system.
 Vagrant is used to install and configure the guest OS.
+
+Set up virtualisation by following these steps:
 
 1. Install [VirtualBox](https://www.virtualbox.org/)
 2. Install [Vagrant](http://www.vagrantup.com/)
