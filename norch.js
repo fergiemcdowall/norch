@@ -17,7 +17,7 @@ program
   .option('-h, --home <home>', 'specify the home directory, stores the index and settings, defaults to ./norch', String, './norch')
   .parse(process.argv);
 
-norch.init({home: program.home});
+norch.init({home: path.resolve(program.home}));
 
 // all environments
 app.set('port', program.port);
