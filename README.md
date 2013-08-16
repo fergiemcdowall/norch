@@ -198,6 +198,8 @@ following:
  * **The GUI (scrolling)** the default GUI is very much a temporary measure. The instant search function is flaky and currently
  there is no support for scrolling
 
+ * **Out of memory error under heavy indexing** right now (august 2013) there seems to be a low level issue that is causing memory to spike drastically. This can be worked around by restarting the server.
+
 Indexing and GUI is the current focus of development
 
 
