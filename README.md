@@ -17,6 +17,7 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 * Field weighting
 * Relevance weighting (tf-idf)
 * Paging (offset and resultset length)
+* Virtualisation (see [virtual-norch](https://github.com/fergiemcdowall/virtual-norch))
 
 ##Download
 
@@ -201,24 +202,6 @@ following:
  * **Out of memory error under heavy indexing** right now (august 2013) there seems to be a low level issue that is causing memory to spike drastically. This can be worked around by restarting the server.
 
 Indexing and GUI is the current focus of development
-
-
-#Virtualisation
-
-Norch comes set up for virtualisation, which can be useful for testing Norch on another operating system
-
-VirtualBox is the virtualisation software that allows a 'host' operating system to run a 'guest' operation system.
-Vagrant is used to install and configure the guest OS.
-
-Set up virtualisation by following these steps:
-
-1. Install [VirtualBox](https://www.virtualbox.org/)
-2. Install [Vagrant](http://www.vagrantup.com/)
-3. `vagrant up`
-4. `vagrant ssh`
-5. `npm install`
-
-__Note:__ when starting Norch insde a Vagrant VM you must specify the norch home directory, see Commandline options. The norch home directory cannot be in a shared folder.
 
 
 #License
