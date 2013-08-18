@@ -7,6 +7,8 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 
 **Github:** https://github.com/fergiemcdowall/norch
 
+**Latest stable release:** https://github.com/fergiemcdowall/norch/releases/tag/v0.2.1
+
 #Features
 
 * Full text search
@@ -24,10 +26,13 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 **git:**
 
     git clone https://github.com/fergiemcdowall/norch
+    git checkout v0.2.1
+
+Drop the `git checkout` if you want the latest and greatest (and possible broken) version
 
 **http:**
 
-http://fergiemcdowall.github.io/norch
+    https://github.com/fergiemcdowall/norch/releases/tag/v0.2.1
 
 ##Installing Norch
 
