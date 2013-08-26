@@ -1,13 +1,13 @@
-#Norch
+#Forage
 
-Norch is an experimental search engine built with [Node.js](http://nodejs.org/) and
-[Search-index](https://github.com/fergiemcdowall/search-index). The name Norch is a contraction of " **No** de Sea **rch** "
+Forage is an experimental search engine built with [Node.js](http://nodejs.org/) and
+[Search-index](https://github.com/fergiemcdowall/search-index). The name Forage is a contraction of " **No** de Sea **rch** "
 
-**Homepage:** http://www.norch.net
+**Homepage:** http://www.forage.net
 
-**Github:** https://github.com/fergiemcdowall/norch
+**Github:** https://github.com/fergiemcdowall/forage
 
-**Latest stable release:** https://github.com/fergiemcdowall/norch/releases/tag/v0.2.1
+**Latest stable release:** https://github.com/fergiemcdowall/forage/releases/tag/v0.2.1
 
 #Features
 
@@ -19,60 +19,60 @@ Norch is an experimental search engine built with [Node.js](http://nodejs.org/) 
 * Field weighting
 * Relevance weighting (tf-idf)
 * Paging (offset and resultset length)
-* Virtualisation (see [virtual-norch](https://github.com/fergiemcdowall/virtual-norch))
+* Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
 
 ##Download
 
 **git:**
 
-    git clone https://github.com/fergiemcdowall/norch
+    git clone https://github.com/fergiemcdowall/forage
     git checkout v0.2.1
 
 Drop the `git checkout` if you want the latest and greatest (and possible broken) version
 
 **http:**
 
-    https://github.com/fergiemcdowall/norch/releases/tag/v0.2.1
+    https://github.com/fergiemcdowall/forage/releases/tag/v0.2.1
 
-##Installing Norch
+##Installing Forage
 
-Norch has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Norch can be installed by running the following command which will download and install all dependencies:
+Forage has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
 
     npm install
 
-If everything went to plan- Norch should now be installed on your machine
+If everything went to plan- Forage should now be installed on your machine
 
 #Operation
 
-*Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
-(localhost). Once Norch is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
+*Note: for the purposes of accessability, this doc assumes that Forage is being installed locally on your own computer
+(localhost). Once Forage is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
 
-##Start your Norch server
+##Start your Forage server
 
-Navigate to the directory where you installed Norch and type
+Navigate to the directory where you installed Forage and type
 
-    node norch
+    node forage
 
-Hurrah! Norch is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
+Hurrah! Forage is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
 and marvel. The default port of 3000 can be modified if required.
 
 ### Startup options
 
 ```
-  $ node norch --help
+  $ node forage --help
 
-  Usage: norch [options]
+  Usage: forage [options]
 
   Options:
 
       -h, --help         output usage information
       -V, --version      output the version number
       -p, --port <port>  specify the port, defaults to 3000
-      -h, --home <home>  specify the home directory, stores the index and settings, defaults to ./norch
+      -h, --home <home>  specify the home directory, stores the index and settings, defaults to ./forage
 ```
 
 ##Indexing
-Once you have set up Norch, you can get some content into it. Norch comes with a JSONified version of the venerable
+Once you have set up Forage, you can get some content into it. Forage comes with a JSONified version of the venerable
 Reuters-21578 test dataset in the directory "testdata". To index this data cd into the directory "testdata" and run
 the following command (note that one data file can contain an arbitralily large number of documents)
 
@@ -81,7 +81,7 @@ the following command (note that one data file can contain an arbitralily large 
 If you are on a unix machine (including mac OSX), you can also run /index.sh in order to read in the entire dataset
 of 21 batch files.
 
-Generally Norch indexes data that is in the format
+Generally Forage indexes data that is in the format
 
 ```javascript
 {
@@ -198,7 +198,7 @@ Multiple field weights:
 
 #Known Issues
 
-Norch is new software and as such should be regarded as a work in progress. Administrators should be aware of the
+Forage is new software and as such should be regarded as a work in progress. Administrators should be aware of the
 following:
 
  * **The GUI (scrolling)** the default GUI is very much a temporary measure. The instant search function is flaky and currently
@@ -211,7 +211,7 @@ Indexing and GUI is the current focus of development
 
 #License
 
-Norch is released under the MIT license:
+Forage is released under the MIT license:
 
 Copyright (c) 2013 Fergus McDowall
 
