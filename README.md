@@ -1,7 +1,7 @@
 #Forage
 
 Forage is an experimental search engine built with [Node.js](http://nodejs.org/) and
-[Search-index](https://github.com/fergiemcdowall/search-index). The name Forage is a contraction of " **No** de Sea **rch** "
+[Search-index](https://github.com/fergiemcdowall/search-index).
 
 **Homepage:** http://www.forage.net
 
