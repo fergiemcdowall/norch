@@ -1,6 +1,6 @@
 {
   "name": "forage",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "dependencies": {
     "express": "3.1.1",
     "search-index": "0.2.16",
