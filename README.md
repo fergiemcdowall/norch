@@ -3,7 +3,7 @@
 Forage is an experimental search engine built with [Node.js](http://nodejs.org/) and
 [Search-index](https://github.com/fergiemcdowall/search-index).
 
-**Homepage:** http://www.forage.net
+**Homepage:** under construction...
 
 **Github:** https://github.com/fergiemcdowall/forage
 
