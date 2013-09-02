@@ -1,5 +1,5 @@
 var config = module.exports
 
 config['unit'] = {
-    environment: 'node', tests: [ 'test/first-test.js' ] 
+    environment: 'node', tests: [ 'test/*-test.js' ] 
 }

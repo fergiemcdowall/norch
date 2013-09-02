@@ -1,3 +1,4 @@
+var forage = require('../forage.js');
 var buster = require('buster');
 var http = require('http');
 
