@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 FILTERFLAG=" --form filterOn=places,topics,organisations"
 
 for OUTPUT in $(ls *.json)
