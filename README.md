@@ -7,7 +7,9 @@ Forage is an experimental search engine built with [Node.js](http://nodejs.org/)
 
 **Github:** https://github.com/fergiemcdowall/forage
 
-**Latest stable release:** https://github.com/fergiemcdowall/forage/releases/tag/v0.2.1
+**Latest StableRelease:** https://github.com/fergiemcdowall/forage/releases/tag/v0.2.1
+
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
 
 #Features
 
