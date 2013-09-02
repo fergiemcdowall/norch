@@ -5,5 +5,7 @@
     "express": "3.1.1",
     "search-index": "0.2.16",
     "commander": "~2.0.0"
+    "buster": "*"
+    "request": "*"
   }
 }
