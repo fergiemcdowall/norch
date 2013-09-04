@@ -6,5 +6,5 @@ branches:
     - master
 notifications:
   email:
-    - rod@vagg.org
+    - fergusmcdowall@gmail.com
 script: npm test
