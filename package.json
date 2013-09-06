@@ -3,7 +3,7 @@
   "version": "0.2.3",
   "dependencies": {
     "express": "3.1.1",
-    "search-index": "0.2.16",
+    "search-index": "0.2.17",
     "commander": "~2.0.0",
     "buster": "*",
     "request": "*"

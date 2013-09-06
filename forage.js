@@ -17,7 +17,7 @@ program
   .option('-h, --home <home>', 'specify the home directory, stores the index and settings, defaults to ./si', String, './si')
   .parse(process.argv);
 
-si.init({home: path.resolve(program.home)});
+//si.init({home: path.resolve(program.home)});
 
 // all environments
 app.set('port', program.port);
