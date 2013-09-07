@@ -20,7 +20,7 @@ buster.testCase('Indexing tests:', {
     var form = r.form()
     form.append('filterOn', 'places,topics,organisations')
     form.append('document',
-                fs.createReadStream('testdata/justOne.json'));
+                fs.createReadStream('test/testdata/justOne.json'));
                 
   }
 });
