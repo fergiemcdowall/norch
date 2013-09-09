@@ -8,7 +8,7 @@ buster.testCase('HTTP endpoints', {
     var options = {
       host: 'localhost',
       port: 3000,
-      path: '/search?q=moscow'
+      path: '/search?q=ussr'
     };
     http.get(options, function(res) {
       console.log("Got response: " + res.statusCode);
