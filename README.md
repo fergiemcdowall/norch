@@ -75,7 +75,7 @@ and marvel. The default port of 3000 can be modified if required.
 
 ##Indexing
 Once you have set up Forage, you can get some content into it. Forage comes with a JSONified version of the venerable
-Reuters-21578 test dataset in the directory "testdata". To index this data cd into the directory "testdata" and run
+Reuters-21578 test dataset in the directory `test/testdata`. To index this data cd into the directory `test/testdata` and run
 the following command (note that one data file can contain an arbitralily large number of documents)
 
     curl --form document=@reuters-000.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
