@@ -28,111 +28,44 @@ buster.testCase('HTTP endpoints', {
     });
   },
   'endpoint returns result': function() {
-    if (this.res) {
-      console.log(this.res);
-      assert(true);
-    }
-    else {
-      assert(false);
+    assert(this.res);
+  },
+  'idf': {
+    'result has idf': function() {
+      assert(this.res.idf);
+    },
+    'idf for ussr on testset is correct': function() {
+      assert.equals(this.res.idf.ussr, 6.425563388011518);
     }
   },
-  'result has idf': function() {
-    debugger;
-    if (this.res.idf) {
-      console.log('idf: '
-                  + JSON.stringify(this.res.idf));
-      assert(true);
-    }
-    else {
-      assert(false);
+  'query': {
+    'result has query': function() {
+      assert(this.res.query);
+    },
+    'result has transformed query': function() {
+      assert(this.res.transformedQuery);
     }
   },
-  'result has query': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('query: '
-                  + JSON.stringify(this.res.query));
-      assert(true);
-    }
-    else {
-      assert(false);
+  'facets': {
+    'result has facets': function() {
+      assert(this.res.facets);
     }
   },
-  'result has transformed query': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('transformedQuery: '
-                  + JSON.stringify(this.res.transformedQuery));
-      assert(true);
-    }
-    else {
-      assert(false);
-    }
-  },
-  'result has totalHits': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('totalHits: '
-                  + JSON.stringify(this.res.totalHits));
-      assert(true);
-    }
-    else {
-      assert(false);
-    }
-  },
-  'result has facets': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('facets: '
-                  + JSON.stringify(this.res.facets));
-      assert(true);
-    }
-    else {
-      assert(false);
-    }
-  },
-  'result has hits': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('hits: '
-                  + JSON.stringify(this.res.transformedQuery));
-      assert(true);
-    }
-    else {
-      assert(false);
-    }
-  },
-  'first hit has matchedTerms': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('hits[0].matchedTerms: '
-                  + JSON.stringify(this.res.hits[0].matchedTerms));
-      assert(true);
-    }
-    else {
-      assert(false);
-    }
-  },
-  'first hit has document': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('hits[0].document: '
-                  + JSON.stringify(this.res.hits[0].document));
-      assert(true);
-    }
-    else {
-      assert(false);
-    }
-  },
-  'first hit has score': function() {
-    debugger;
-    if (this.res.query) {
-      console.log('hits[0].score: '
-                  + JSON.stringify(this.res.hits[0].score));
-      assert(true);
-    }
-    else {
-      assert(false);
+  'hits': {
+    'result has hits': function() {
+      assert(this.res.hits);
+    },
+    'result has totalHits': function() {
+      assert(this.res.totalHits);
+    },
+    'first hit has matchedTerms': function() {
+      assert(this.res.hits[0].matchedTerms);
+    },
+    'first hit has document': function() {
+      assert(this.res.hits[0].document);
+    },
+    'first hit has score': function() {
+      assert(this.res.hits[0].score);
     }
   }
 });

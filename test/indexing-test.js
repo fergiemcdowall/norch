@@ -4,7 +4,8 @@ var fs = require('fs');
 var request = require('request');
 
 buster.testCase('Indexing tests:', {
-  "read in 1000 documents": function (done) {
+  'index batch of 1000 docs': function (done) {
+    this.timeout = 60000;
     var r = request.post('http://localhost:3000/indexer',
                          function (error, response, body) {
                            if (!response) {
@@ -20,8 +21,7 @@ buster.testCase('Indexing tests:', {
     var form = r.form()
     form.append('filterOn', 'places,topics,organisations')
     form.append('document',
-                fs.createReadStream('test/testdata/justOne.json'));
-                
+                fs.createReadStream('test/testdata/reuters-000.json'));
   }
 });
 
