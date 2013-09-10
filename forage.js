@@ -8,6 +8,7 @@ var express = require('express'),
     fs = require('fs'),
     si = require('search-index'),
     program = require('commander'),
+    colors = require('colors');
     app = express();
 
 
@@ -28,12 +29,6 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-si.calibrate(function(msg) {
-  console.log('startup calibration completed');
-  console.log(msg);
-});
-*/
 
 // development only
 if ('development' == app.get('env')) {
@@ -149,54 +144,54 @@ app.post('/indexer', function(req, res) {
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log();
-  console.log('      ___');
-  console.log('     /\\  \\');
-  console.log('    /::\\  \\');
-  console.log('   /:/\\:\\  \\');
-  console.log('  /::\\~\\:\\  \\');
-  console.log(' /:/\\:\\ \\:\\__\\');
-  console.log(' \\/__\\:\\ \\/__/');
-  console.log('      \\:\\__\\ ___');
-  console.log('       \\/__//\\  \\');
-  console.log('           /::\\  \\');
-  console.log('          /:/\\:\\  \\');
-  console.log('         /:/  \\:\\  \\');
-  console.log('        /:/__/ \\:\\__\\');
-  console.log('        \\:\\  \\ /:/  /');
-  console.log('         \\:\\  /:/  /___');
-  console.log('          \\:\\/:/  //\\  \\');
-  console.log('           \\::/  //::\\  \\');
-  console.log('            \\/__//:/\\:\\  \\');
-  console.log('                /::\\~\\:\\  \\');
-  console.log('               /:/\\:\\ \\:\\__\\');
-  console.log('               \\/_|::\\/:/  /');
-  console.log('                  |:|::/  /___');
-  console.log('                  |:|\\/__//\\  \\');
-  console.log('                  |:|  | /::\\  \\');
-  console.log('                   \\|__|/:/\\:\\  \\');
-  console.log('                       /::\\~\\:\\  \\');
-  console.log('                      /:/\\:\\ \\:\\__\\');
-  console.log('                      \\/__\\:\\/:/  /');
-  console.log('                           \\::/  /___');
-  console.log('                           /:/  //\\  \\');
-  console.log('                          /:/  //::\\  \\');
-  console.log('                          \\/__//:/\\:\\  \\');
-  console.log('                              /:/  \\:\\  \\');
-  console.log('                             /:/__/_\\:\\__\\');
-  console.log('                             \\:\\  /\\ \\/__/');
-  console.log('                              \\:\\ \\:\\__\\ ___');
-  console.log('                               \\:\\/:/  //\\  \\');
-  console.log('                                \\::/  //::\\  \\');
-  console.log('                                 \\/__//:/\\:\\  \\');
-  console.log('                                     /::\\~\\:\\  \\');
-  console.log('                                    /:/\\:\\ \\:\\__\\');
-  console.log('                                    \\:\\~\\:\\ \\/__/');
-  console.log('                                     \\:\\ \\:\\__\\');
-  console.log('                                      \\:\\ \\/__/');
-  console.log('MIT license, 2013                      \\:\\__\\');
-  console.log('http://fergiemcdowall.github.io/Forage  \\/__/');
+  console.log('      ___'.red);
+  console.log('     /\\  \\'.red);
+  console.log('    /'.red + '::'.blue + '\\  \\'.red);
+  console.log('   /'.red + ':'.blue + '/\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('  /'.red + '::'.blue + '\\~\\'.red + ':'.blue + '\\  \\'.red);
+  console.log(' /'.red + ':'.blue + '/\\'.red + ':'.blue + '\\ \\'.red + ':'.blue + '\\__\\'.red);
+  console.log(' \\/__\\'.red + ':'.blue + '\\ \\/__/'.red);
+  console.log('      \\'.red + ':'.blue + '\\__\\ ___'.red);
+  console.log('       \\/__//\\  \\'.red);
+  console.log('           /'.red + '::'.blue + '\\  \\'.red);
+  console.log('          /'.red + ':'.blue + '/\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('         /'.red + ':'.blue + '/  \\'.red + ':'.blue + '\\  \\'.red);
+  console.log('        /'.red + ':'.blue + '/__/ \\'.red + ':'.blue + '\\__\\'.red);
+  console.log('        \\'.red + ':'.blue + '\\  \\ /'.red + ':'.blue + '/  /'.red);
+  console.log('         \\'.red + ':'.blue + '\\  /'.red + ':'.blue + '/  /___'.red);
+  console.log('          \\'.red + ':'.blue + '\\/'.red + ':'.blue + '/  //\\  \\'.red);
+  console.log('           \\'.red + '::'.blue + '/  //'.red + '::'.blue + '\\  \\'.red);
+  console.log('            \\/__//'.red + ':'.blue + '/\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                /'.red + '::'.blue + '\\~\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('               /'.red + ':'.blue + '/\\'.red + ':'.blue + '\\ \\'.red + ':'.blue + '\\__\\'.red);
+  console.log('               \\/_|'.red + '::'.blue + '\\/'.red + ':'.blue + '/  /'.red);
+  console.log('                  |'.red + ':'.blue + '|'.red + '::'.blue + '/  /___'.red);
+  console.log('                  |'.red + ':'.blue + '|\\/__//\\  \\'.red);
+  console.log('                  |'.red + ':'.blue + '|  | /'.red + '::'.blue + '\\  \\'.red);
+  console.log('                   \\|__|/'.red + ':'.blue + '/\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                       /'.red + '::'.blue + '\\~\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                      /'.red + ':'.blue + '/\\'.red + ':'.blue + '\\ \\'.red + ':'.blue + '\\__\\'.red);
+  console.log('                      \\/__\\'.red + ':'.blue + '\\/'.red + ':'.blue + '/  /'.red);
+  console.log('                           \\'.red + '::'.blue + '/  /___'.red);
+  console.log('                           /'.red + ':'.blue + '/  //\\  \\'.red);
+  console.log('                          /'.red + ':'.blue + '/  //'.red + '::'.blue + '\\  \\'.red);
+  console.log('                          \\/__//'.red + ':'.blue + '/\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                              /'.red + ':'.blue + '/  \\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                             /'.red + ':'.blue + '/__/_\\'.red + ':'.blue + '\\__\\'.red);
+  console.log('                             \\'.red + ':'.blue + '\\  /\\ \\/__/'.red);
+  console.log('                              \\'.red + ':'.blue + '\\ \\'.red + ':'.blue + '\\__\\ ___'.red);
+  console.log('                               \\'.red + ':'.blue + '\\/'.red + ':'.blue + '/  //\\  \\'.red);
+  console.log('                                \\'.red + '::'.blue + '/  //'.red + '::'.blue + '\\  \\'.red);
+  console.log('                                 \\/__//'.red + ':'.blue + '/\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                                     /'.red + '::'.blue + '\\~\\'.red + ':'.blue + '\\  \\'.red);
+  console.log('                                    /'.red + ':'.blue + '/\\'.red + ':'.blue + '\\ \\'.red + ':'.blue + '\\__\\'.red);
+  console.log('                                    \\'.red + ':'.blue + '\\~\\'.red + ':'.blue + '\\ \\/__/'.red);
+  console.log('                                     \\'.red + ':'.blue + '\\ \\'.red + ':'.blue + '\\__\\'.red);
+  console.log('                                      \\'.red + ':'.blue + '\\ \\/__/'.red);
+  console.log('MIT license, 2013'.red + '                      \\'.red + ':'.blue + '\\__\\'.red);
+  console.log('http://fergiemcdowall.github.io/Forage'.red + '  \\/__/'.red);
   console.log();
-  console.log('Forage server listening on port ' + app.get('port'));
-//  console.log('Forage home is ' + program.home);
+  console.log('Forage server listening on port ' + app.get('port').red);
+//  console.log('Forage home is ' + program.home.red);
   console.log();
 });
