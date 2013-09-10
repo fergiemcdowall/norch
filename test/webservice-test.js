@@ -26,7 +26,6 @@ function testForageURL (testCaseName,
           data += chunk;
         });
         res.on('end',function(){
-          var obj = JSON.parse(data);
           thisholder.res = JSON.parse(data);
           done(assert(true));
         });
@@ -36,6 +35,7 @@ function testForageURL (testCaseName,
       });
     },
     'endpoint returns result': function() {
+      console.log(JSON.stringify(this.res, null, 2));
       assert(this.res);
     },
     'idf': {
