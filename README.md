@@ -1,6 +1,6 @@
-#Forage
+#Forage.js
 
-Forage is an experimental search engine built with [Node.js](http://nodejs.org/) and
+Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and
 [Search-index](https://github.com/fergiemcdowall/search-index).
 
 **Homepage:** http://www.foragejs.net
@@ -28,17 +28,17 @@ Forage is an experimental search engine built with [Node.js](http://nodejs.org/)
 **git:**
 
     git clone https://github.com/fergiemcdowall/forage
-    git checkout v0.2.1
+    git checkout v0.2.3
 
 Drop the `git checkout` if you want the latest and greatest (and possible broken) version
 
 **http:**
 
-    https://github.com/fergiemcdowall/forage/releases/tag/v0.2.1
+    https://github.com/fergiemcdowall/forage/releases/tag/v0.2.3
 
-##Installing Forage
+##Installing Forage.js
 
-Forage has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
+Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
 
     npm install
 
@@ -49,7 +49,7 @@ If everything went to plan- Forage should now be installed on your machine
 *Note: for the purposes of accessability, this doc assumes that Forage is being installed locally on your own computer
 (localhost). Once Forage is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
 
-##Start your Forage server
+##Start your Forage.js server
 
 Navigate to the directory where you installed Forage and type
 
@@ -74,7 +74,7 @@ and marvel. The default port of 3000 can be modified if required.
 ```
 
 ##Indexing
-Once you have set up Forage, you can get some content into it. Forage comes with a JSONified version of the venerable
+Once you have set up Forage.js, you can get some content into it. Forage comes with a JSONified version of the venerable
 Reuters-21578 test dataset in the directory `test/testdata`. To index this data cd into the directory `test/testdata` and run
 the following command (note that one data file can contain an arbitralily large number of documents)
 
@@ -213,7 +213,7 @@ Indexing and GUI is the current focus of development
 
 #License
 
-Forage is released under the MIT license:
+Forage.js is released under the MIT license:
 
 Copyright (c) 2013 Fergus McDowall
 
