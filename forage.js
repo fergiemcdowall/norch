@@ -13,10 +13,11 @@ var express = require('express'),
 
 
 program
-  .version('0.2.1')
+  .version('0.2.3')
   .option('-p, --port <port>', 'specify the port, defaults to 3000', Number, 3000)
-  .option('-h, --home <home>', 'specify the home directory, stores the index and settings, defaults to ./si', String, './si')
   .parse(process.argv);
+
+debugger;
 
 //si.init({home: path.resolve(program.home)});
 
@@ -191,7 +192,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('MIT license, 2013'.red + '                      \\'.red + ':'.blue + '\\__\\'.red);
   console.log('http://fergiemcdowall.github.io/Forage'.red + '  \\/__/'.red);
   console.log();
-  console.log('Forage server listening on port ' + app.get('port').red);
+  console.log('Forage server listening on port ' + app.get('port'));
 //  console.log('Forage home is ' + program.home.red);
   console.log();
 });
