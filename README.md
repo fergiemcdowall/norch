@@ -36,6 +36,21 @@ Drop the `git checkout` if you want the latest and greatest (and possible broken
 
     https://github.com/fergiemcdowall/forage/releases/tag/v0.2.3
 
+##Known Issues
+
+###Out of Memory Errors under heavy indexing
+
+Currently heavy indexing may produce and out of memory error, even with the test data that is included with Forage.
+One solution is to run Forage with the `--max-old-space-size=<the size of your RAM>` option. See this issue for further
+details https://github.com/rvagg/node-levelup/issues/171
+
+###Installation on Windows
+
+Native installation on Windows should be regarded as non-trivial. If you have the "right" python and C libs installed
+then it will work without any problems. See the section "Tested and Supported Platforms" in the
+[levelDOWN docs](https://github.com/rvagg/node-leveldown). Windows users who cannot/will not change their C/Python setup
+can optionally check out the [virtual-forage](https://github.com/fergiemcdowall/virtual-forage) package, which will fire up forage in a virtual machine.
+
 ##Installing Forage.js
 
 Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
