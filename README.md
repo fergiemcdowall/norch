@@ -49,7 +49,8 @@ details https://github.com/rvagg/node-levelup/issues/171
 Native installation on Windows should be regarded as non-trivial. If you have the "right" python and C libs installed
 then it will work without any problems. See the section "Tested and Supported Platforms" in the
 [levelDOWN docs](https://github.com/rvagg/node-leveldown). Windows users who cannot/will not change their C/Python setup
-can optionally check out the [virtual-forage](https://github.com/fergiemcdowall/virtual-forage) package, which will fire up forage in a virtual machine.
+can optionally check out the [virtual-forage](https://github.com/fergiemcdowall/virtual-forage) package, which will
+fire up forage in a virtual machine. Having said that- give it a go, it will _probably_ work.
 
 ##Installing Forage.js
 
