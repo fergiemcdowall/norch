@@ -7,7 +7,7 @@
     "commander": "~2.0.0",
     "express": "3.1.1",
     "request": "*",
-    "search-index": "0.2.17"
+    "search-index": "0.2.18"
   },
   "scripts": {
     "test": "buster test"
