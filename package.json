@@ -2,11 +2,11 @@
   "name": "forage",
   "version": "0.2.3",
   "dependencies": {
-    "buster": "*",
-    "colors": "*",
-    "commander": "~2.0.0",
+    "bustermove": "0.3.1",
+    "colors": "0.6.2",
+    "commander": "2.0.0",
     "express": "3.1.1",
-    "request": "*",
+    "request": "2.27.0",
     "search-index": "0.2.18"
   },
   "scripts": {
