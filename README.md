@@ -11,9 +11,9 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 **Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
 
-[![NPM](https://nodei.co/npm/search-index.png?stars&downloads)](https://nodei.co/npm/forage/)
+[![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
 
-[![NPM](https://nodei.co/npm-dl/search-index.png)](https://nodei.co/npm/forage/)
+[![NPM](https://nodei.co/npm-dl/forage.png)](https://nodei.co/npm/forage/)
 
 #Features
 
