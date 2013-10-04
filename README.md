@@ -2,7 +2,9 @@
 
 Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
 
-    $ npm install forage
+    $ npm install -g forage
+
+(Forage can also be installed into the current working directory by dropping the `-g` flag)
 
 If everything went to plan- Forage should now be installed on your machine
 
