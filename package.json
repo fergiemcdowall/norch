@@ -1,6 +1,8 @@
 {
   "name": "forage",
-  "version": "0.2.3",
+  "version": "0.2.4",
+  "description": "Forage.js is a free text search engine",
+  "main": "./lib/forage",
   "dependencies": {
     "bustermove": "0.3.1",
     "colors": "0.6.2",
@@ -8,6 +10,25 @@
     "express": "3.1.1",
     "request": "2.27.0",
     "search-index": "0.2.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fergiemcdowall/forage.git"
+  },
+  "keywords": [
+    "search",
+    "server",
+    "free text",
+    "big data"
+  ],
+  "bin": {
+    "forage": "./bin/forage"
+  },
+  "maintainers": [
+    "fergiemcdowall <fergusmcdowall@gmail.com>"
+  ],
+  "engines": {
+    "node": ">= 0.8.x"
   },
   "scripts": {
     "test": "buster test"
