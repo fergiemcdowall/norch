@@ -58,7 +58,6 @@ and marvel. The default port of 3000 can be modified if required.
       -h, --help         output usage information
       -V, --version      output the version number
       -p, --port <port>  specify the port, defaults to 3000
-      -h, --home <home>  specify the home directory, stores the index and settings, defaults to ./forage
 ```
 
 ##Indexing

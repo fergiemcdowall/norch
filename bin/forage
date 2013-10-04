@@ -1,4 +1,9 @@
 #!/usr/bin/env node
 
-require('../lib/forage.js');
+program = require('commander'),
+program
+  .version('0.2.3')
+  .option('-p, --port <port>', 'specify the port, defaults to 3000', Number, 3000)
+  .parse(process.argv);
+require('../lib/forage.js')({'port': program.port});
 
