@@ -28,20 +28,22 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
 
-    npm install forage
+    $ npm install forage
 
 If everything went to plan- Forage should now be installed on your machine
 
 #Operation
 
 *Note: for the purposes of accessability, this doc assumes that Forage is being installed locally on your own computer
-(localhost). Once Forage is rolled out on to remote servers, the hostname on all URLs should be updated accordingly.*
+(localhost). Once Forage is rolled out on to remote servers, the
+hostname on all URLs should be updated accordingly. Command line
+commands are denoted by the prefix `$ ` which should not be typed in*
 
 ##Start your Forage.js server
 
 Type
 
-    forage
+    $ forage
 
 Hurrah! Forage is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
 and marvel. The default port of 3000 can be modified if required.
@@ -49,7 +51,7 @@ and marvel. The default port of 3000 can be modified if required.
 ### Startup options
 
 ```
-  $ node forage --help
+  $ forage --help
 
   Usage: forage [options]
 
