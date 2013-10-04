@@ -1,34 +1,4 @@
-#Forage.js
-
-Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and
-[Search-index](https://github.com/fergiemcdowall/search-index).
-
-**Homepage:** http://www.foragejs.net
-
-**Github:** https://github.com/fergiemcdowall/forage
-
-**Latest StableRelease:** https://github.com/fergiemcdowall/forage/releases/tag/v0.2.3
-
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
-
-[![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
-
-[![NPM](https://nodei.co/npm-dl/forage.png)](https://nodei.co/npm/forage/)
-
-#Features
-
-* Full text search
-* Stopword removal
-* Faceting
-* Filtering
-* Fielded search
-* Field weighting
-* Relevance weighting (tf-idf)
-* Paging (offset and resultset length)
-* Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
-
-
-##Installing Forage.js
+#Installation
 
 Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
 
@@ -190,6 +160,31 @@ Usage:
 Multiple field weights:
 
 [http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
+
+#Features
+
+Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and featuring
+
+* Full text search
+* Stopword removal
+* Faceting
+* Filtering
+* Fielded search
+* Field weighting
+* Relevance weighting (tf-idf)
+* Paging (offset and resultset length)
+* Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
+
+**Homepage:** http://www.foragejs.net
+
+**Github:** https://github.com/fergiemcdowall/forage
+
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
+
+[![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
+
+[![NPM](https://nodei.co/npm-dl/forage.png)](https://nodei.co/npm/forage/)
+
 
 #Known Issues
 
