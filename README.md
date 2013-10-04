@@ -23,25 +23,12 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 * Paging (offset and resultset length)
 * Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
 
-##Download
-
-**git:**
-
-    git clone https://github.com/fergiemcdowall/forage
-    git checkout v0.2.3
-
-Drop the `git checkout` if you want the latest and greatest (and possible broken) version
-
-**http:**
-
-    https://github.com/fergiemcdowall/forage/releases/tag/v0.2.3
-
 
 ##Installing Forage.js
 
 Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
 
-    npm install
+    npm install forage
 
 If everything went to plan- Forage should now be installed on your machine
 
@@ -52,9 +39,9 @@ If everything went to plan- Forage should now be installed on your machine
 
 ##Start your Forage.js server
 
-Navigate to the directory where you installed Forage and type
+Type
 
-    node forage
+    forage
 
 Hurrah! Forage is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
 and marvel. The default port of 3000 can be modified if required.
