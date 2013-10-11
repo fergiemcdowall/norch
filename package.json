@@ -9,7 +9,7 @@
     "commander": "2.0.0",
     "express": "3.1.1",
     "request": "2.27.0",
-    "search-index": "0.2.18"
+    "search-index": "0.2.19"
   },
   "repository": {
     "type": "git",
