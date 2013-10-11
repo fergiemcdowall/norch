@@ -4,7 +4,7 @@
   "description": "Forage.js is a free text search engine",
   "main": "./lib/forage",
   "dependencies": {
-    "bustermove": "0.3.1",
+    "buster": "0.7.4",
     "colors": "0.6.2",
     "commander": "2.0.0",
     "express": "3.1.1",
@@ -31,6 +31,6 @@
     "node": ">= 0.8.x"
   },
   "scripts": {
-    "test": "buster test"
+    "test": "buster-test"
   }
 }

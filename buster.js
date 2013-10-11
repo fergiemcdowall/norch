@@ -1,5 +1,5 @@
 var config = module.exports
 
-config['unit'] = {
+config['My tests'] = {
     environment: 'node', tests: [ 'test/*-test.js' ] 
 }

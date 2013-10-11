@@ -1,4 +1,4 @@
-var forage = require('../forage.js');
+var forage = require('../lib/forage.js');
 var buster = require('buster');
 var http = require('http');
 
@@ -27,71 +27,71 @@ function testForageURL (testCaseName,
         });
         res.on('end',function(){
           thisholder.res = JSON.parse(data);
-          done(assert(true));
+          done(buster.assert(true));
         });
       }).on('error', function(e) {
-        console.log("Got error: " + e.message);
-        assert(false);
+//        console.log("Got error: " + e.message);
+        buster.assert(false);
       });
     },
     'endpoint returns result': function() {
-      console.log(JSON.stringify(this.res, null, 2));
-      assert(this.res);
+//      console.log(JSON.stringify(this.res, null, 2));
+      buster.assert(this.res);
     },
     'idf': {
       'result has idf': function() {
-        assert(this.res.idf);
+        buster.assert(this.res.idf);
       },
       'idf for ussr on testset is correct': function() {
-        assert.equals(this.res.idf[idfToken], idfValue);
+        buster.assert.equals(this.res.idf[idfToken], idfValue);
       }
     },
     'query': {
       'result has query': function() {
-        assert(this.res.query);
+        buster.assert(this.res.query);
       },
       'result has transformed query': function() {
-        assert(this.res.transformedQuery);
+        buster.assert(this.res.transformedQuery);
       }
     },
     'facets': {
       'result has facets': function() {
-        assert(this.res.facets);
+        buster.assert(this.res.facets);
       },
       'result has places facet': function() {
-        assert(this.res.facets.places);
+        buster.assert(this.res.facets.places);
       },
       'result has topics facet': function() {
-        assert(this.res.facets.topics);
+        buster.assert(this.res.facets.topics);
       },
       'result has organisations facet': function() {
-        assert(this.res.facets.organisations);
+        buster.assert(this.res.facets.organisations);
       }
     },
     'hits': {
       'result has hits': function() {
-        assert.equals(this.res.hits[0].document.id, expectedFirstResultID);
+        buster.assert.equals(this.res.hits[0].id + '', expectedFirstResultID + '');
       },
       'top hit is correct': function() {
-        assert(this.res.hits);
+        buster.assert(this.res.hits);
       },
       'result has totalHits': function() {
-        assert(this.res.totalHits);
+        buster.assert(this.res.totalHits);
       },
       'totalHits is correct': function() {
-        assert.equals(this.res.totalHits, totalHits);
+        buster.assert.equals(this.res.totalHits, totalHits);
       },
       'totalHits value is equal to the actual count of hits': function() {
-        assert.equals(this.res.totalHits, this.res.hits.length);
+        buster.assert.equals(this.res.totalHits, this.res.hits.length);
       },
       'first hit has matchedTerms': function() {
-        assert(this.res.hits[0].matchedTerms);
+        buster.assert(this.res.hits[0].matchedTerms);
       },
       'first hit has document': function() {
-        assert(this.res.hits[0].document);
+        buster.assert(this.res.hits[0].document);
       },
       'first hit has score': function() {
-        assert(this.res.hits[0].score);
+        buster.assert(this.res.hits[0].score);
       }
     }
   });

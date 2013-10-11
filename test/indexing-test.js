@@ -1,21 +1,21 @@
-var forage = require('../forage.js');
+var forage = require('../lib/forage.js');
 var buster = require('buster');
 var fs = require('fs');
 var request = require('request');
 
 buster.testCase('Indexing tests:', {
   'index batch of 1000 docs': function (done) {
-    this.timeout = 60000;
+    this.timeout = 10000;
     var r = request.post('http://localhost:3000/indexer',
                          function (error, response, body) {
                            if (!response) {
-                             done(assert(false));
+                             done(buster.assert(false));
                            }
                            else if (error) {
-                             done(assert(false));
+                             done(buster.assert(false));
                            }
                            else if (response.statusCode == 200) {
-                             done(assert(true));
+                             done(buster.assert(true));
                            }
                          })
     var form = r.form()
