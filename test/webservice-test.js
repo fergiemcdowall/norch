@@ -1,98 +1,93 @@
+var buster = require("buster");
 var forage = require('../lib/forage.js');
-var buster = require('buster');
 var http = require('http');
+var request = require('request');
+var fs = require('fs');
+
+buster.spec.expose(); // Make functions global
+
+var spec = describe("Test webservice", function () {
 
 
-testForageURL('search for USSR', '/search?q=ussr', 856, 'ussr', 6.425563388011518, 6);
-testForageURL('search for moscow', '/search?q=moscow', 286, 'moscow', 6.579714067838776, 4);
+  var forageURLs = [{url:'/search?q=moscow',
+                     searchTerm: 'moscow',
+                     idf: 6.579714067838776,
+                     firstHit: 286,
+                     totalHits: 4},
+                    {url:'/search?q=ussr',
+                     searchTerm: 'ussr',
+                     idf: 6.425563388011518,
+                     firstHit: 856,
+                     totalHits: 6}];
+  var forageURLcounter = 0;
 
-function testForageURL (testCaseName,
-                        URL,
-                        expectedFirstResultID,
-                        idfToken,
-                        idfValue,
-                        totalHits) {
-  buster.testCase(testCaseName, {
-    setUp: function (done) {
-      var thisholder = this;
-      var options = {
-        host: 'localhost',
-        port: 3000,
-        path: URL
-      };
-      http.get(options, function(res) {
-        var data = '';
-        res.on('data', function (chunk){
-          data += chunk;
-        });
-        res.on('end',function(){
-          thisholder.res = JSON.parse(data);
-          done(buster.assert(true));
-        });
-      }).on('error', function(e) {
-//        console.log("Got error: " + e.message);
-        buster.assert(false);
-      });
-    },
-    'endpoint returns result': function() {
-//      console.log(JSON.stringify(this.res, null, 2));
-      buster.assert(this.res);
-    },
-    'idf': {
-      'result has idf': function() {
-        buster.assert(this.res.idf);
-      },
-      'idf for ussr on testset is correct': function() {
-        buster.assert.equals(this.res.idf[idfToken], idfValue);
-      }
-    },
-    'query': {
-      'result has query': function() {
-        buster.assert(this.res.query);
-      },
-      'result has transformed query': function() {
-        buster.assert(this.res.transformedQuery);
-      }
-    },
-    'facets': {
-      'result has facets': function() {
-        buster.assert(this.res.facets);
-      },
-      'result has places facet': function() {
-        buster.assert(this.res.facets.places);
-      },
-      'result has topics facet': function() {
-        buster.assert(this.res.facets.topics);
-      },
-      'result has organisations facet': function() {
-        buster.assert(this.res.facets.organisations);
-      }
-    },
-    'hits': {
-      'result has hits': function() {
-        buster.assert.equals(this.res.hits[0].id + '', expectedFirstResultID + '');
-      },
-      'top hit is correct': function() {
-        buster.assert(this.res.hits);
-      },
-      'result has totalHits': function() {
-        buster.assert(this.res.totalHits);
-      },
-      'totalHits is correct': function() {
-        buster.assert.equals(this.res.totalHits, totalHits);
-      },
-      'totalHits value is equal to the actual count of hits': function() {
-        buster.assert.equals(this.res.totalHits, this.res.hits.length);
-      },
-      'first hit has matchedTerms': function() {
-        buster.assert(this.res.hits[0].matchedTerms);
-      },
-      'first hit has document': function() {
-        buster.assert(this.res.hits[0].document);
-      },
-      'first hit has score': function() {
-        buster.assert(this.res.hits[0].score);
-      }
-    }
+  beforeAll(function (done) {
+    this.timeout = 10000;
+    var r = request.post('http://localhost:3000/indexer',
+                         function (error, response, body) {
+                           if (!response) {
+                             done(buster.assert(false));
+                           }
+                           else if (error) {
+                             done(buster.assert(false));
+                           }
+                           else if (response.statusCode == 200) {
+                             done(buster.assert(true));
+                           }
+                         });
+    var form = r.form();
+    form.append('filterOn', 'places,topics,organisations');
+    form.append('document',
+                fs.createReadStream('test/testdata/reuters-000.json'));
   });
-}
+  
+  before(function (done) {
+    var that = this;
+    var options = {
+      host: 'localhost',
+      port: 3000,
+      path: forageURLs[forageURLcounter].url
+    };
+    http.get(options, function(res) {
+      var data = '';
+      res.on('data', function (chunk){
+        data += chunk;
+      });
+      res.on('end',function(){
+        that.res = JSON.parse(data);
+        done(buster.assert(true));
+      });
+    }).on('error', function(e) {
+      //        console.log("Got error: " + e.message);
+      buster.assert(false);
+    });
+  });
+  
+
+  for (var i = 0; i < forageURLs.length; i++) {
+    it("query URL is " + forageURLs[i].url, function () {
+      buster.assert(this.res);
+      buster.assert(this.res.idf);
+      buster.assert(this.res.idf[forageURLs[forageURLcounter].searchTerm],
+                    forageURLs[forageURLcounter].idf);
+      buster.assert(this.res.query);
+      buster.assert(this.res.transformedQuery);
+      buster.assert(this.res.facets);
+      buster.assert(this.res.facets.places);
+      buster.assert(this.res.facets.topics);
+      buster.assert(this.res.facets.organisations);
+      buster.assert.equals(this.res.hits[0].id + '',
+                           forageURLs[forageURLcounter].firstHit + '');
+      buster.assert(this.res.hits);
+      buster.assert(this.res.totalHits);
+      buster.assert.equals(this.res.totalHits,
+                           forageURLs[forageURLcounter].totalHits);
+      buster.assert.equals(this.res.totalHits, this.res.hits.length);
+      buster.assert(this.res.hits[0].matchedTerms);
+      buster.assert(this.res.hits[0].document);
+      buster.assert(this.res.hits[0].score);
+      forageURLcounter++
+    });
+  }
+  
+});
