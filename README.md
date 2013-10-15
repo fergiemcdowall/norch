@@ -242,7 +242,7 @@ Multiple field weights:
 
 #About Forage
 
-Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and featuring
+Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/fergiemcdowall/search-index) featuring
 
 * Full text search
 * Stopword removal
