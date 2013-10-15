@@ -1,3 +1,14 @@
+#Forage
+  * <a href="#installation">Installation</a>
+  * <a href="#operation">Operation</a>
+  * <a href="#indexing">Indexing API</a>
+  * <a href="#search">Search API</a>
+  * <a href="#about">About Forage</a>
+  * <a href="#issues">Known Issues</a>
+  * <a href="#licence">Licence</a>
+
+
+<a name="installation"></a>
 #Installation
 
 Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that these are both installed Forage can be installed by running the following command which will download and install all dependencies:
@@ -8,6 +19,7 @@ Forage.js has 2 dependencies- Node.js and npm (Node Package Manager). Given that
 
 If everything went to plan- Forage should now be installed on your machine
 
+<a name="operation"></a>
 #Operation
 
 *Note: for the purposes of accessability, this doc assumes that Forage is being installed locally on your own computer
@@ -38,7 +50,8 @@ and marvel. The default port of 3000 can be modified if required.
       -p, --port <port>  specify the port, defaults to 3000
 ```
 
-##Indexing
+<a name="indexing"></a>
+#Indexing API
 Once you have set up Forage.js, you can get some content into it. Forage comes with a JSONified version of the venerable
 Reuters-21578 test dataset in the directory `test/testdata`. To index this data cd into the directory `test/testdata` and run
 the following command (note that one data file can contain an arbitralily large number of documents)
@@ -82,8 +95,8 @@ Example
 filterOn is an array of fields that can be used to filter search results. Each defined field must be an array field in
 the document. filterOn will not work with string fields.
 
-
-#Searching
+<a name="search"></a>
+#Search API
 
 Search is available on [http://localhost.com:3000/search](http://localhost.com:3000/search)
 
@@ -163,7 +176,8 @@ Multiple field weights:
 
 [http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
 
-#Features
+<a name="about"></a>
+#About Forage
 
 Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and featuring
 
@@ -187,7 +201,7 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 [![NPM](https://nodei.co/npm-dl/forage.png)](https://nodei.co/npm/forage/)
 
-
+<a name="issues"></a>
 #Known Issues
 
 Forage is new software and as such should be regarded as a work in progress. Administrators should be aware of the
@@ -208,7 +222,7 @@ fire up forage in a virtual machine.
 
 Indexing and GUI is the current focus of development
 
-
+<a name="licence"></a>
 #License
 
 Forage.js is released under the MIT license:
