@@ -1,6 +1,5 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Forage](#forage)
 - [Installation](#installation)
 - [Operation](#operation)
 	- [Start your Forage.js server](#start-your-foragejs-server)
