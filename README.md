@@ -1,3 +1,30 @@
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Forage](#forage)
+- [Installation](#installation)
+- [Operation](#operation)
+	- [Start your Forage.js server](#start-your-foragejs-server)
+		- [Startup options](#startup-options)
+- [Crawling](#crawling)
+	- [forage-fetch](#forage-fetch)
+	- [forage-document-processor](#forage-document-processor)
+	- [forage-indexer](#forage-indexer)
+- [Indexing API](#indexing-api)
+	- [Indexing parameters](#indexing-parameters)
+		- [filterOn](#filteron)
+- [Search API](#search-api)
+	- [Search parameters](#search-parameters)
+		- [q](#q)
+		- [searchFields](#searchfields)
+		- [facets](#facets)
+		- [filter](#filter)
+		- [offset](#offset)
+		- [pagesize](#pagesize)
+		- [weight](#weight)
+- [About Forage](#about-forage)
+- [Known Issues](#known-issues)
+- [License](#license)
+
 #Forage
   * <a href="#installation">Installation</a>
   * <a href="#operation">Operation</a>
