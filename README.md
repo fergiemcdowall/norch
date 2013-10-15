@@ -1,6 +1,7 @@
 #Forage
   * <a href="#installation">Installation</a>
   * <a href="#operation">Operation</a>
+  * <a href="#crawling">Web Crawling</a>
   * <a href="#indexing">Indexing API</a>
   * <a href="#search">Search API</a>
   * <a href="#about">About Forage</a>
@@ -39,7 +40,7 @@ and marvel. The default port of 3000 can be modified if required.
 ### Startup options
 
 ```
-  $ forage --help
+$ forage --help
 
   Usage: forage [options]
 
@@ -48,6 +49,52 @@ and marvel. The default port of 3000 can be modified if required.
       -h, --help         output usage information
       -V, --version      output the version number
       -p, --port <port>  specify the port, defaults to 3000
+```
+
+<a name="crawling"></a>
+#Crawling
+Forage comes bundled with command line tools for spidering, fetching, processing and indexing webpages.
+
+##forage-fetch
+```
+$ forage-fetch --help
+
+  Usage: forage-fetch [options]
+
+  Options:
+
+    -h, --help                   output usage information
+    -V, --version                output the version number
+    -d, --directory <directory>  specify the fetch directory,
+    -n, --hostname <hostname>    specify the hostname
+    -p, --protocol <protocol>    specify the protocol, defaults to http://
+    -s, --starturl <starturl>    specify the URL to start fetching from
+```
+##forage-document-processor
+```
+$ forage-document-processor --help
+
+  Usage: forage-document-processor [options]
+
+  Options:
+
+    -h, --help                                   output usage information
+    -V, --version                                output the version number
+    -f, --fetchdirectory <fetchdirectory>        specify the fetch directory, defaults to fetch/
+    -d, --documentdirectory <documentdirectory>  specify the document directory, defaults to doc/
+```
+##forage-indexer
+```
+$ forage-indexer --help
+
+  Usage: forage-indexer [options]
+
+  Options:
+
+    -h, --help                                   output usage information
+    -V, --version                                output the version number
+    -d, --documentdirectory <documentdirectory>  specify the document directory, defaults to doc/
+    -e, --endpoint <endpoint>                    specify the forage endpoint,
 ```
 
 <a name="indexing"></a>
