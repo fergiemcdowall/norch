@@ -276,13 +276,16 @@ following:
 
  * **Out of memory error under heavy indexing** Currently heavy indexing may produce and out of memory error, even with the test data that is included with Forage.
 One solution is to run Forage with the `--max-old-space-size=<the size of your RAM>` option. See this issue for further
-details https://github.com/rvagg/node-levelup/issues/171
+details https://github.com/rvagg/node-levelup/issues/171 . If you are running some flavour of unix, try switching out `level`
+with `level-hyper`. Another solution is to restart forage between batches to free up RAM- this can be automated with
+`forever.js`
 
  * **Installation on Windows** Native installation on Windows should be regarded as non-trivial. If you have the "right" python and C libs installed
-then it will work without any problems. See the section "Tested and Supported Platforms" in the
+then it will work without any problems. The test framework `buster.js` will always throw a nasty error on installation, which does
+not affect operation. See the section "Tested and Supported Platforms" in the
 [levelDOWN docs](https://github.com/rvagg/node-leveldown). Windows users who cannot/will not change their C/Python setup
 can optionally check out the [virtual-forage](https://github.com/fergiemcdowall/virtual-forage) package, which will
-fire up forage in a virtual machine.
+fire up forage in a virtual machine
 
 Indexing and GUI is the current focus of development
 
