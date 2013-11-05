@@ -1,6 +1,6 @@
 {
   "name": "forage",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Forage.js is a free text search engine",
   "main": "./lib/forage",
   "dependencies": {
@@ -8,7 +8,8 @@
     "cheerio": "0.12.3",
     "colors": "0.6.2",
     "commander": "2.0.0",
-    "express": "3.1.1",
+    "express": "3.4.4",
+    "forage-bootstrap": "*",
     "request": "2.27.0",
     "search-index": "0.2.20"
   },
@@ -23,7 +24,10 @@
     "big data"
   ],
   "bin": {
-    "forage": "./bin/forage"
+    "forage": "./bin/forage",
+    "forage-document-processor": "./bin/forage-document-processor",
+    "forage-fetch": "./bin/forage-fetch",
+    "forage-indexer": "./bin/forage-indexer"
   },
   "maintainers": [
     "fergiemcdowall <fergusmcdowall@gmail.com>"
