@@ -70,49 +70,16 @@ $ forage --help
 
 
 #Crawling
-Forage comes bundled with command line tools for spidering, fetching, processing and indexing webpages.
+Forage has command line tools for spidering, fetching, processing and indexing webpages that can be installed seperately
 
 ##forage-fetch
-```
-$ forage-fetch --help
+Get your webpages with [forage-fetch](https://github.com/foragejs/forage-fetch)
 
-  Usage: forage-fetch [options]
-
-  Options:
-
-    -h, --help                   output usage information
-    -V, --version                output the version number
-    -d, --directory <directory>  specify the fetch directory,
-    -n, --hostname <hostname>    specify the hostname
-    -p, --protocol <protocol>    specify the protocol, defaults to http://
-    -s, --starturl <starturl>    specify the URL to start fetching from
-```
 ##forage-document-processor
-```
-$ forage-document-processor --help
+Turn your fetched webpages into JSON with [forage-document-processor](https://github.com/foragejs/forage-document-processor)
 
-  Usage: forage-document-processor [options]
-
-  Options:
-
-    -h, --help                                   output usage information
-    -V, --version                                output the version number
-    -f, --fetchdirectory <fetchdirectory>        specify the fetch directory, defaults to fetch/
-    -d, --documentdirectory <documentdirectory>  specify the document directory, defaults to doc/
-```
 ##forage-indexer
-```
-$ forage-indexer --help
-
-  Usage: forage-indexer [options]
-
-  Options:
-
-    -h, --help                                   output usage information
-    -V, --version                                output the version number
-    -d, --documentdirectory <documentdirectory>  specify the document directory, defaults to doc/
-    -e, --endpoint <endpoint>                    specify the forage endpoint,
-```
+Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/forage-indexer)
 
 
 #Indexing API
