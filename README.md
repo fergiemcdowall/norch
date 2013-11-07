@@ -271,23 +271,15 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 Forage is new software and as such should be regarded as a work in progress. Administrators should be aware of the
 following:
 
- * **The GUI (scrolling)** the default GUI is very much a temporary measure. The instant search function is flaky and currently
- there is no support for scrolling
-
- * **Out of memory error under heavy indexing** Currently heavy indexing may produce and out of memory error, even with the test data that is included with Forage.
+ * **Out of memory error under heavy indexing** Currently **very** heavy indexing **may** produce and out of memory error, even with the test data that is included with Forage.
 One solution is to run Forage with the `--max-old-space-size=<the size of your RAM>` option. See this issue for further
 details https://github.com/rvagg/node-levelup/issues/171 . If you are running some flavour of unix, try switching out `level`
 with `level-hyper`. Another solution is to restart forage between batches to free up RAM- this can be automated with
 `forever.js`
 
- * **Installation on Windows** Native installation on Windows should be regarded as non-trivial. If you have the "right" python and C libs installed
-then it will work without any problems. The test framework `buster.js` will always throw a nasty error on installation, which does
-not affect operation. See the section "Tested and Supported Platforms" in the
-[levelDOWN docs](https://github.com/rvagg/node-leveldown). Windows users who cannot/will not change their C/Python setup
-can optionally check out the [virtual-forage](https://github.com/fergiemcdowall/virtual-forage) package, which will
-fire up forage in a virtual machine
-
-Indexing and GUI is the current focus of development
+ * **Installation on Windows** Forages underlying libraries float in and out of workingness on Windows. Although you
+_can_ get Forage to work natively on Windows, its not really recommended. Thankfully, Forage can easily be virtualised
+with Vagrant- check out [virtual-forage](https://github.com/fergiemcdowall/virtual-forage).
 
 
 #License
