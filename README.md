@@ -75,16 +75,38 @@ Forage has command line tools for spidering, fetching, processing and indexing w
 ##forage-fetch
 Get your webpages with [forage-fetch](https://github.com/foragejs/forage-fetch)
 
+Install
+
+```$ npm install forage-fetch```
+
+Help
+
+```$ forage-fetch -h``` or [read the docs](https://github.com/foragejs/forage-fetch)
+
 ##forage-document-processor
 Turn your fetched webpages into JSON with [forage-document-processor](https://github.com/foragejs/forage-document-processor)
+
+Install
+
+```$ npm install forage-document-processor```
+
+Help
+
+```$ forage-document-processor -h``` or [read the docs](https://github.com/foragejs/forage-document-processor)
 
 ##forage-indexer
 Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/forage-indexer)
 
+Install
+
+```$ npm install forage-indexer```
+
+Help
+
+```$ forage-document-indexer -h``` or [read the docs](https://github.com/foragejs/forage-document-indexer)
+
 
 #Indexing API
-
-*Note* Forage can optionally be indexed using the [forage-indexer node app](#forage-indexer). This section describes the raw HTTP interface.
 
 Once you have set up Forage.js, you can get some content into it. Forage comes with a JSONified version of the venerable
 Reuters-21578 test dataset in the directory `test/testdata`. To index this data cd into the directory `test/testdata` and run
@@ -128,6 +150,9 @@ Example
 
 filterOn is an array of fields that can be used to filter search results. Each defined field must be an array field in
 the document. filterOn will not work with string fields.
+
+##forage-indexer
+Forage can optionally be indexed using the [forage-indexer node app](#forage-indexer).
 
 
 #Search API
