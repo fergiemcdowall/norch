@@ -75,33 +75,33 @@ Forage has command line tools for spidering, fetching, processing and indexing w
 ##forage-fetch
 Get your webpages with [forage-fetch](https://github.com/foragejs/forage-fetch)
 
-Install
+**Install:**
 
 ```$ npm install forage-fetch```
 
-Help
+**Help:**
 
 ```$ forage-fetch -h``` or [read the docs](https://github.com/foragejs/forage-fetch)
 
 ##forage-document-processor
 Turn your fetched webpages into JSON with [forage-document-processor](https://github.com/foragejs/forage-document-processor)
 
-Install
+**Install:**
 
 ```$ npm install forage-document-processor```
 
-Help
+**Help:**
 
 ```$ forage-document-processor -h``` or [read the docs](https://github.com/foragejs/forage-document-processor)
 
 ##forage-indexer
 Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/forage-indexer)
 
-Install
+**Install:**
 
 ```$ npm install forage-indexer```
 
-Help
+**Help:**
 
 ```$ forage-indexer -h``` or [read the docs](https://github.com/foragejs/forage-indexer)
 
