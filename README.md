@@ -103,7 +103,7 @@ Install
 
 Help
 
-```$ forage-document-indexer -h``` or [read the docs](https://github.com/foragejs/forage-document-indexer)
+```$ forage-indexer -h``` or [read the docs](https://github.com/foragejs/forage-indexer)
 
 
 #Indexing API
