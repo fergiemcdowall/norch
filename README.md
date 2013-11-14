@@ -83,6 +83,9 @@ Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/
 
 
 #Indexing API
+
+*Note* Forage can optionally be indexed using the [forage-indexer node app](#forage-indexer). This section describes the raw HTTP interface.
+
 Once you have set up Forage.js, you can get some content into it. Forage comes with a JSONified version of the venerable
 Reuters-21578 test dataset in the directory `test/testdata`. To index this data cd into the directory `test/testdata` and run
 the following command (note that one data file can contain an arbitralily large number of documents)
