@@ -9,6 +9,9 @@
 	- [forage-document-processor](#forage-document-processor)
 	- [forage-indexer](#forage-indexer)
 - [Indexing API](#indexing-api)
+	- [Document Format](#document-format)
+	- [HTTP Interface](#http-interface)
+	- [Forage-indexer](#forage-indexer)
 	- [Indexing parameters](#indexing-parameters)
 		- [filterOn](#filteron)
 - [Search API](#search-api)
@@ -20,10 +23,12 @@
 		- [offset](#offset)
 		- [pagesize](#pagesize)
 		- [weight](#weight)
+- [Matcher API](#matcher-api)
+	- [Generating a matcher](#generating-a-matcher)
+	- [Connecting to a matcher](#connecting-to-a-matcher)
 - [About Forage](#about-forage)
 - [Known Issues](#known-issues)
 - [License](#license)
-
 
 #Installation
 
@@ -237,6 +242,22 @@ Multiple field weights:
 
 [http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
 
+#Matcher API
+
+Forage comes with a matcher that can be used to create autosuggest functionality. The matcher is derived from the content of the reverse index. At the moment Forage ships with one matcher,
+there is a desire to abstract this out into a framework that can accomodate mulitiple pluggable matchers.
+
+##Generating a matcher
+
+Make sure that you have some documents in your index and then run:
+
+    http://localhost:3000/generateMatcher
+
+##Connecting to a matcher
+
+Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery autocomplete](http://jqueryui.com/autocomplete/) the matcher can be called by using this URL:
+
+    http://localhost:3000/matcher?beginsWith=<matcher term>
 
 #About Forage
 
@@ -246,6 +267,7 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 * Stopword removal
 * Faceting
 * Filtering
+* Matching (Autosuggest)
 * Fielded search
 * Field weighting
 * Relevance weighting (tf-idf)
@@ -267,12 +289,6 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 Forage is new software and as such should be regarded as a work in progress. Administrators should be aware of the
 following:
-
- * **Out of memory error under heavy indexing** Currently **very** heavy indexing **may** produce and out of memory error, even with the test data that is included with Forage.
-One solution is to run Forage with the `--max-old-space-size=<the size of your RAM>` option. See this issue for further
-details https://github.com/rvagg/node-levelup/issues/171 . If you are running some flavour of unix, try switching out `level`
-with `level-hyper`. Another solution is to restart forage between batches to free up RAM- this can be automated with
-`forever.js`
 
  * **Installation on Windows** Forages underlying libraries float in and out of workingness on Windows. Although you
 _can_ get Forage to work natively on Windows, its not really recommended. Thankfully, Forage can easily be virtualised
