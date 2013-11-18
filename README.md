@@ -261,7 +261,7 @@ Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQu
 
 #About Forage
 
-Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/fergiemcdowall/search-index) featuring
+Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/foragejs/search-index) featuring
 
 * Full text search
 * Stopword removal
