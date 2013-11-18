@@ -108,16 +108,11 @@ Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/
 
 #Indexing API
 
-Once you have set up Forage.js, you can get some content into it. Forage comes with a JSONified version of the venerable
-Reuters-21578 test dataset in the directory `test/testdata`. To index this data cd into the directory `test/testdata` and run
-the following command (note that one data file can contain an arbitralily large number of documents)
+##Document Format
 
-    curl --form document=@reuters-000.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
-
-If you are on a unix machine (including mac OSX), you can also run /index.sh in order to read in the entire dataset
-of 21 batch files.
-
-Generally Forage indexes data that is in the format
+Generally Forage indexes data that is in the format below, that is to say an object containing a list of key:values where the key is the document ID and the values are a futher
+list of key:values that define the fields. Fields can be called anything other than 'ID'. Field values can be either
+strings or simple arrays. Arrays can be used to create filters and facets.
 
 ```javascript
 {
@@ -134,9 +129,19 @@ Generally Forage indexes data that is in the format
 }
 ```
 
-That is to say an object containing a list of key:values where the key is the document ID and the values are a futher
-list of key:values that define the fields. Fields can be called anything other than 'ID'. Field values can be either
-strings or simple arrays.
+##HTTP Interface
+
+If the above was in a file called `data.json`, it could be indexed using a command like
+
+    curl --form document=@data.json http://localhost:3000/indexer --form filterOn=metedata
+
+There is some test data in the test/testdata folder of the forage.js package. It can be indexed like so:
+
+    curl --form document=@reuters-000.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
+
+##Forage-indexer
+
+Forage can optionally be indexed using the [forage-indexer node app](#forage-indexer).
 
 ##Indexing parameters
 
@@ -150,9 +155,6 @@ Example
 
 filterOn is an array of fields that can be used to filter search results. Each defined field must be an array field in
 the document. filterOn will not work with string fields.
-
-##forage-indexer
-Forage can optionally be indexed using the [forage-indexer node app](#forage-indexer).
 
 
 #Search API
