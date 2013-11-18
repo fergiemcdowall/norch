@@ -272,13 +272,13 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 * Field weighting
 * Relevance weighting (tf-idf)
 * Paging (offset and resultset length)
-* Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
+* Virtualisation (see [virtual-forage](https://github.com/foragejs/virtual-forage))
 
 **Homepage:** http://www.foragejs.net
 
-**Github:** https://github.com/fergiemcdowall/forage
+**Github:** https://github.com/foragejs/forage
 
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/foragejs/forage.png)](http://travis-ci.org/foragejs/forage)
 
 [![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
 
@@ -292,7 +292,7 @@ following:
 
  * **Installation on Windows** Forages underlying libraries float in and out of workingness on Windows. Although you
 _can_ get Forage to work natively on Windows, its not really recommended. Thankfully, Forage can easily be virtualised
-with Vagrant- check out [virtual-forage](https://github.com/fergiemcdowall/virtual-forage).
+with Vagrant- check out [virtual-forage](https://github.com/foragejs/virtual-forage).
 
 
 #License
