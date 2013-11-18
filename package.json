@@ -1,7 +1,7 @@
 {
   "name": "forage",
-  "version": "0.2.5",
-  "description": "Forage.js is a free text search engine",
+  "version": "0.3.0",
+  "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/forage",
   "dependencies": {
     "buster": "0.7.3",
