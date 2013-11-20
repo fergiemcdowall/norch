@@ -82,7 +82,7 @@ Get your webpages with [forage-fetch](https://github.com/foragejs/forage-fetch)
 
 **Install:**
 
-```$ npm install forage-fetch```
+```$ npm install -g forage-fetch```
 
 **Help:**
 
@@ -93,7 +93,7 @@ Turn your fetched webpages into JSON with [forage-document-processor](https://gi
 
 **Install:**
 
-```$ npm install forage-document-processor```
+```$ npm install -g forage-document-processor```
 
 **Help:**
 
@@ -104,7 +104,7 @@ Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/
 
 **Install:**
 
-```$ npm install forage-indexer```
+```$ npm install -g forage-indexer```
 
 **Help:**
 
