@@ -4,14 +4,16 @@
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/forage",
   "dependencies": {
-    "buster": "0.7.3",
     "cheerio": "0.12.3",
     "colors": "0.6.2",
     "commander": "2.0.0",
-    "express": "3.4.4",
+    "express": "3.4.8",
     "forage-bootstrap": "*",
     "request": "2.27.0",
-    "search-index": "0.2.21"
+    "search-index": "0.2.22"
+  },
+  "devDependencies": {
+    "bustermove": "*"
   },
   "repository": {
     "type": "git",
