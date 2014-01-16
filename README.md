@@ -78,7 +78,7 @@ $ forage --help
 Forage has command line tools for spidering, fetching, processing and indexing webpages that can be installed seperately
 
 ##forage-fetch
-Get your webpages with [forage-fetch](https://github.com/foragejs/forage-fetch)
+Get your webpages with [forage-fetch](https://github.com/fergiemcdowall/forage-fetch)
 
 **Install:**
 
@@ -86,10 +86,10 @@ Get your webpages with [forage-fetch](https://github.com/foragejs/forage-fetch)
 
 **Help:**
 
-```$ forage-fetch -h``` or [read the docs](https://github.com/foragejs/forage-fetch)
+```$ forage-fetch -h``` or [read the docs](https://github.com/fergiemcdowall/forage-fetch)
 
 ##forage-document-processor
-Turn your fetched webpages into JSON with [forage-document-processor](https://github.com/foragejs/forage-document-processor)
+Turn your fetched webpages into JSON with [forage-document-processor](https://github.com/fergiemcdowall/forage-document-processor)
 
 **Install:**
 
@@ -97,10 +97,10 @@ Turn your fetched webpages into JSON with [forage-document-processor](https://gi
 
 **Help:**
 
-```$ forage-document-processor -h``` or [read the docs](https://github.com/foragejs/forage-document-processor)
+```$ forage-document-processor -h``` or [read the docs](https://github.com/fergiemcdowall/forage-document-processor)
 
 ##forage-indexer
-Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/forage-indexer)
+Index your JSONified webpages with [forage-indexer](https://github.com/fergiemcdowall/forage-indexer)
 
 **Install:**
 
@@ -108,7 +108,7 @@ Index your JSONified webpages with [forage-indexer](https://github.com/foragejs/
 
 **Help:**
 
-```$ forage-indexer -h``` or [read the docs](https://github.com/foragejs/forage-indexer)
+```$ forage-indexer -h``` or [read the docs](https://github.com/fergiemcdowall/forage-indexer)
 
 
 #Indexing API
@@ -261,7 +261,7 @@ Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQu
 
 #About Forage
 
-Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/foragejs/search-index) featuring
+Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/fergiemcdowall/search-index) featuring
 
 * Full text search
 * Stopword removal
@@ -272,13 +272,13 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 * Field weighting
 * Relevance weighting (tf-idf)
 * Paging (offset and resultset length)
-* Virtualisation (see [virtual-forage](https://github.com/foragejs/virtual-forage))
+* Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
 
 **Homepage:** http://www.foragejs.net
 
-**Github:** https://github.com/foragejs/forage
+**Github:** https://github.com/fergiemcdowall/forage
 
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/foragejs/forage.png)](http://travis-ci.org/foragejs/forage)
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
 
 [![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
 
@@ -292,7 +292,7 @@ following:
 
  * **Installation on Windows** Forages underlying libraries float in and out of workingness on Windows. Although you
 _can_ get Forage to work natively on Windows, its not really recommended. Thankfully, Forage can easily be virtualised
-with Vagrant- check out [virtual-forage](https://github.com/foragejs/virtual-forage).
+with Vagrant- check out [virtual-forage](https://github.com/fergiemcdowall/virtual-forage).
 
 
 #License
