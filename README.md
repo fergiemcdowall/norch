@@ -11,7 +11,7 @@
 - [Indexing API](#indexing-api)
 	- [Document Format](#document-format)
 	- [HTTP Interface](#http-interface)
-	- [Forage-indexer](#forage-indexer)
+	- [Forage-indexer](#forage-indexer-1)
 	- [Indexing parameters](#indexing-parameters)
 		- [filterOn](#filteron)
 - [Search API](#search-api)
@@ -22,6 +22,7 @@
 		- [filter](#filter)
 		- [offset](#offset)
 		- [pagesize](#pagesize)
+		- [teaser](#teaser)
 		- [weight](#weight)
 - [Matcher API](#matcher-api)
 	- [Generating a matcher](#generating-a-matcher)
@@ -29,6 +30,7 @@
 - [About Forage](#about-forage)
 - [Known Issues](#known-issues)
 - [License](#license)
+- 
 
 #Installation
 
