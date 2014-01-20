@@ -229,6 +229,16 @@ Usage:
 
 [http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5)
 
+
+###teaser
+**(Optional)** for "teaser". Use this option to generate a short paragraph that indicates where the search terms occur in the document.
+
+Usage:
+
+    teaser=<field to generate teaser on>
+
+[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body)
+
 ###weight
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
 
