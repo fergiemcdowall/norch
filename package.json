@@ -10,7 +10,7 @@
     "express": "3.4.8",
     "forage-bootstrap": "*",
     "request": "2.27.0",
-    "search-index": "0.2.22"
+    "search-index": "0.2.23"
   },
   "devDependencies": {
     "bustermove": "*"
