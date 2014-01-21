@@ -296,6 +296,8 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 [![NPM](https://nodei.co/npm-dl/forage.png)](https://nodei.co/npm/forage/)
 
+http://npm-stat.vorba.ch/charts.html?package=forage
+
 <a name="issues"></a>
 #Known Issues
 
