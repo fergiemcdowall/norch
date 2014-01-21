@@ -30,7 +30,7 @@
 - [About Forage](#about-forage)
 - [Known Issues](#known-issues)
 - [License](#license)
-- 
+
 
 #Installation
 
