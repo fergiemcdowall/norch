@@ -58,8 +58,8 @@ Type
 
     $ forage
 
-Hurrah! Forage is now running locally on your machine. Head over to [http://localhost:3000/](http://localhost:3000/)
-and marvel. The default port of 3000 can be modified if required.
+Hurrah! Forage is now running locally on your machine. Head over to [http://localhost:3030/](http://localhost:3030/)
+and marvel. The default port of 3030 can be modified if required.
 
 ### Startup options
 
@@ -72,7 +72,7 @@ $ forage --help
 
       -h, --help         output usage information
       -V, --version      output the version number
-      -p, --port <port>  specify the port, defaults to 3000
+      -p, --port <port>  specify the port, defaults to 3030
 ```
 
 
@@ -140,11 +140,11 @@ strings or simple arrays. Arrays can be used to create filters and facets.
 
 If the above was in a file called `data.json`, it could be indexed using a command like
 
-    curl --form document=@data.json http://localhost:3000/indexer --form filterOn=metedata
+    curl --form document=@data.json http://localhost:3030/indexer --form filterOn=metedata
 
 There is some test data in the test/testdata folder of the forage.js package. It can be indexed like so:
 
-    curl --form document=@reuters-000.json http://localhost:3000/indexer --form filterOn=places,topics,organisations
+    curl --form document=@reuters-000.json http://localhost:3030/indexer --form filterOn=places,topics,organisations
 
 ##Forage-indexer
 
@@ -166,7 +166,7 @@ the document. filterOn will not work with string fields.
 
 #Search API
 
-Search is available on [http://localhost.com:3000/search](http://localhost.com:3000/search)
+Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
 
 ##Search parameters
 
@@ -177,7 +177,7 @@ Usage:
 
     q=<query term>
 
-[http://localhost:3000/search?q=moscow](http://localhost:3000/search?q=moscow)
+[http://localhost:3030/search?q=moscow](http://localhost:3030/search?q=moscow)
 
 ###searchFields
 
@@ -185,7 +185,7 @@ Search on specified fields. Ignore text that exists in other fields.
 
     searchFields[]=<field to search in>
     
-[http://localhost:3000/search?q=plans&searchFields[]=body](http://localhost:3000/search?q=plans&searchFields[]=body)
+[http://localhost:3030/search?q=plans&searchFields[]=body](http://localhost:3030/search?q=plans&searchFields[]=body)
 
 ###facets
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
@@ -194,7 +194,7 @@ Usage:
 
     facets=<field to facet on>
 
-[http://localhost:3000/search?q=moscow&facets=topics](http://localhost:3000/search?q=moscow&facets=topics)
+[http://localhost:3030/search?q=moscow&facets=topics](http://localhost:3030/search?q=moscow&facets=topics)
 
 ###filter
 **(Optional)** For "filter". Use this option to limit your search to the given field
@@ -203,11 +203,11 @@ Usage:
 
     filter[<filter field>][]=<value>
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain)
 
 Multiple filters:
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr)
 
 
 ###offset
@@ -219,7 +219,7 @@ Usage:
 
     offset=<start index>
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5)
 
 ###pagesize
 
@@ -229,7 +229,7 @@ Usage:
 
     pagesize=<size of resultset>
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5)
 
 
 ###teaser
@@ -239,7 +239,7 @@ Usage:
 
     teaser=<field to generate teaser on>
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body)
 
 ###weight
 **(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
@@ -248,11 +248,11 @@ Usage:
 
     weight[<field name>][]:<weight (factor)>
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10)
 
 Multiple field weights:
 
-[http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3000/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
+[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
 
 #Matcher API
 
@@ -263,13 +263,13 @@ there is a desire to abstract this out into a framework that can accomodate muli
 
 Make sure that you have some documents in your index and then run:
 
-    http://localhost:3000/generateMatcher
+    http://localhost:3030/generateMatcher
 
 ##Connecting to a matcher
 
 Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery autocomplete](http://jqueryui.com/autocomplete/) the matcher can be called by using this URL:
 
-    http://localhost:3000/matcher?beginsWith=<matcher term>
+    http://localhost:3030/matcher?beginsWith=<matcher term>
 
 #About Forage
 
