@@ -290,7 +290,7 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 **Github:** https://github.com/fergiemcdowall/forage
 
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage) (TODO: fix travis tests- Forage probably works, even if the tests are failing)
 
 [![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
 
