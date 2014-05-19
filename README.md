@@ -273,6 +273,8 @@ Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQu
 
 #About Forage
 
+![Forage](https://farm6.staticflickr.com/5192/14141658313_ebf053d53d_m.jpg)
+
 Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/fergiemcdowall/search-index) featuring
 
 * Full text search
