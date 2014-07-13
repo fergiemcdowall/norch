@@ -256,18 +256,18 @@ Multiple field weights:
 
 #Matcher API
 
-Forage comes with a matcher that can be used to create autosuggest functionality. The matcher is derived from the content of the reverse index. At the moment Forage ships with one matcher,
-there is a desire to abstract this out into a framework that can accomodate mulitiple pluggable matchers.
-
-##Generating a matcher
-
-Make sure that you have some documents in your index and then run:
-
-    http://localhost:3030/generateMatcher
+Forage comes with a matcher that can be used to create autosuggest
+functionality. The matcher is derived from the content of the reverse
+index. At the moment Forage ships with one matcher, there is a desire
+to abstract this out into a framework that can accomodate mulitiple
+pluggable matchers.
 
 ##Connecting to a matcher
 
-Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery autocomplete](http://jqueryui.com/autocomplete/) the matcher can be called by using this URL:
+Using something like
+[Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery
+autocomplete](http://jqueryui.com/autocomplete/) the matcher can be
+called by using this URL:
 
     http://localhost:3030/matcher?beginsWith=<matcher term>
 
@@ -275,7 +275,10 @@ Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQu
 
 ![Forage](https://farm6.staticflickr.com/5192/14141658313_ebf053d53d_m.jpg)
 
-Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/fergiemcdowall/search-index) featuring
+Forage.js is an experimental search engine built with
+[Node.js](http://nodejs.org/) and
+[search-index](https://github.com/fergiemcdowall/search-index)
+featuring
 
 * Full text search
 * Stopword removal
