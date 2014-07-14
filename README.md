@@ -165,9 +165,15 @@ the document. filterOn will not work with string fields.
 
 #Search API
 
-Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
+##Get document by ID
+
+It is possible to get a document and associated index entries by ID by
+calling `http://localhost.com:3030/getDoc?docID=` followed by the
+document's ID
 
 ##Search parameters
+
+Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
 
 ###q
 **(Required)** For "query". The search term. Asterisk (```*```) returns everything.
