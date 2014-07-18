@@ -15,6 +15,7 @@
 	- [Indexing parameters](#user-content-indexing-parameters)
 		- [filterOn](#user-content-filteron)
 - [Search API](#user-content-search-api)
+ 	- [Get document by ID](#user-content-get-document-by-id)
 	- [Search parameters](#user-content-search-parameters)
 		- [q](#user-content-q)
 		- [searchFields](#user-content-searchfields)
