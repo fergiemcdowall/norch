@@ -1,6 +1,6 @@
 {
   "name": "forage",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/forage",
   "dependencies": {
@@ -8,9 +8,9 @@
     "colors": "0.6.2",
     "commander": "2.0.0",
     "express": "3.4.8",
-    "forage-bootstrap": "*",
+    "forage-bootstrap": "0.0.3",
     "request": "2.27.0",
-    "search-index": "0.3.1"
+    "search-index": "0.3.3"
   },
   "devDependencies": {
     "jasmine-node": "1.14.2"
