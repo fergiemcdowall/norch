@@ -32,7 +32,7 @@
     "fergiemcdowall <fergusmcdowall@gmail.com>"
   ],
   "engines": {
-    "node": ">= 0.8.x"
+    "node": ">= 0.10.x"
   },
   "scripts": {
     "test": "jasmine-node test/spec/*-spec.js"
