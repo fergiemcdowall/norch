@@ -1,6 +1,6 @@
 {
   "name": "forage",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/forage",
   "dependencies": {
