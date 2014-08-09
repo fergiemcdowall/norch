@@ -10,7 +10,7 @@
     "express": "3.4.8",
     "forage-bootstrap": "0.0.3",
     "request": "2.27.0",
-    "search-index": "0.3.4"
+    "search-index": "0.3.5"
   },
   "devDependencies": {
     "jasmine-node": "1.14.2"
