@@ -1,35 +1,35 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Installation](#installation)
-- [Operation](#operation)
-	- [Start your Forage.js server](#start-your-foragejs-server)
-		- [Startup options](#startup-options)
-- [Crawling](#crawling)
-	- [forage-fetch](#forage-fetch)
-	- [forage-document-processor](#forage-document-processor)
-	- [forage-indexer](#forage-indexer)
-- [Indexing API](#indexing-api)
-	- [Document Format](#document-format)
-	- [HTTP Interface](#http-interface)
-	- [Forage-indexer](#forage-indexer-1)
-	- [Indexing parameters](#indexing-parameters)
-		- [filterOn](#filteron)
-- [Search API](#search-api)
-	- [Search parameters](#search-parameters)
-		- [q](#q)
-		- [searchFields](#searchfields)
-		- [facets](#facets)
-		- [filter](#filter)
-		- [offset](#offset)
-		- [pagesize](#pagesize)
-		- [teaser](#teaser)
-		- [weight](#weight)
-- [Matcher API](#matcher-api)
-	- [Generating a matcher](#generating-a-matcher)
-	- [Connecting to a matcher](#connecting-to-a-matcher)
-- [About Forage](#about-forage)
-- [Known Issues](#known-issues)
-- [License](#license)
+- [Installation](#user-content-installation)
+- [Operation](#user-content-operation)
+	- [Start your Forage.js server](#user-content-start-your-foragejs-server)
+		- [Startup options](#user-content-startup-options)
+- [Crawling](#user-content-crawling)
+	- [forage-fetch](#user-content-forage-fetch)
+	- [forage-document-processor](#user-content-forage-document-processor)
+	- [forage-indexer](#user-content-forage-indexer)
+- [Indexing API](#user-content-indexing-api)
+	- [Document Format](#user-content-document-format)
+	- [HTTP Interface](#user-content-http-interface)
+	- [Forage-indexer](#user-content-forage-indexer-1)
+	- [Indexing parameters](#user-content-indexing-parameters)
+		- [filterOn](#user-content-filteron)
+- [Search API](#user-content-search-api)
+ 	- [Get document by ID](#user-content-get-document-by-id)
+	- [Search parameters](#user-content-search-parameters)
+		- [q](#user-content-q)
+		- [searchFields](#user-content-searchfields)
+		- [facets](#user-content-facets)
+		- [filter](#user-content-filter)
+		- [offset](#user-content-offset)
+		- [pagesize](#user-content-pagesize)
+		- [teaser](#user-content-teaser)
+		- [weight](#user-content-weight)
+- [Matcher API](#user-content-matcher-api)
+	- [Connecting to a matcher](#user-content-connecting-to-a-matcher)
+- [About Forage](#user-content-about-forage)
+- [Known Issues](#user-content-known-issues)
+- [License](#user-content-license)
 
 
 #Installation
@@ -167,9 +167,15 @@ the document. filterOn will not work with string fields.
 
 #Search API
 
-Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
+##Get document by ID
+
+It is possible to get a document and associated index entries by ID by
+calling `http://localhost.com:3030/getDoc?docID=` followed by the
+document's ID
 
 ##Search parameters
+
+Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
 
 ###q
 **(Required)** For "query". The search term. Asterisk (```*```) returns everything.
@@ -257,18 +263,18 @@ Multiple field weights:
 
 #Matcher API
 
-Forage comes with a matcher that can be used to create autosuggest functionality. The matcher is derived from the content of the reverse index. At the moment Forage ships with one matcher,
-there is a desire to abstract this out into a framework that can accomodate mulitiple pluggable matchers.
-
-##Generating a matcher
-
-Make sure that you have some documents in your index and then run:
-
-    http://localhost:3030/generateMatcher
+Forage comes with a matcher that can be used to create autosuggest
+functionality. The matcher is derived from the content of the reverse
+index. At the moment Forage ships with one matcher, there is a desire
+to abstract this out into a framework that can accomodate mulitiple
+pluggable matchers.
 
 ##Connecting to a matcher
 
-Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery autocomplete](http://jqueryui.com/autocomplete/) the matcher can be called by using this URL:
+Using something like
+[Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery
+autocomplete](http://jqueryui.com/autocomplete/) the matcher can be
+called by using this URL:
 
     http://localhost:3030/matcher?beginsWith=<matcher term>
 
@@ -276,7 +282,10 @@ Using something like [Typeahead](http://twitter.github.io/typeahead.js/) or [JQu
 
 ![Forage](https://farm6.staticflickr.com/5192/14141658313_ebf053d53d_m.jpg)
 
-Forage.js is an experimental search engine built with [Node.js](http://nodejs.org/) and [search-index](https://github.com/fergiemcdowall/search-index) featuring
+Forage.js is an experimental search engine built with
+[Node.js](http://nodejs.org/) and
+[search-index](https://github.com/fergiemcdowall/search-index)
+featuring
 
 * Full text search
 * Stopword removal
@@ -295,7 +304,7 @@ Forage.js is an experimental search engine built with [Node.js](http://nodejs.or
 
 **Mailing list:** foragejs@googlegroups.com - subscribe by sending an email to foragejs+subscribe@googlegroups.com
 
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage) (TODO: fix travis tests- Forage probably works, even if the tests are failing)
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
 
 [![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
 
