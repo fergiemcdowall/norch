@@ -73,6 +73,7 @@ $ forage --help
       -h, --help         output usage information
       -V, --version      output the version number
       -p, --port <port>  specify the port, defaults to 3030
+      -n, --hostname <hostname> specify the hostname, defaults to 0.0.0.0 (IADDR_ANY)
 ```
 
 
