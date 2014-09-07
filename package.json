@@ -10,9 +10,10 @@
     "express": "3.4.8",
     "forage-bootstrap": "0.0.3",
     "request": "2.27.0",
-    "search-index": "0.3.5"
+    "search-index": "0.3.6"
   },
   "devDependencies": {
+    "reuters-21578-json": "0.0.1",
     "jasmine-node": "1.14.2"
   },
   "repository": {
