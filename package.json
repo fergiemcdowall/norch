@@ -1,14 +1,14 @@
 {
-  "name": "forage",
+  "name": "norch",
   "version": "0.3.7",
   "description": "A search engine based on Node.js and LevelDB",
-  "main": "./lib/forage",
+  "main": "./lib/norch",
   "dependencies": {
     "cheerio": "0.12.3",
     "colors": "0.6.2",
     "commander": "2.0.0",
     "express": "3.4.8",
-    "forage-bootstrap": "0.0.3",
+    "norch-bootstrap": "0.0.3",
     "request": "2.27.0",
     "search-index": "0.3.6"
   },
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fergiemcdowall/forage.git"
+    "url": "https://github.com/fergiemcdowall/norch.git"
   },
   "keywords": [
     "search",
@@ -27,7 +27,7 @@
     "big data"
   ],
   "bin": {
-    "forage": "./bin/forage"
+    "norch": "./bin/norch"
   },
   "maintainers": [
     "fergiemcdowall <fergusmcdowall@gmail.com>"

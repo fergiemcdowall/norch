@@ -2,16 +2,16 @@
 
 - [Installation](#user-content-installation)
 - [Operation](#user-content-operation)
-	- [Start your Forage.js server](#user-content-start-your-foragejs-server)
+	- [Start your Norch.js server](#user-content-start-your-norchjs-server)
 		- [Startup options](#user-content-startup-options)
 - [Crawling](#user-content-crawling)
-	- [forage-fetch](#user-content-forage-fetch)
-	- [forage-document-processor](#user-content-forage-document-processor)
-	- [forage-indexer](#user-content-forage-indexer)
+	- [norch-fetch](#user-content-norch-fetch)
+	- [norch-document-processor](#user-content-norch-document-processor)
+	- [norch-indexer](#user-content-norch-indexer)
 - [Indexing API](#user-content-indexing-api)
 	- [Document Format](#user-content-document-format)
 	- [HTTP Interface](#user-content-http-interface)
-	- [Forage-indexer](#user-content-forage-indexer-1)
+	- [Norch-indexer](#user-content-norch-indexer-1)
 	- [Indexing parameters](#user-content-indexing-parameters)
 		- [filterOn](#user-content-filteron)
 - [Search API](#user-content-search-api)
@@ -27,46 +27,46 @@
 		- [weight](#user-content-weight)
 - [Matcher API](#user-content-matcher-api)
 	- [Connecting to a matcher](#user-content-connecting-to-a-matcher)
-- [About Forage](#user-content-about-forage)
+- [About Norch](#user-content-about-norch)
 - [Known Issues](#user-content-known-issues)
 - [License](#user-content-license)
 
 
 #Installation
 
-Confirm that node.js is set up correctly, then install Forage like so:
+Confirm that node.js is set up correctly, then install Norch like so:
 
-    $ npm install -g forage
+    $ npm install -g norch
 
 **Notes:**
-  1. You need admin priviledges to install globally- on mac and linux use sudo: `$ sudo npm install -g forage`.
-  2. Forage can also be installed into the current working directory by dropping the `-g` flag: `$ npm install forage`. Forage now exists in the `node_modules` directory. From the directory you ran the install command, type: `$ node_modules/forage/bin/forage` to start forage.
+  1. You need admin priviledges to install globally- on mac and linux use sudo: `$ sudo npm install -g norch`.
+  2. Norch can also be installed into the current working directory by dropping the `-g` flag: `$ npm install norch`. Norch now exists in the `node_modules` directory. From the directory you ran the install command, type: `$ node_modules/norch/bin/norch` to start norch.
 
-If everything went to plan- Forage should now be installed on your machine
+If everything went to plan- Norch should now be installed on your machine
 
 
 #Operation
 
-*Note: for the purposes of accessability, this doc assumes that Forage is being installed locally on your own computer
-(localhost). Once Forage is rolled out on to remote servers, the
+*Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
+(localhost). Once Norch is rolled out on to remote servers, the
 hostname on all URLs should be updated accordingly. Command line
 commands are denoted by the prefix `$ ` which should not be typed in*
 
-##Start your Forage.js server
+##Start your Norch.js server
 
 Type
 
-    $ forage
+    $ norch
 
-Hurrah! Forage is now running locally on your machine. Head over to [http://localhost:3030/](http://localhost:3030/)
+Hurrah! Norch is now running locally on your machine. Head over to [http://localhost:3030/](http://localhost:3030/)
 and marvel. The default port of 3030 can be modified if required.
 
 ### Startup options
 
 ```
-$ forage --help
+$ norch --help
 
-  Usage: forage [options]
+  Usage: norch [options]
 
   Options:
 
@@ -78,47 +78,47 @@ $ forage --help
 
 
 #Crawling
-Forage has command line tools for spidering, fetching, processing and indexing webpages that can be installed seperately
+Norch has command line tools for spidering, fetching, processing and indexing webpages that can be installed seperately
 
-##forage-fetch
-Get your webpages with [forage-fetch](https://github.com/fergiemcdowall/forage-fetch)
-
-**Install:**
-
-```$ npm install -g forage-fetch```
-
-**Help:**
-
-```$ forage-fetch -h``` or [read the docs](https://github.com/fergiemcdowall/forage-fetch)
-
-##forage-document-processor
-Turn your fetched webpages into JSON with [forage-document-processor](https://github.com/fergiemcdowall/forage-document-processor)
+##norch-fetch
+Get your webpages with [norch-fetch](https://github.com/fergiemcdowall/norch-fetch)
 
 **Install:**
 
-```$ npm install -g forage-document-processor```
+```$ npm install -g norch-fetch```
 
 **Help:**
 
-```$ forage-document-processor -h``` or [read the docs](https://github.com/fergiemcdowall/forage-document-processor)
+```$ norch-fetch -h``` or [read the docs](https://github.com/fergiemcdowall/norch-fetch)
 
-##forage-indexer
-Index your JSONified webpages with [forage-indexer](https://github.com/fergiemcdowall/forage-indexer)
+##norch-document-processor
+Turn your fetched webpages into JSON with [norch-document-processor](https://github.com/fergiemcdowall/norch-document-processor)
 
 **Install:**
 
-```$ npm install -g forage-indexer```
+```$ npm install -g norch-document-processor```
 
 **Help:**
 
-```$ forage-indexer -h``` or [read the docs](https://github.com/fergiemcdowall/forage-indexer)
+```$ norch-document-processor -h``` or [read the docs](https://github.com/fergiemcdowall/norch-document-processor)
+
+##norch-indexer
+Index your JSONified webpages with [norch-indexer](https://github.com/fergiemcdowall/norch-indexer)
+
+**Install:**
+
+```$ npm install -g norch-indexer```
+
+**Help:**
+
+```$ norch-indexer -h``` or [read the docs](https://github.com/fergiemcdowall/norch-indexer)
 
 
 #Indexing API
 
 ##Document Format
 
-Generally Forage indexes data that is in the format below, that is to say an object containing a list of key:values where the key is the document ID and the values are a futher
+Generally Norch indexes data that is in the format below, that is to say an object containing a list of key:values where the key is the document ID and the values are a futher
 list of key:values that define the fields. Fields can be called anything other than 'ID'. Field values can be either
 strings or simple arrays. Arrays can be used to create filters and facets.
 
@@ -143,13 +143,13 @@ If the above was in a file called `data.json`, it could be indexed using a comma
 
     curl --form document=@data.json http://localhost:3030/indexer --form filterOn=metedata
 
-There is some test data in the test/testdata folder of the forage.js package. It can be indexed like so:
+There is some test data in the test/testdata folder of the norch.js package. It can be indexed like so:
 
     curl --form document=@reuters-000.json http://localhost:3030/indexer --form filterOn=places,topics,organisations
 
-##Forage-indexer
+##Norch-indexer
 
-Forage can optionally be indexed using the [forage-indexer node app](#forage-indexer).
+Norch can optionally be indexed using the [norch-indexer node app](#norch-indexer).
 
 ##Indexing parameters
 
@@ -263,9 +263,9 @@ Multiple field weights:
 
 #Matcher API
 
-Forage comes with a matcher that can be used to create autosuggest
+Norch comes with a matcher that can be used to create autosuggest
 functionality. The matcher is derived from the content of the reverse
-index. At the moment Forage ships with one matcher, there is a desire
+index. At the moment Norch ships with one matcher, there is a desire
 to abstract this out into a framework that can accomodate mulitiple
 pluggable matchers.
 
@@ -278,11 +278,11 @@ called by using this URL:
 
     http://localhost:3030/matcher?beginsWith=<matcher term>
 
-#About Forage
+#About Norch
 
-![Forage](https://farm6.staticflickr.com/5192/14141658313_ebf053d53d_m.jpg)
+![Norch](https://farm6.staticflickr.com/5192/14141658313_ebf053d53d_m.jpg)
 
-Forage.js is an experimental search engine built with
+Norch.js is an experimental search engine built with
 [Node.js](http://nodejs.org/) and
 [search-index](https://github.com/fergiemcdowall/search-index)
 featuring
@@ -296,36 +296,36 @@ featuring
 * Field weighting
 * Relevance weighting (tf-idf)
 * Paging (offset and resultset length)
-* Virtualisation (see [virtual-forage](https://github.com/fergiemcdowall/virtual-forage))
+* Virtualisation (see [virtual-norch](https://github.com/fergiemcdowall/virtual-norch))
 
-**Homepage:** http://www.foragejs.net
+**Homepage:** http://www.norchjs.net
 
-**Github:** https://github.com/fergiemcdowall/forage
+**Github:** https://github.com/fergiemcdowall/norch
 
-**Mailing list:** foragejs@googlegroups.com - subscribe by sending an email to foragejs+subscribe@googlegroups.com
+**Mailing list:** norchjs@googlegroups.com - subscribe by sending an email to norchjs+subscribe@googlegroups.com
 
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/forage.png)](http://travis-ci.org/fergiemcdowall/forage)
+**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/norch.png)](http://travis-ci.org/fergiemcdowall/norch)
 
-[![NPM](https://nodei.co/npm/forage.png?stars&downloads)](https://nodei.co/npm/forage/)
+[![NPM](https://nodei.co/npm/norch.png?stars&downloads)](https://nodei.co/npm/norch/)
 
-[![NPM](https://nodei.co/npm-dl/forage.png)](https://nodei.co/npm/forage/)
+[![NPM](https://nodei.co/npm-dl/norch.png)](https://nodei.co/npm/norch/)
 
-http://npm-stat.vorba.ch/charts.html?package=forage
+http://npm-stat.vorba.ch/charts.html?package=norch
 
 <a name="issues"></a>
 #Known Issues
 
-Forage is new software and as such should be regarded as a work in progress. Administrators should be aware of the
+Norch is new software and as such should be regarded as a work in progress. Administrators should be aware of the
 following:
 
- * **Installation on Windows** Forages underlying libraries float in and out of workingness on Windows. Although you
-_can_ get Forage to work natively on Windows, its not really recommended. Thankfully, Forage can easily be virtualised
-with Vagrant- check out [virtual-forage](https://github.com/fergiemcdowall/virtual-forage).
+ * **Installation on Windows** Norchs underlying libraries float in and out of workingness on Windows. Although you
+_can_ get Norch to work natively on Windows, its not really recommended. Thankfully, Norch can easily be virtualised
+with Vagrant- check out [virtual-norch](https://github.com/fergiemcdowall/virtual-norch).
 
 
 #License
 
-Forage.js is released under the MIT license:
+Norch.js is released under the MIT license:
 
 Copyright (c) 2013 Fergus McDowall
 

@@ -1,5 +1,5 @@
 var fs = require('fs');
-//var si = require('../../lib/forage.js');
+//var si = require('../../lib/norch.js');
 
 describe('indexing and search', function () {
 
