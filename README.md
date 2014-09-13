@@ -28,7 +28,6 @@
 - [Matcher API](#user-content-matcher-api)
 	- [Connecting to a matcher](#user-content-connecting-to-a-matcher)
 - [About Norch](#user-content-about-norch)
-- [Known Issues](#user-content-known-issues)
 - [License](#user-content-license)
 
 
@@ -309,16 +308,6 @@ featuring
 [![NPM](https://nodei.co/npm-dl/norch.png)](https://nodei.co/npm/norch/)
 
 http://npm-stat.vorba.ch/charts.html?package=norch
-
-<a name="issues"></a>
-#Known Issues
-
-Norch is new software and as such should be regarded as a work in progress. Administrators should be aware of the
-following:
-
- * **Installation on Windows** Norchs underlying libraries float in and out of workingness on Windows. Although you
-_can_ get Norch to work natively on Windows, its not really recommended. Thankfully, Norch can easily be virtualised
-with Vagrant- check out [virtual-norch](https://github.com/fergiemcdowall/virtual-norch).
 
 
 #License
