@@ -280,8 +280,6 @@ called by using this URL:
 
 #About Norch
 
-![Norch](https://farm6.staticflickr.com/5192/14141658313_ebf053d53d_m.jpg)
-
 Norch.js is an experimental search engine built with
 [Node.js](http://nodejs.org/) and
 [search-index](https://github.com/fergiemcdowall/search-index)
