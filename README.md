@@ -146,6 +146,12 @@ There is some test data in the test/testdata folder of the norch.js package. It 
 
     curl --form document=@reuters-000.json http://localhost:3030/indexer --form filterOn=places,topics,organisations
 
+You can also put the data to be indexed in the URL like this (note that single quotes go on the outside and double on the inside of the JSON object):
+
+    curl --form document='{"doc1":{"title":"A really interesting document","body":"This is a really interesting document"}}' http://localhost:3030/indexer
+
+
+
 ##Norch-indexer
 
 Norch can optionally be indexed using the [norch-indexer node app](#norch-indexer).
