@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
@@ -12,10 +12,10 @@
     "multer": "0.1.4",
     "norch-bootstrap": "0.0.3",
     "request": "2.27.0",
-    "search-index": "0.4.0"
+    "search-index": "0.4.1"
   },
   "devDependencies": {
-    "reuters-21578-json": "0.0.1",
+    "reuters-21578-json": "0.0.4",
     "jasmine-node": "1.14.2"
   },
   "repository": {
