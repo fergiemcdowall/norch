@@ -117,10 +117,7 @@ Index your JSONified webpages with [norch-indexer](https://github.com/fergiemcdo
 
 ##Document Format
 
-Generally Norch indexes data that is in the format below, that is to
-say an object containing a list of key:values where the key is the
-document ID and the values are a futher list of key:values that define
-the fields. Fields can be called anything other than 'ID'. Field
+Norch indexes data that is in the format below. Field
 values can be either strings or simple arrays. Arrays can be used to
 create filters and facets. An ID can optionally be specified, if no ID
 is specified, an unique ID will be assigned by Norch
