@@ -4,6 +4,7 @@
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
+    "body-parser": "^1.9.3",
     "cheerio": "0.12.3",
     "colors": "0.6.2",
     "commander": "2.0.0",
