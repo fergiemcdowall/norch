@@ -173,6 +173,22 @@ filterOn is an array of fields that can be used to filter search results. Each d
 the document. filterOn will not work with string fields.
 
 
+#Replication API
+
+##Snapshot
+
+Create a snapshot of the search index by doing this:
+
+`curl http://localhost:3030/snapshot -o snapshot.gz`
+
+
+##Replicate
+
+Replicate into an empty index from a snapshot file by doing this:
+
+`curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: tion/gzip"`
+
+
 #Search API
 
 ##Get document by ID
