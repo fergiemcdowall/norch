@@ -1,3 +1,42 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Installation](#installation)
+- [Operation](#operation)
+  - [Start your Norch.js server](#start-your-norchjs-server)
+    - [Startup options](#startup-options)
+- [Crawling](#crawling)
+  - [norch-fetch](#norch-fetch)
+  - [norch-document-processor](#norch-document-processor)
+  - [norch-indexer](#norch-indexer)
+- [Indexing API](#indexing-api)
+  - [Document Format](#document-format)
+  - [HTTP Interface](#http-interface)
+  - [Norch-indexer](#norch-indexer)
+  - [Indexing parameters](#indexing-parameters)
+    - [filterOn](#filteron)
+- [Replication API](#replication-api)
+  - [Snapshot](#snapshot)
+  - [Replicate](#replicate)
+- [Search API](#search-api)
+  - [Get document by ID](#get-document-by-id)
+  - [Search parameters](#search-parameters)
+    - [q](#q)
+    - [searchFields](#searchfields)
+    - [facets](#facets)
+    - [filter](#filter)
+    - [offset](#offset)
+    - [pagesize](#pagesize)
+    - [teaser](#teaser)
+    - [weight](#weight)
+- [Matcher API](#matcher-api)
+  - [Connecting to a matcher](#connecting-to-a-matcher)
+- [About Norch](#about-norch)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Installation](#)
