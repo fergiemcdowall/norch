@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
