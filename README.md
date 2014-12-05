@@ -194,7 +194,7 @@ There is some test data in the test/testdata folder of the norch.js package. It 
 
 You can also put the data to be indexed in the URL like this (note that single quotes go on the outside and double on the inside of the JSON object):
 
-    curl --form document='{"doc1":{"title":"A really interesting document","body":"This is a really interesting document"}}' http://localhost:3030/indexer
+    curl --form document='[{"title":"A really interesting document","body":"This is a really interesting document"}]' http://localhost:3030/indexer
 
 
 
