@@ -16,8 +16,10 @@
     "search-index": "0.4.8"
   },
   "devDependencies": {
+    "mocha":"2.0.1",
     "reuters-21578-json": "0.0.4",
-    "mocha":"2.0.1"
+    "should":"4.3.0",
+    "supertest":"0.15.0"
   },
   "repository": {
     "type": "git",
