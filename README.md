@@ -37,43 +37,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
-
-- [Installation](#)
-- [Operation](#)
-	- [Start your Norch.js server](#)
-		- [Startup options](#)
-- [Crawling](#)
-	- [norch-fetch](#)
-	- [norch-document-processor](#)
-	- [norch-indexer](#)
-- [Indexing API](#)
-	- [Document Format](#)
-	- [HTTP Interface](#)
-	- [Norch-indexer](#)
-	- [Indexing parameters](#)
-		- [filterOn](#)
-- [Replication API](#)
-	- [Snapshot](#)
-	- [Replicate](#)
-- [Search API](#)
-	- [Get document by ID](#)
-	- [Search parameters](#)
-		- [q](#)
-		- [searchFields](#)
-		- [facets](#)
-		- [filter](#)
-		- [offset](#)
-		- [pagesize](#)
-		- [teaser](#)
-		- [weight](#)
-- [Matcher API](#)
-	- [Connecting to a matcher](#)
-- [About Norch](#)
-- [License](#)
-
-
-
 #Installation
 
 Confirm that node.js is set up correctly, then install Norch like so:
