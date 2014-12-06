@@ -22,10 +22,18 @@ describe('Can I Index Data?', function() {
   describe('Indexing', function() {
     var timeLimit = 5000;
     this.timeout(timeLimit);
-    it('should post and index a file of data within ' + timeLimit + 'ms', function(done) {
+    it('should post and index a file of data', function(done) {
       request.post('/indexer')
-        .field('extra_info', '{"in":"case you want to send json along with your file"}')
         .attach('document', './node_modules/reuters-21578-json/data/justOne/justOne.json')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+          done();
+        });
+    });
+    it('should post and index data "inline"', function(done) {
+      request.post('/indexer')
+        .field('document', '[{"title":"A really interesting document","body":"This is a really interesting document"}, {"title":"Yet another really interesting document","body":"Yet again this is another really, really interesting document"}]')
         .expect(200)
         .end(function(err, res) {
           if (err) throw err;
