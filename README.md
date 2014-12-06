@@ -334,7 +334,7 @@ featuring
 
 **Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/norch.png)](http://travis-ci.org/fergiemcdowall/norch)
 
-[![NPM](https://nodei.co/npm/norch.png?stars&downloads)](https://nodei.co/npm/norch/)
+[![NPM](https://nodei.co/npm/norch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/norch/)
 
 [![NPM](https://nodei.co/npm-dl/norch.png)](https://nodei.co/npm/norch/)
 
