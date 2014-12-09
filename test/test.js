@@ -4,9 +4,10 @@
 var fs = require('fs');
 var should = require('should'); 
 var supertest = require('supertest');
-var norch = require('../lib/norch.js')({'indexPath':'test-norch'});
+var norch = require('../lib/norch.js')({'indexPath':'norch-test'});
 var superrequest = supertest('localhost:3030');
 var request = require('request');
+
 
 describe('Am I A Happy Norch?', function() {
   describe('General Norchiness', function() {
@@ -58,20 +59,16 @@ describe('Can I do indexing and restore?', function() {
     });
 	});
   describe('Restoring from a backup', function() {
-    var replicantNorch = require('../lib/norch.js')({'indexPath':'replicant-norch','port':4040});
+    var replicantNorch = require('../lib/norch.js')({'indexPath':'norch-replicant','port':4040});
     var replicantSuperrequest = supertest('localhost:4040');
     var timeLimit = 5000;
     this.timeout(timeLimit);
-
-
-
   //curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
     it('should post and index a file of data', function(done) {
       fs.createReadStream('backup.gz').pipe(request.post('http://localhost:4040/replicate')).on('response', function(){
         done();
       });
     });
-
     it('should be able to search again', function(done) {
       replicantSuperrequest.get('/search?q=reuter')
         .expect(200)
@@ -82,8 +79,81 @@ describe('Can I do indexing and restore?', function() {
           done();
         });
     });
-
 	});
 });
 
+describe('Can I empty an index?', function() {
+  it('should say that there are documents in the index', function(done) {
+    superrequest.get('/tellMeAboutMyNorch').expect(200).end(function(err, res) {
+      should.exist(res.text);
+      should.exist(JSON.parse(res.text).totalDocs, 12);
+      done();
+    });
+  });
+  it('should empty the index', function(done) {
+    superrequest.get('/empty').expect(200).end(function(err, res) {
+      should.exist(res.text);
+      should.exist(JSON.parse(res.text).success, true);
+      should.exist(JSON.parse(res.text).message, 'index emptied');
+      done();
+    });
+  });
+  it('should say that there are now no documents in the index', function(done) {
+    superrequest.get('/tellMeAboutMyNorch').expect(200).end(function(err, res) {
+      should.exist(res.text);
+      should.exist(JSON.parse(res.text).totalDocs, 0);
+      done();
+    });
+  });
+});
+
+
+describe('Can I Index and search in bigger data files?', function() {
+  var timeLimit = 60000;
+  this.timeout(timeLimit);
+  it('should post and index a file of data with filter fields', function(done) {
+    superrequest.post('/indexer')
+      .field('filterOn','places,topics,organisations')
+      .attach('document', './node_modules/reuters-21578-json/data/full/reuters-000.json')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+        done();
+      });
+  });
+  it('should say that there are now 1000 documents in the index', function(done) {
+    superrequest.get('/tellMeAboutMyNorch').expect(200).end(function(err, res) {
+      should.exist(res.text);
+      should.exist(JSON.parse(res.text).totalDocs, 1000);
+      done();
+    });
+  });
+  it('should be able to search and show facets', function(done) {
+    superrequest.get('/search?q=reuter&facets=topics,places,organisations').expect(200).end(function(err, res) {
+      should.exist(res.text);
+      var resultSet = JSON.parse(res.text);
+      resultSet.should.have.property('facets');
+
+      resultSet.totalDocs.should.be.exactly(922);
+
+      resultSet.hits.length.should.be.exactly(10);
+
+//ranking is volitile for searches where score is exactly the same
+//      resultSet.hits[0].id.should.be.exactly(53);
+
+      resultSet.facets.should.have.property('topics');
+      resultSet.facets.topics[0].key.should.be.exactly('earn');
+      resultSet.facets.topics[0].value.should.be.exactly(182);
+
+      resultSet.facets.should.have.property('places');
+      resultSet.facets.places[2].key.should.be.exactly('japan');
+      resultSet.facets.places[2].value.should.be.exactly(47);
+
+      resultSet.facets.should.have.property('organisations');
+      resultSet.facets.organisations[4].key.should.be.exactly('worldbank');
+      resultSet.facets.organisations[4].value.should.be.exactly(5);
+      done();
+    });
+  });
+});
 

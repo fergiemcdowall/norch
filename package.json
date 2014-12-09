@@ -41,6 +41,6 @@
     "node": ">= 0.10.x"
   },
   "scripts": {
-    "test": "rm -rf si && mocha"
+    "test": "rm -rf norch* && mocha"
   }
 }
