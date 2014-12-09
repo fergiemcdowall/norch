@@ -365,4 +365,12 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+[license-url]: LICENSE
 
+[npm-url]: https://npmjs.org/package/norch
+[npm-version-image]: http://img.shields.io/npm/v/norch.svg?style=flat
+[npm-downloads-image]: http://img.shields.io/npm/dm/norch.svg?style=flat
+
+[travis-url]: http://travis-ci.org/fergiemcdowall/norch
+[travis-image]: http://img.shields.io/travis/fergiemcdowall/norch/develop.svg?style=flat
