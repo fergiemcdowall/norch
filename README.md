@@ -373,4 +373,4 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [npm-downloads-image]: http://img.shields.io/npm/dm/norch.svg?style=flat
 
 [travis-url]: http://travis-ci.org/fergiemcdowall/norch
-[travis-image]: http://img.shields.io/travis/fergiemcdowall/norch/develop.svg?style=flat
+[travis-image]: http://img.shields.io/travis/fergiemcdowall/norch.svg?style=flat
