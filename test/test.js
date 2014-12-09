@@ -111,7 +111,7 @@ describe('Can I empty an index?', function() {
 
 
 describe('Can I Index and search in bigger data files?', function() {
-  var timeLimit = 60000;
+  var timeLimit = 120000;
   this.timeout(timeLimit);
   it('should post and index a file of data with filter fields', function(done) {
     superrequest.post('/indexer')
