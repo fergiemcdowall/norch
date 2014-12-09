@@ -17,7 +17,7 @@ describe('Am I A Happy Norch?', function() {
         done();
       });
     });
-	});
+  });
 });
 
 describe('Can I Index Data?', function() {
@@ -42,7 +42,7 @@ describe('Can I Index Data?', function() {
           done();
         });
     });
-	});
+  });
 });
 
 
@@ -57,7 +57,7 @@ describe('Can I do indexing and restore?', function() {
           done();
         });
     });
-	});
+  });
   describe('Restoring from a backup', function() {
     var replicantNorch = require('../lib/norch.js')({'indexPath':'norch-replicant','port':4040});
     var replicantSuperrequest = supertest('localhost:4040');
@@ -65,8 +65,10 @@ describe('Can I do indexing and restore?', function() {
     this.timeout(timeLimit);
   //curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
     it('should post and index a file of data', function(done) {
-      fs.createReadStream('backup.gz').pipe(request.post('http://localhost:4040/replicate')).on('response', function(){
-        done();
+      fs.createReadStream('backup.gz')
+        .pipe(request.post('http://localhost:4040/replicate'))
+        .on('response', function(){
+          done();
       });
     });
     it('should be able to search again', function(done) {
@@ -79,7 +81,7 @@ describe('Can I do indexing and restore?', function() {
           done();
         });
     });
-	});
+  });
 });
 
 describe('Can I empty an index?', function() {
