@@ -366,7 +366,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
-[license-url]: LICENSE
+[license-url]: https://github.com/fergiemcdowall/norch/blob/master/README.md#license
 
 [npm-url]: https://npmjs.org/package/norch
 [npm-version-image]: http://img.shields.io/npm/v/norch.svg?style=flat
