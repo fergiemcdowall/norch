@@ -130,16 +130,16 @@ is specified, an unique ID will be assigned by Norch
 ```javascript
 [
   {
-    'id':'1',
-    'title':'A really interesting document',
-    'body':'This is a really interesting document',
-    'metadata':['red', 'potato']
+    "id":"1",
+    "title":"A really interesting document",
+    "body":"This is a really interesting document",
+    "metadata":["red", "potato"]
   },
   {
-    'id':'2',
-    'title':'Another interesting document',
-    'body':'This is another really interesting document that is a bit different',
-    'metadata':['yellow', 'potato']
+    "id":"2",
+    "title":"Another interesting document",
+    "body":"This is another really interesting document that is a bit different",
+    "metadata":["yellow", "potato"]
   }
 ]
 ```
