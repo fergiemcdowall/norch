@@ -325,8 +325,6 @@ featuring
 * Paging (offset and resultset length)
 * Virtualisation (see [virtual-norch](https://github.com/fergiemcdowall/virtual-norch))
 
-**Homepage:** http://www.norchjs.net
-
 **Github:** https://github.com/fergiemcdowall/norch
 
 **Mailing list:** norchjs@googlegroups.com - subscribe by sending an email to norchjs+subscribe@googlegroups.com
