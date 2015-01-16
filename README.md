@@ -335,7 +335,7 @@ featuring
 
 [![NPM](https://nodei.co/npm-dl/norch.png)](https://nodei.co/npm/norch/)
 
-http://npm-stat.vorba.ch/charts.html?package=norch
+http://npm-stat.com/charts.html?package=norch
 
 
 #License
