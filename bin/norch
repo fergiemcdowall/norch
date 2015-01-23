@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-require('../lib/norch.js');
+require('../lib/norch.js')({'indexPath':'si'});
 
 
