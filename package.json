@@ -13,11 +13,11 @@
     "multer": "0.1.4",
     "norch-bootstrap": "0.0.5",
     "request": "2.27.0",
-    "search-index": "0.4.9"
+    "search-index": "0.4.12"
   },
   "devDependencies": {
     "mocha":"2.0.1",
-    "reuters-21578-json": "0.0.4",
+    "reuters-21578-json":"0.0.4",
     "should":"4.3.0",
     "supertest":"0.15.0"
   },
