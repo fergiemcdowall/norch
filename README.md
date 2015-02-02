@@ -186,6 +186,11 @@ Create a snapshot of the search index by doing this:
 
 `curl http://localhost:3030/snapshot -o snapshot.gz`
 
+##Empty
+
+Empty an index by using the 'empty' endpoint (or alternatively you can just delete the data directory):
+
+`curl http://localhost:3030/empty`
 
 ##Replicate
 
