@@ -220,13 +220,9 @@ Usage:
 
 [http://localhost:3030/search?q=moscow](http://localhost:3030/search?q=moscow)
 
-###searchFields
+To search on one or more fields, do something like:
 
-Search on specified fields. Ignore text that exists in other fields.
-
-    searchFields[]=<field to search in>
-    
-[http://localhost:3030/search?q=plans&searchFields[]=body](http://localhost:3030/search?q=plans&searchFields[]=body)
+[http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra](http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra)
 
 ###facets
 **(Optional)** For "facet". The fields that will be used to create faceted navigation
