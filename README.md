@@ -222,6 +222,8 @@ Usage:
 
 To search on one or more fields, do something like:
 
+    q[title]=reagan&q[body]=intelligence contra
+
 [http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra](http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra)
 
 ###facets
