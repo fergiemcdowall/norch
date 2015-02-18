@@ -10,6 +10,7 @@ var Norch = require('../lib/norch.js');
 var norch = new Norch({'indexPath':'norch-test'});
 var superrequest = supertest('localhost:3030');
 
+
 describe('Am I A Happy Norch?', function() {
   describe('General Norchiness', function() {
     it('should show the home page', function(done) {
@@ -20,6 +21,7 @@ describe('Am I A Happy Norch?', function() {
     });
   });
 });
+
 
 describe('Can I Index Data?', function() {
   describe('Indexing', function() {
@@ -162,6 +164,20 @@ describe('Can I Index and search in bigger data files?', function() {
       resultSet.facets.should.have.property('organisations');
       resultSet.facets.organisations[4].key.should.be.exactly('worldbank');
       resultSet.facets.organisations[4].value.should.be.exactly(5);
+      done();
+    });
+  });
+  it('should be able to do a wildcard search and return all docs in the index', function(done) {
+    superrequest.get('/search?q=*&facets=topics,places,organisations').expect(200).end(function(err, res) {
+      should.exist(res.text);
+      var resultSet = JSON.parse(res.text);
+      resultSet.totalDocs.should.be.exactly(1000);
+      resultSet.facets.should.have.property('topics');
+      resultSet.facets.topics[0].key.should.be.exactly('earn');
+      resultSet.facets.topics[0].value.should.be.exactly(193);
+      resultSet.facets.should.have.property('places');
+      resultSet.facets.places[0].key.should.be.exactly('usa');
+      resultSet.facets.places[0].value.should.be.exactly(546);
       done();
     });
   });
