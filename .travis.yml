@@ -1,6 +1,9 @@
 language: node_js
 node_js:
+  - "0.12"
+  - "0.11"
   - "0.10"
+  - iojs
 notifications:
   slack: norch:wLsHiXjnAH5BdtTq3qtAqGp7
   
