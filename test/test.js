@@ -10,7 +10,6 @@ var Norch = require('../lib/norch.js');
 var norch = new Norch({'indexPath':'norch-test'});
 var superrequest = supertest('localhost:3030');
 
-
 describe('Am I A Happy Norch?', function() {
   describe('General Norchiness', function() {
     it('should show the home page', function(done) {
@@ -48,7 +47,6 @@ describe('Can I Index Data?', function() {
   });
 });
 
-
 describe('Can I do indexing and restore?', function() {
   describe('Making a backup', function() {
     var timeLimit = 10000;
@@ -80,12 +78,13 @@ describe('Can I do indexing and restore?', function() {
         .end(function(err, res) {
           if (err) throw err;
           should.exist(res.text);
-          should.exist(JSON.parse(res.text).totalDocs, 9);
+          should.exist(JSON.parse(res.text).totalHits, 9);
           done();
         });
     });
   });
 });
+
 
 describe('Can I empty an index?', function() {
   it('should say that there are documents in the index', function(done) {
@@ -151,7 +150,7 @@ describe('Can I Index and search in bigger data files?', function() {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
       resultSet.should.have.property('facets');
-      resultSet.totalDocs.should.be.exactly(922);
+      resultSet.totalHits.should.be.exactly(922);
       resultSet.hits.length.should.be.exactly(10);
 //ranking is volitile for searches where score is exactly the same
 //      resultSet.hits[0].id.should.be.exactly(53);
@@ -171,7 +170,7 @@ describe('Can I Index and search in bigger data files?', function() {
     superrequest.get('/search?q=*&facets=topics,places,organisations').expect(200).end(function(err, res) {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
-      resultSet.totalDocs.should.be.exactly(1000);
+      resultSet.totalHits.should.be.exactly(1000);
       resultSet.facets.should.have.property('topics');
       resultSet.facets.topics[0].key.should.be.exactly('earn');
       resultSet.facets.topics[0].value.should.be.exactly(193);
@@ -182,4 +181,5 @@ describe('Can I Index and search in bigger data files?', function() {
     });
   });
 });
+
 
