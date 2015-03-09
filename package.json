@@ -42,6 +42,6 @@
   },
   "scripts": {
     "test": "rm -rf norch* && mocha",
-    "start": ""
+    "start": "./bin/norch"
   }
 }
