@@ -293,6 +293,16 @@ Multiple field weights:
 
 [http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
 
+#Search using the search-index.js API
+
+You can search using the [search-index
+api](https://github.com/fergiemcdowall/search-index#search) by
+sepcifying a `JSONq` parameter like so:
+
+
+    `http://localhost:3030/search?JSONq={%22query%22:{%22*%22:[%22usa%22]}}`
+
+
 #Matcher API
 
 Norch comes with a matcher that can be used to create autosuggest
