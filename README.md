@@ -251,7 +251,7 @@ For more complex queries, including those involving filters and facets, you can 
 [search-index api](https://github.com/fergiemcdowall/search-index#search) by
 sepcifying a `JSONq` parameter like so:
 
-    `http://localhost:3030/search?JSONq={%22query%22:{%22*%22:[%22usa%22]}}`
+    `http://localhost:3030/search?JSONq={"query":{"*":["usa"]}}`
 
 
 #Matcher API
