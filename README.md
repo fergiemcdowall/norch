@@ -297,9 +297,8 @@ featuring
 
 [![NPM](https://nodei.co/npm/norch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/norch/)
 
-[![NPM](https://nodei.co/npm-dl/norch.png)](https://nodei.co/npm/norch/)
+[![NPM](https://nodei.co/npm-dl/norch.png)](http://npm-stat.com/charts.html?package=norch)
 
-http://npm-stat.com/charts.html?package=norch
 
 
 #License
