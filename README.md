@@ -226,28 +226,6 @@ To search on one or more fields, do something like:
 
 [http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra](http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra)
 
-###facets
-**(Optional)** For "facet". The fields that will be used to create faceted navigation
-
-Usage:
-
-    facets=<field to facet on>
-
-[http://localhost:3030/search?q=moscow&facets=topics](http://localhost:3030/search?q=moscow&facets=topics)
-
-###filter
-**(Optional)** For "filter". Use this option to limit your search to the given field
-
-Usage:
-
-    filter[<filter field>][]=<value>
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain)
-
-Multiple filters:
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&filter[topics][]=acq&filter[places][]=ussr)
-
 
 ###offset
 
@@ -271,34 +249,12 @@ Usage:
 [http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5)
 
 
-###teaser
-**(Optional)** for "teaser". Use this option to generate a short paragraph that indicates where the search terms occur in the document.
-
-Usage:
-
-    teaser=<field to generate teaser on>
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5&teaser=body)
-
-###weight
-**(Optional)** For "weight". Use this option to tune relevancy by assigning weight to given fields. Weights can be arbitralily large.
-
-Usage:
-
-    weight[<field name>][]:<weight (factor)>
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10)
-
-Multiple field weights:
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&weight[title][]=10&weight[body][]=2)
 
 #Search using the search-index.js API
 
-You can search using the [search-index
-api](https://github.com/fergiemcdowall/search-index#search) by
+For more complex queries, including those involving filters and facets, you can search using the
+[search-index api](https://github.com/fergiemcdowall/search-index#search) by
 sepcifying a `JSONq` parameter like so:
-
 
     `http://localhost:3030/search?JSONq={%22query%22:{%22*%22:[%22usa%22]}}`
 
