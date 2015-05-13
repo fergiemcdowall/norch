@@ -24,7 +24,7 @@
     - [q](#q)
     - [offset](#offset)
     - [pagesize](#pagesize)
-- [Search using the search-index.js API](#search-using-the-search-indexjs-api)
+    - [(Search using the search-index.js API)](#search-using-the-search-indexjs-api)
 - [Matcher API](#matcher-api)
   - [Connecting to a matcher](#connecting-to-a-matcher)
 - [About Norch](#about-norch)
@@ -245,7 +245,7 @@ Usage:
 
 
 
-#Search using the search-index.js API
+###(Search using the search-index.js API)
 
 For more complex queries, including those involving filters and facets, you can search using the
 [search-index api](https://github.com/fergiemcdowall/search-index#search) by
