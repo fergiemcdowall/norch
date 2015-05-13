@@ -1,5 +1,3 @@
-[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url]
-
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Installation](#installation)
@@ -24,17 +22,14 @@
   - [Get document by ID](#get-document-by-id)
   - [Search parameters](#search-parameters)
     - [q](#q)
-    - [searchFields](#searchfields)
-    - [facets](#facets)
-    - [filter](#filter)
     - [offset](#offset)
     - [pagesize](#pagesize)
-    - [teaser](#teaser)
-    - [weight](#weight)
+- [Search using the search-index.js API](#search-using-the-search-indexjs-api)
 - [Matcher API](#matcher-api)
   - [Connecting to a matcher](#connecting-to-a-matcher)
 - [About Norch](#about-norch)
 - [License](#license)
+
 
 #Installation
 
