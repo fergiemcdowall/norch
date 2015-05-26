@@ -5,6 +5,7 @@ var fs = require('fs');
 var should = require('should'); 
 var supertest = require('supertest');
 var request = require('request');
+var si = require('search-index');
 //var norch = require('../lib/norch.js')({'indexPath':'norch-test'});
 var Norch = require('../lib/norch.js');
 var norch = new Norch({'indexPath':'norch-test'});
@@ -230,6 +231,77 @@ describe('Can I Index and search in bigger data files?', function() {
       resultSet.facets[1].value[0].key.should.be.exactly('usa');
       resultSet.facets[1].value[0].value.should.be.exactly(546);
       done();
+    });
+  });
+
+});
+
+describe('Running norch and search-index in the same process.', function () {
+  var norch;
+  var searchIndex;
+  var superTest;
+  var docId = 111;
+  var docTitle = 'Test'
+
+  before(function () {
+    searchIndex = si({indexPath: 'norch-si-combined'});
+    norch = new Norch({si: searchIndex, port: 5050});
+    superTest = supertest('localhost:5050');
+  });
+
+  describe('Index status', function () {
+    it('should be empty', function (done) {
+      searchIndex.tellMeAboutMySearchIndex(function (msg) {
+        msg.totalDocs.should.be.exactly(0);
+        done();
+      })
+    });
+  });
+
+  describe('indexing data through norch and si', function () {
+    it('should post and index a file of data', function(done) {
+      superTest.post('/indexer')
+        .attach('document', './node_modules/reuters-21578-json/data/justTen/justTen.json')
+        .expect(200)
+        .end(function(err) {
+          if (err) throw err;
+          done();
+        });
+    });
+    it('should be possible to add a doc through search-index\'s api', function (done) {
+      searchIndex.add({batchName: 'test'}, [{id: docId, title: docTitle}], function (err) {
+        if (err) throw err;
+        done();
+      });
+    });
+    it('should have 11 docs now', function (done) {
+      searchIndex.tellMeAboutMySearchIndex(function (msg) {
+        msg.totalDocs.should.be.exactly(11);
+        done();
+      })
+    })
+  });
+
+  describe('getting docs should work through both norch and si', function () {
+    it('should be able to find doc ' + docId + ' via norch get', function (done) {
+      superTest.get('/getDoc?docID=' + docId)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+          var resp = JSON.parse(res.text);
+          resp.id.should.be.exactly(docId);
+          resp.title.should.be.exactly(docTitle);
+          done();
+        });
+    });
+    it('should be able to find doc ' + docId + ' through si get', function (done) {
+      searchIndex.get(docId, function (err, res) {
+        if (err) throw err;
+        var doc = JSON.parse(res);
+        doc.id.should.be.exactly(docId);
+        doc.title.should.be.exactly(docTitle);
+        done();
+      })
     });
   });
 

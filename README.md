@@ -75,6 +75,20 @@ $ norch --help
       -n, --hostname <hostname> specify the hostname, defaults to 0.0.0.0 (IADDR_ANY)
 ```
 
+###Using Norch in a node-program
+
+Norch can be instantiated like
+
+```
+var norch = require('norch')(); 
+```
+
+or by giving it an instance of search-index
+
+```
+var si = require('search-index')();
+var norch - require('norch')({si: si});
+```
 
 #Crawling
 Norch has command line tools for spidering, fetching, processing and indexing webpages that can be installed seperately
