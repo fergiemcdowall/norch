@@ -11,7 +11,6 @@ var sandbox = './test/sandbox/'
 var norch = new Norch({indexPath: sandbox + 'norch-test'});
 var superrequest = supertest('localhost:3030');
 
-
 describe('Am I A Happy Norch?', function() {
   describe('General Norchiness', function() {
     it('should show the home page', function(done) {
@@ -22,7 +21,6 @@ describe('Am I A Happy Norch?', function() {
     });
   });
 });
-
 
 describe('Can I Index Data?', function() {
   describe('Indexing', function() {
@@ -48,6 +46,7 @@ describe('Can I Index Data?', function() {
     });
   });
 });
+
 
 describe('Can I do indexing and restore?', function() {
   describe('Making a backup', function() {
@@ -87,17 +86,16 @@ describe('Can I do indexing and restore?', function() {
   });
 });
 
-
 describe('Can I empty an index?', function() {
   it('should say that there are documents in the index', function(done) {
     request('http://localhost:3030/tellMeAboutMyNorch', function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log(body) // Show the HTML for the Google homepage.
+        console.log(body)
       }
     })
     request('http://localhost:4040/tellMeAboutMyNorch', function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log(body) // Show the HTML for the Google homepage.
+        console.log(body)
       }
     })
     superrequest.get('/tellMeAboutMyNorch').expect(200).end(function(err, res) {
@@ -123,14 +121,19 @@ describe('Can I empty an index?', function() {
   });
 });
 
-
 describe('Can I Index and search in bigger data files?', function() {
   var timeLimit = 120000;
   this.timeout(timeLimit);
-
   it('should post and index a file of data with filter fields', function(done) {
+    var options = {};
+    options.batchName = 'reuters';
+    options.fieldOptions = [
+      {fieldName: 'places', filter: true},
+      {fieldName: 'topics', filter: true},
+      {fieldName: 'organisations', filter: true}
+    ];
     superrequest.post('/indexer')
-      .field('filterOn','places,topics,organisations')
+      .field('options', JSON.stringify(options))
       .attach('document', './node_modules/reuters-21578-json/data/full/reuters-000.json')
       .expect(200)
       .end(function(err, res) {
@@ -138,6 +141,7 @@ describe('Can I Index and search in bigger data files?', function() {
         done();
       });
   });
+
   it('should say that there are now 1000 documents in the index', function(done) {
     superrequest.get('/tellMeAboutMyNorch').expect(200).end(function(err, res) {
       should.exist(res.text);
@@ -147,8 +151,8 @@ describe('Can I Index and search in bigger data files?', function() {
   });
   it('should be able to search and show facets', function(done) {
     var q = {};
-    q["query"] = {"*":["reuter"]};
-    q["facets"] = {"topics":{}, "places":{}, "organisations":{}};
+    q.query = {"*":["reuter"]};
+    q.facets = {topics:{}, places:{}, organisations:{}};
     superrequest.get('/search?JSONq=' + JSON.stringify(q)).expect(200).end(function(err, res) {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
@@ -189,8 +193,6 @@ describe('Can I Index and search in bigger data files?', function() {
       done();
     });
   });
-
-
   it('can drill down on an individual result', function(done) {
     var q = {};
     q["query"] = {"*":["reuter"]};
@@ -215,7 +217,6 @@ describe('Can I Index and search in bigger data files?', function() {
       done();
     });
   });
-
   it('should be able to do a wildcard search and return all docs in the index', function(done) {
     var q = {};
     q["query"] = {"*":["*"]};
@@ -233,8 +234,8 @@ describe('Can I Index and search in bigger data files?', function() {
       done();
     });
   });
-
 });
+
 
 describe('Running norch and search-index in the same process.', function () {
   var norch;
@@ -297,14 +298,13 @@ describe('Running norch and search-index in the same process.', function () {
     it('should be able to find doc ' + docId + ' through si get', function (done) {
       searchIndex.get(docId, function (err, res) {
         if (err) throw err;
-        var doc = JSON.parse(res);
+        var doc = res;
         doc.id.should.be.exactly(docId);
         doc.title.should.be.exactly(docTitle);
         done();
       })
     });
   });
-
 });
 
 //needs some tests to show filtering
