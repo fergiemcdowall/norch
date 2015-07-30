@@ -17,6 +17,8 @@
     "search-index": "0.5.2"
   },
   "devDependencies": {
+    "jscs": "~1.13.1",
+    "jshint": "~2.7.0",
     "mocha":"2.0.1",
     "reuters-21578-json":"0.0.4",
     "should":"4.3.0",
@@ -42,6 +44,7 @@
     "node": ">= 0.10.x"
   },
   "scripts": {
+    "lint": " jshint lib || true && jscs lib || true",
     "test": "rm -rf norch* && mocha",
     "start": "./bin/norch"
   }
