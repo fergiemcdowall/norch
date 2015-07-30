@@ -6,9 +6,9 @@ var should = require('should');
 var supertest = require('supertest');
 var request = require('request');
 var si = require('search-index');
-//var norch = require('../lib/norch.js')({'indexPath':'norch-test'});
 var Norch = require('../lib/norch.js');
-var norch = new Norch({'indexPath':'norch-test'});
+var sandbox = './test/sandbox/'
+var norch = new Norch({indexPath: sandbox + 'norch-test'});
 var superrequest = supertest('localhost:3030');
 
 
@@ -55,20 +55,20 @@ describe('Can I do indexing and restore?', function() {
     this.timeout(timeLimit);
     it('should generate a backup file', function(done) {
       superrequest.get('/snapshot')
-        .pipe(fs.createWriteStream('backup.gz'))
+        .pipe(fs.createWriteStream(sandbox + 'backup.gz'))
         .on('close', function() {
           done();
         });
     });
   });
   describe('Restoring from a backup', function() {
-    var replicantNorch = new Norch({'indexPath':'norch-replicant','port':4040});
+    var replicantNorch = new Norch({'indexPath': sandbox + 'norch-replicant','port':4040});
     var replicantSuperrequest = supertest('localhost:4040');
     var timeLimit = 5000;
     this.timeout(timeLimit);
   //curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
     it('should post and index a file of data', function(done) {
-      fs.createReadStream('backup.gz')
+      fs.createReadStream(sandbox + 'backup.gz')
         .pipe(request.post('http://localhost:4040/replicate'))
         .on('response', function(){
           done();
@@ -244,7 +244,7 @@ describe('Running norch and search-index in the same process.', function () {
   var docTitle = 'Test'
 
   before(function () {
-    searchIndex = si({indexPath: 'norch-si-combined'});
+    searchIndex = si({indexPath: sandbox + 'norch-si-combined'});
     norch = new Norch({si: searchIndex, port: 5050});
     superTest = supertest('localhost:5050');
   });
