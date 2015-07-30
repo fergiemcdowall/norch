@@ -4,28 +4,19 @@
 - [Operation](#operation)
   - [Start your Norch.js server](#start-your-norchjs-server)
     - [Startup options](#startup-options)
-- [Crawling](#crawling)
-  - [norch-fetch](#norch-fetch)
-  - [norch-document-processor](#norch-document-processor)
-  - [norch-indexer](#norch-indexer)
-- [Indexing API](#indexing-api)
+    - [Using Norch in a node-program](#using-norch-in-a-node-program)
+- [Indexing](#indexing)
   - [Document Format](#document-format)
   - [HTTP Interface](#http-interface)
-  - [Norch-indexer](#norch-indexer)
-  - [Indexing parameters](#indexing-parameters)
-    - [filterOn](#filteron)
-- [Replication API](#replication-api)
+  - [Indexing options object](#indexing-options-object)
+- [Replication](#replication)
   - [Snapshot](#snapshot)
   - [Empty](#empty)
   - [Replicate](#replicate)
-- [Search API](#search-api)
+- [Searching](#searching)
   - [Get document by ID](#get-document-by-id)
   - [Search parameters](#search-parameters)
-    - [q](#q)
-    - [offset](#offset)
-    - [pagesize](#pagesize)
-    - [(Search using the search-index.js API)](#search-using-the-search-indexjs-api)
-- [Matcher API](#matcher-api)
+- [Matching (Autosuggest)](#matching-autosuggest)
   - [Connecting to a matcher](#connecting-to-a-matcher)
 - [About Norch](#about-norch)
 - [License](#license)
@@ -55,86 +46,55 @@ commands are denoted by the prefix `$ ` which should not be typed in*
 
 Type
 
-    $ norch
+```bash
+$ norch
+```
 
 Hurrah! Norch is now running locally on your machine. Head over to [http://localhost:3030/](http://localhost:3030/)
 and marvel. The default port of 3030 can be modified if required.
 
 ### Startup options
 
-```
+```bash
 $ norch --help
 
   Usage: norch [options]
 
   Options:
 
-      -h, --help         output usage information
-      -V, --version      output the version number
-      -p, --port <port>  specify the port, defaults to 3030
-      -n, --hostname <hostname> specify the hostname, defaults to 0.0.0.0 (IADDR_ANY)
+    -h, --help                   output usage information
+    -V, --version                output the version number
+    -p, --port <port>            specify the port, defaults to 3030
+    -n, --hostname <hostname>    specify the hostname, defaults to 0.0.0.0 (INADDR_ANY)
+    -i, --indexPath <indexPath>  specify the name of the index directory, defaults to norch-index
+    -l, --logLevel <logLevel>    specify the loglevel- silly | debug | verbose | info | warn | error
+    -s, --logSilent <logSilent>  silent mode
+    -c, --cors <items>           comma-delimited list of Access-Control-Allow-Origin addresses in the form of "http(s)://hostname:port" (or "*")
 ```
 
 ###Using Norch in a node-program
 
 Norch can be instantiated like
 
-```
+```javascript
 var norch = require('norch')(); 
 ```
 
 or by giving it an instance of search-index
 
-```
+```javascript
 var si = require('search-index')();
 var norch - require('norch')({si: si});
 ```
 
-#Crawling
-Norch has command line tools for spidering, fetching, processing and indexing webpages that can be installed seperately
-
-##norch-fetch
-Get your webpages with [norch-fetch](https://github.com/fergiemcdowall/norch-fetch)
-
-**Install:**
-
-```$ npm install -g norch-fetch```
-
-**Help:**
-
-```$ norch-fetch -h``` or [read the docs](https://github.com/fergiemcdowall/norch-fetch)
-
-##norch-document-processor
-Turn your fetched webpages into JSON with [norch-document-processor](https://github.com/fergiemcdowall/norch-document-processor)
-
-**Install:**
-
-```$ npm install -g norch-document-processor```
-
-**Help:**
-
-```$ norch-document-processor -h``` or [read the docs](https://github.com/fergiemcdowall/norch-document-processor)
-
-##norch-indexer
-Index your JSONified webpages with [norch-indexer](https://github.com/fergiemcdowall/norch-indexer)
-
-**Install:**
-
-```$ npm install -g norch-indexer```
-
-**Help:**
-
-```$ norch-indexer -h``` or [read the docs](https://github.com/fergiemcdowall/norch-indexer)
-
-
-#Indexing API
+#Indexing
 
 ##Document Format
 
-Norch indexes data that is in the format below. Field
-values can be either strings or simple arrays. Arrays can be used to
-create filters and facets. An ID can optionally be specified, if no ID
-is specified, an unique ID will be assigned by Norch
+Norch indexes data that is in the format below. Field values can be
+either strings or simple arrays. Arrays can be used to create filters
+and facets. An ID can optionally be specified, if no ID is specified,
+an unique ID will be assigned by Norch
 
 ```javascript
 [
@@ -155,39 +115,37 @@ is specified, an unique ID will be assigned by Norch
 
 ##HTTP Interface
 
-If the above was in a file called `data.json`, it could be indexed using a command like
+If the above was in a file called `data.json`, it could be indexed
+using a command like
 
-    curl --form document=@data.json http://localhost:3030/indexer --form filterOn=metedata
+```bash
+curl --form document=@data.json http://localhost:3030/indexer
+```
 
-There is some test data in the test/testdata folder of the norch.js package. It can be indexed like so:
+There is some test data in the test/testdata folder of the norch.js
+package. It can be indexed like so:
 
-    curl --form document=@reuters-000.json http://localhost:3030/indexer --form filterOn=places,topics,organisations
+```bash
+curl --form document=@reuters-000.json http://localhost:3030/indexer`
+```
+
+You could specify fields to facet and filter on like this:
+
+```bash
+curl --form document=@reuters-000.json http://localhost:3030/indexer --form options=[{fieldName: 'places', filter: true},{fieldName: 'topics', filter: true},{fieldName: 'organisations', filter: true}]
+```
 
 You can also put the data to be indexed in the URL like this (note that single quotes go on the outside and double on the inside of the JSON object):
 
-    curl --form document='[{"title":"A really interesting document","body":"This is a really interesting document"}]' http://localhost:3030/indexer
-
-
-
-##Norch-indexer
-
-Norch can optionally be indexed using the [norch-indexer node app](#norch-indexer).
-
-##Indexing parameters
-
-###filterOn
-
-Example
-
-```
- --form filterOn=places,topics,organisations
+```bash
+curl --form document='[{"title":"A really interesting document","body":"This is a really interesting document"}]' http://localhost:3030/indexer
 ```
 
-filterOn is an array of fields that can be used to filter search results. Each defined field must be an array field in
-the document. filterOn will not work with string fields.
+##Indexing options object
 
+The indexing options object is that which is used by the underlying `search-index`. It is [described in more detail here](https://github.com/fergiemcdowall/search-index/blob/master/doc/add.md)
 
-#Replication API
+#Replication
 
 ##Snapshot
 
@@ -208,7 +166,7 @@ Replicate into an empty index from a snapshot file by doing this:
 `curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: tion/gzip"`
 
 
-#Search API
+#Searching
 
 ##Get document by ID
 
@@ -220,55 +178,12 @@ document's ID
 
 Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
 
-###q
-**(Required)** For "query". The search term. Asterisk (```*```) returns everything.
+Search using the search-index.js API and attach the query object to a `JSONq` parameter like so:
 
-Usage:
-
-    q=<query term>
-
-[http://localhost:3030/search?q=moscow](http://localhost:3030/search?q=moscow)
-
-To search on one or more fields, do something like:
-
-    q[title]=reagan&q[body]=intelligence contra
-
-[http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra](http://localhost:3030/search?q[title]=reagan&q[body]=intelligence%20contra)
+`http://localhost:3030/search?JSONq={"query":{"*":["usa"]}}`
 
 
-###offset
-
-**(Optional)** The index in the resultSet that the server
-  returns. Userful for paging.
-
-Usage:
-
-    offset=<start index>
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5)
-
-###pagesize
-
-**(Optional)** defines the size of the resultset (defaults to 20)
-
-Usage:
-
-    pagesize=<size of resultset>
-
-[http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5](http://localhost:3030/search?q=moscow&facets=topics&filter[topics][]=grain&offset=5&pagesize=5)
-
-
-
-###(Search using the search-index.js API)
-
-For more complex queries, including those involving filters and facets, you can search using the
-[search-index api](https://github.com/fergiemcdowall/search-index#search) by
-sepcifying a `JSONq` parameter like so:
-
-    http://localhost:3030/search?JSONq={"query":{"*":["usa"]}}
-
-
-#Matcher API
+#Matching (Autosuggest)
 
 Norch comes with a matcher that can be used to create autosuggest
 functionality. The matcher is derived from the content of the reverse
