@@ -1,3 +1,5 @@
+[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url]
+
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Installation](#installation)
@@ -221,8 +223,6 @@ featuring
 **Github:** https://github.com/fergiemcdowall/norch
 
 **Mailing list:** norchjs@googlegroups.com - subscribe by sending an email to norchjs+subscribe@googlegroups.com
-
-**Build Status Master Branch:** [![Build Status](https://secure.travis-ci.org/fergiemcdowall/norch.png)](http://travis-ci.org/fergiemcdowall/norch)
 
 [![NPM](https://nodei.co/npm/norch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/norch/)
 
