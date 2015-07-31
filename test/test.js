@@ -22,6 +22,7 @@ describe('Am I A Happy Norch?', function() {
   });
 });
 
+
 describe('Can I Index Data?', function() {
   describe('Indexing', function() {
     var timeLimit = 5000;
@@ -74,7 +75,9 @@ describe('Can I do indexing and restore?', function() {
       });
     });
     it('should be able to search again', function(done) {
-      replicantSuperrequest.get('/search?q=reuter')
+      var q = {};
+      q.query = {'*':['reuter']};
+      replicantSuperrequest.get('/search?q=' + JSON.stringify(q))
         .expect(200)
         .end(function(err, res) {
           if (err) throw err;
@@ -153,7 +156,7 @@ describe('Can I Index and search in bigger data files?', function() {
     var q = {};
     q.query = {"*":["reuter"]};
     q.facets = {topics:{}, places:{}, organisations:{}};
-    superrequest.get('/search?JSONq=' + JSON.stringify(q)).expect(200).end(function(err, res) {
+    superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function(err, res) {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
       resultSet.should.have.property('facets');
@@ -176,7 +179,7 @@ describe('Can I Index and search in bigger data files?', function() {
     q["query"] = {"*":["reuter"]};
     q["facets"] = {"topics":{}, "places":{}, "organisations":{}};
     q["filter"] = {"topics":[["earn", "earn"]]};
-    superrequest.get('/search?JSONq=' + JSON.stringify(q)).expect(200).end(function(err, res) {
+    superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function(err, res) {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
       resultSet.hits.length.should.be.exactly(100);
@@ -198,7 +201,7 @@ describe('Can I Index and search in bigger data files?', function() {
     q["query"] = {"*":["reuter"]};
     q["facets"] = {"topics":{}, "places":{}, "organisations":{}};
     q["filter"] = {"topics":[["earn","earn"],["alum","alum"]]};
-    superrequest.get('/search?JSONq=' + JSON.stringify(q)).expect(200).end(function(err, res) {
+    superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function(err, res) {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
       resultSet.hits.length.should.be.exactly(2);
@@ -221,7 +224,7 @@ describe('Can I Index and search in bigger data files?', function() {
     var q = {};
     q["query"] = {"*":["*"]};
     q["facets"] = {"topics":{}, "places":{}, "organisations":{}};
-    superrequest.get('/search?JSONq=' + JSON.stringify(q)).expect(200).end(function(err, res) {
+    superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function(err, res) {
       should.exist(res.text);
       var resultSet = JSON.parse(res.text);
       resultSet.totalHits.should.be.exactly(1000);
