@@ -5,7 +5,6 @@ var fs = require('fs');
 var should = require('should'); 
 var supertest = require('supertest');
 var request = require('request');
-var si = require('search-index');
 var Norch = require('../lib/norch.js');
 var sandbox = './test/sandbox/'
 var norch = new Norch({indexPath: sandbox + 'norch-test'});
@@ -248,7 +247,7 @@ describe('Running norch and search-index in the same process.', function () {
   var docTitle = 'Test'
 
   before(function () {
-    searchIndex = si({indexPath: sandbox + 'norch-si-combined'});
+    searchIndex = require('search-index')({indexPath: sandbox + 'norch-si-combined'});
     norch = new Norch({si: searchIndex, port: 5050});
     superTest = supertest('localhost:5050');
   });
