@@ -24,7 +24,7 @@
 - [License](#license)
 
 
-#Installation
+# Installation
 
 Confirm that node.js is set up correctly, then install Norch like so:
 
@@ -37,14 +37,14 @@ Confirm that node.js is set up correctly, then install Norch like so:
 If everything went to plan- Norch should now be installed on your machine
 
 
-#Operation
+# Operation
 
 *Note: for the purposes of accessability, this doc assumes that Norch is being installed locally on your own computer
 (localhost). Once Norch is rolled out on to remote servers, the
 hostname on all URLs should be updated accordingly. Command line
 commands are denoted by the prefix `$ ` which should not be typed in*
 
-##Start your Norch.js server
+## Start your Norch.js server
 
 Type
 
@@ -74,7 +74,7 @@ $ norch --help
     -c, --cors <items>           comma-delimited list of Access-Control-Allow-Origin addresses in the form of "http(s)://hostname:port" (or "*")
 ```
 
-###Using Norch in a node-program
+### Using Norch in a node-program
 
 Norch can be instantiated like
 
@@ -89,9 +89,9 @@ var si = require('search-index')();
 var norch - require('norch')({si: si});
 ```
 
-#Indexing
+# Indexing
 
-##Document Format
+## Document Format
 
 Norch indexes data that is in the format below. Field values can be
 either strings or simple arrays. Arrays can be used to create filters
@@ -115,7 +115,7 @@ an unique ID will be assigned by Norch
 ]
 ```
 
-##HTTP Interface
+## HTTP Interface
 
 If the above was in a file called `data.json`, it could be indexed
 using a command like
@@ -143,40 +143,40 @@ You can also put the data to be indexed in the URL like this (note that single q
 curl --form document='[{"title":"A really interesting document","body":"This is a really interesting document"}]' http://localhost:3030/indexer
 ```
 
-##Indexing options object
+## Indexing options object
 
 The indexing options object is that which is used by the underlying `search-index`. It is [described in more detail here](https://github.com/fergiemcdowall/search-index/blob/master/doc/add.md)
 
-#Replication
+# Replication
 
-##Snapshot
+## Snapshot
 
 Create a snapshot of the search index by doing this:
 
 `curl http://localhost:3030/snapshot -o snapshot.gz`
 
-##Empty
+## Empty
 
 Empty an index by using the 'empty' endpoint (or alternatively you can just delete the data directory):
 
 `curl http://localhost:3030/empty`
 
-##Replicate
+## Replicate
 
 Replicate into an empty index from a snapshot file by doing this:
 
 `curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: tion/gzip"`
 
 
-#Searching
+# Searching
 
-##Get document by ID
+## Get document by ID
 
 It is possible to get a document and associated index entries by ID by
 calling `http://localhost.com:3030/getDoc?docID=` followed by the
 document's ID
 
-##Search parameters
+## Search parameters
 
 Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
 
@@ -185,7 +185,7 @@ Search using the search-index.js API and attach the query object to a `q` parame
 `http://localhost:3030/search?q={"query":{"*":["usa"]}}`
 
 
-#Matching (Autosuggest)
+# Matching (Autosuggest)
 
 Norch comes with a matcher that can be used to create autosuggest
 functionality. The matcher is derived from the content of the reverse
@@ -193,7 +193,7 @@ index. At the moment Norch ships with one matcher, there is a desire
 to abstract this out into a framework that can accomodate mulitiple
 pluggable matchers.
 
-##Connecting to a matcher
+## Connecting to a matcher
 
 Using something like
 [Typeahead](http://twitter.github.io/typeahead.js/) or [JQuery
@@ -202,7 +202,7 @@ called by using this URL:
 
     http://localhost:3030/matcher?beginsWith=<matcher term>
 
-#About Norch
+# About Norch
 
 Norch.js is an experimental search engine built with
 [Node.js](http://nodejs.org/) and
@@ -230,7 +230,7 @@ featuring
 
 
 
-#License
+# License
 
 Norch.js is released under the MIT license:
 
