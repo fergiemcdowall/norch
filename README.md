@@ -180,7 +180,7 @@ document's ID
 
 Search is available on [http://localhost.com:3030/search](http://localhost.com:3030/search)
 
-Search using the search-index.js API and attach the query object to a `q` parameter like so:
+Search using the [search-index.js API](https://github.com/fergiemcdowall/search-index/blob/master/doc/search.md) and attach the query object to a `q` parameter like so:
 
 `http://localhost:3030/search?q={"query":{"*":["usa"]}}`
 
