@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
@@ -11,7 +11,7 @@
     "lodash": "3.10.0",
     "morgan": "1.6.1",
     "multer": "0.1.4",
-    "search-index": "0.6.3"
+    "search-index": "0.6.6"
   },
   "devDependencies": {
     "jscs": "2.0.0",
@@ -47,5 +47,6 @@
     "lint": " jshint lib || true && jscs lib || true",
     "test": "rm -rf test/sandbox && mkdir test/sandbox && date && mocha",
     "start": "./bin/norch"
-  }
+  },
+  "license": "MIT"
 }
