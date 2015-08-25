@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Installation](#installation)
+  - [One-click install to Heroku](#one-click-install-to-heroku)
+  - [Manual Install with NPM](#manual-install-with-npm)
 - [Operation](#operation)
   - [Start your Norch.js server](#start-your-norchjs-server)
     - [Startup options](#startup-options)
