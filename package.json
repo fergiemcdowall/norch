@@ -35,13 +35,13 @@
     "big data"
   ],
   "bin": {
-    "norch": "./bin/norch"
+    "norch": "./bin/norch -p 80"
   },
   "maintainers": [
     "fergiemcdowall <fergusmcdowall@gmail.com>"
   ],
   "engines": {
-    "node": ">= 0.10.x"
+    "node": "0.12.x"
   },
   "scripts": {
     "lint": " jshint lib || true && jscs lib || true",

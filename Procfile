@@ -1,1 +1,1 @@
-web: npm start
+web: ./bin/norch -p 80
