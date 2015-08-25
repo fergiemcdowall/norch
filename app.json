@@ -1,0 +1,7 @@
+{
+  "name": "Norch",
+  "description": "A search engine that runs on Node.js and can replicate into torrents, browsers and lots of other stuff. Use it to make offline search",
+  "repository": "https://github.com/fergiemcdowall/norch",
+  "logo": "https://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "search", "solr", "lucene", "elasticsearch"]
+}
