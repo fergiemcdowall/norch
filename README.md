@@ -26,6 +26,11 @@
 
 # Installation
 
+## One-click install to Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+## Manual Install with NPM
+
 Confirm that node.js is set up correctly, then install Norch like so:
 
     $ npm install -g norch
