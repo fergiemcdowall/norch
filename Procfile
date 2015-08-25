@@ -1,1 +1,1 @@
-web: ./bin/norch -p 5000
+web: ./bin/norch
