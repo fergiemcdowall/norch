@@ -35,7 +35,7 @@
     "big data"
   ],
   "bin": {
-    "norch": "./bin/norch -p 80"
+    "norch": "./bin/norch"
   },
   "maintainers": [
     "fergiemcdowall <fergusmcdowall@gmail.com>"
