@@ -28,7 +28,8 @@
 
 # Installation
 
-## One-click install to Heroku
+## One-click Install to Heroku
+
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Manual Install with NPM
