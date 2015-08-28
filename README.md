@@ -18,7 +18,7 @@
 
 **Make autosuggest**
 
-`http://localhost:3030/matcher?beginsWith=<matcher term>`
+`http://localhost:3030/matcher?match={"beginsWith":"usa"}`
 
 **Replicate an index**
 
