@@ -4,9 +4,7 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 
-```bash
-npm install -g norch
-```
+`npm install -g norch`
 
 ```javascript
 var norch = require('norch')(); 
@@ -28,7 +26,7 @@ var norch = require('norch')();
 
 ```bash
 curl http://localhost:3030/snapshot -o snapshot.gz
-curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
+curl -X POST http://anotherIndex:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
 ```
 
 
