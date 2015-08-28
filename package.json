@@ -11,7 +11,7 @@
     "lodash": "3.10.0",
     "morgan": "1.6.1",
     "multer": "0.1.4",
-    "search-index": "0.6.6"
+    "search-index": "0.6.7"
   },
   "devDependencies": {
     "jscs": "2.0.0",
