@@ -10,6 +10,8 @@ var sandbox = './test/sandbox/'
 var norch = new Norch({indexPath: sandbox + 'norch-test'});
 var superrequest = supertest('localhost:3030');
 
+
+
 describe('Am I A Happy Norch?', function() {
   describe('General Norchiness', function() {
     it('should show the home page', function(done) {
@@ -123,9 +125,12 @@ describe('Can I empty an index?', function() {
   });
 });
 
+
+
 describe('Can I Index and search in bigger data files?', function() {
   var timeLimit = 120000;
   this.timeout(timeLimit);
+
   it('should post and index a file of data with filter fields', function(done) {
     var options = {};
     options.batchName = 'reuters';
@@ -236,6 +241,22 @@ describe('Can I Index and search in bigger data files?', function() {
       done();
     });
   });
+  it('should be able to match', function(done) {
+    var mtch = {beginsWith: "lon"}
+    superrequest.get('/matcher?match=' + JSON.stringify(mtch)).expect(200).end(function(err, res) {
+      should.exist(res.text);
+      var matches = JSON.parse(res.text);
+      matches.should.eql([ 'long',
+                           'london',
+                           'longer',
+                           'longrange',
+                           'longstanding',
+                           'longtime' ]
+                        )
+      done();
+    });
+  });
+
 });
 
 
