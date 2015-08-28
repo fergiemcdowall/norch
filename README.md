@@ -6,9 +6,7 @@
 
 `npm install -g norch`
 
-```javascript
-var norch = require('norch')(); 
-```
+`var norch = require('norch')();`
 
 **Put stuff in**
 
