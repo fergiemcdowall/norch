@@ -293,7 +293,7 @@ describe('Running norch and search-index in the same process.', function () {
         });
     });
     it('should be possible to add a doc through search-index\'s api', function (done) {
-      searchIndex.add({batchName: 'test'}, [{id: docId, title: docTitle}], function (err) {
+      searchIndex.add([{id: docId, title: docTitle}], {batchName: 'test'}, function (err) {
         if (err) throw err;
         done();
       });
