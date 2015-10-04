@@ -23,7 +23,6 @@ describe('Am I A Happy Norch?', function() {
   });
 });
 
-
 describe('Can I Index Data?', function() {
   describe('Indexing', function() {
     var timeLimit = 5000;
@@ -92,16 +91,6 @@ describe('Can I do indexing and restore?', function() {
 
 describe('Can I empty an index?', function() {
   it('should say that there are documents in the index', function(done) {
-    request('http://localhost:3030/tellMeAboutMyNorch', function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log(body)
-      }
-    })
-    request('http://localhost:4040/tellMeAboutMyNorch', function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log(body)
-      }
-    })
     superrequest.get('/tellMeAboutMyNorch').expect(200).end(function(err, res) {
       should.exist(res.text);
       should.exist(JSON.parse(res.text).totalDocs, 12);
@@ -124,8 +113,6 @@ describe('Can I empty an index?', function() {
     });
   });
 });
-
-
 
 describe('Can I Index and search in bigger data files?', function() {
   var timeLimit = 120000;
@@ -193,7 +180,7 @@ describe('Can I Index and search in bigger data files?', function() {
       resultSet.facets[0].value[0].key.should.be.exactly('earn');
       resultSet.facets[0].value[0].value.should.be.exactly(182);
       resultSet.facets[1].key.should.be.exactly('places');
-      resultSet.facets[1].value[5].key.should.be.exactly('japan');
+      resultSet.facets[1].value[5].key.should.be.exactly('hong-kong');
       resultSet.facets[1].value[5].value.should.be.exactly(3);
       resultSet.facets[2].key.should.be.exactly('organisations');
       resultSet.facets[2].value.length.should.be.exactly(0);
@@ -213,9 +200,9 @@ describe('Can I Index and search in bigger data files?', function() {
       resultSet.totalHits.should.be.exactly(2);
       resultSet.facets[0].key.should.be.exactly('topics');
       resultSet.facets[0].value.length.should.be.exactly(2);
-      resultSet.facets[0].value[0].key.should.be.exactly('alum');
+      resultSet.facets[0].value[0].key.should.be.exactly('earn');
       resultSet.facets[0].value[0].value.should.be.exactly(2);
-      resultSet.facets[0].value[1].key.should.be.exactly('earn');
+      resultSet.facets[0].value[1].key.should.be.exactly('alum');
       resultSet.facets[0].value[1].value.should.be.exactly(2);
       resultSet.facets[1].key.should.be.exactly('places');
       resultSet.facets[1].value.length.should.be.exactly(1);
@@ -264,7 +251,7 @@ describe('Running norch and search-index in the same process.', function () {
   var norch;
   var searchIndex;
   var superTest;
-  var docId = 111;
+  var docId = '111';
   var docTitle = 'Test'
 
   before(function () {
