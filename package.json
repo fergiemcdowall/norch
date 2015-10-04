@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
@@ -11,7 +11,7 @@
     "lodash": "3.10.0",
     "morgan": "1.6.1",
     "multer": "0.1.4",
-    "search-index": "0.6.12"
+    "search-index": "0.6.13"
   },
   "devDependencies": {
     "jscs": "2.0.0",
