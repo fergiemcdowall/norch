@@ -27,6 +27,25 @@ curl http://localhost:3030/snapshot -o snapshot.gz
 curl -X POST http://anotherIndex:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
 ```
 
+**Command line startup options**
+
+```bash
+ $ norch --help
+ 
+   Usage: norch [options]
+ 
+   Options:
+ 
+    -h, --help                   output usage information
+    -V, --version                output the version number
+    -p, --port <port>            specify the port, defaults to 3030
+    -n, --hostname <hostname>    specify the hostname, defaults to 0.0.0.0 (INADDR_ANY)
+    -i, --indexPath <indexPath>  specify the name of the index directory, defaults to norch-index
+    -l, --logLevel <logLevel>    specify the loglevel- silly | debug | verbose | info | warn | error
+    -s, --logSilent <logSilent>  silent mode
+    -c, --cors <items>           comma-delimited list of Access-Control-Allow-Origin addresses in the form of "http(s)://hostname:port" (or "*")
+ ```
+
 
 ### About Norch
 
