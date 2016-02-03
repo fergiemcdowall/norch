@@ -53,7 +53,7 @@ describe('Can I Index Data?', function () {
         .end(function (err, res) {
           should.not.exist(err)
           should.exist(res.text)
-          should.exist(JSON.parse(res.text).totalHits, 9)
+          should.equal(JSON.parse(res.text).totalHits, 10)
           done()
         })
     })
@@ -79,16 +79,6 @@ describe('Can I do indexing and restore?', function () {
     var replicantSuperrequest = supertest('localhost:4040')
     var timeLimit = 5000
     this.timeout(timeLimit)
-    // curl -X POST http://localhost:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
-    it('should post and index data "inline"', function (done) {
-      replicantSuperrequest.post('/indexer')
-        .field('document', '[{"title":"A really interesting document","body":"This is a really interesting document"}, {"title":"Yet another really interesting document","body":"Yet again this is another really, really interesting document"}]')
-        .expect(200)
-        .end(function (err, res) {
-          if (err) console.log(err)
-          done()
-        })
-    })
     it('should post and index a file of data', function (done) {
       fs.createReadStream(sandbox + 'backup.gz')
         .pipe(request.post('http://localhost:4040/replicate'))
@@ -104,7 +94,7 @@ describe('Can I do indexing and restore?', function () {
         .end(function (err, res) {
           should.not.exist(err)
           should.exist(res.text)
-          should.exist(JSON.parse(res.text).totalHits, 9)
+          should.equal(JSON.parse(res.text).totalHits, 10)
           done()
         })
     })
@@ -116,7 +106,7 @@ describe('Can I empty an index?', function () {
     superrequest.get('/tellmeaboutmynorch').expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
-      should.exist(JSON.parse(res.text).totalDocs, 12)
+      should.equal(JSON.parse(res.text).totalDocs, 12)
       done()
     })
   })
@@ -124,8 +114,8 @@ describe('Can I empty an index?', function () {
     superrequest.get('/flush').expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
-      should.exist(JSON.parse(res.text).success, true)
-      should.exist(JSON.parse(res.text).message, 'index emptied')
+      should.equal(JSON.parse(res.text).success, true)
+      should.equal(JSON.parse(res.text).message, 'index emptied')
       done()
     })
   })
@@ -133,7 +123,7 @@ describe('Can I empty an index?', function () {
     superrequest.get('/tellmeaboutmynorch').expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
-      should.exist(JSON.parse(res.text).totalDocs, 0)
+      should.equal(JSON.parse(res.text).totalDocs, 0)
       done()
     })
   })
@@ -165,7 +155,7 @@ describe('Can I Index and search in bigger data files?', function () {
     superrequest.get('/tellmeaboutmynorch').expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
-      should.exist(JSON.parse(res.text).totalDocs, 1000)
+      should.equal(JSON.parse(res.text).totalDocs, 1000)
       done()
     })
   })
