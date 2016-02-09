@@ -3,6 +3,8 @@
 // http://stackoverflow.com/questions/10120866/how-to-unit-test-with-a-file-upload-in-mocha
 // http://thewayofcode.wordpress.com/2013/04/21/how-to-build-and-test-rest-api-with-nodejs-express-mocha/
 
+var async = require('async')
+var da = require('distribute-array')
 var fs = require('fs')
 var should = require('should')
 var supertest = require('supertest')
@@ -11,6 +13,7 @@ var Norch = require('../lib/norch.js')
 var sandbox = './test/sandbox/'
 var norch = new Norch({indexPath: sandbox + 'norch-test'})
 var superrequest = supertest('localhost:3030')
+var _ = require('lodash');
 
 describe('Am I A Happy Norch?', function () {
   describe('General Norchiness', function () {
@@ -101,6 +104,57 @@ describe('Can I do indexing and restore?', function () {
   })
 })
 
+describe('Concurrent indexing', function (done) {
+  var concurrentIndexingNorch = new Norch({
+    'indexPath': sandbox + 'norch-concurrent',
+    'port': 5050})
+  var concurrentSuperrequest = supertest('localhost:5050')
+  this.timeout(60000)
+  var batchData = da(require('../node_modules/reuters-21578-json/data/full/reuters-000.json'), 10)
+  var resultForStarUSA = [ '287', '510', '998', '997', '996', '995', '994', '993', '992', '991' ]
+
+  function indexBatch(index, callback) {
+    console.log('started indexing batch ' + index)
+    concurrentSuperrequest.post('/indexer')
+      .field('document', JSON.stringify(batchData[index]))
+      .expect(200)
+      .end(function (err, res) {
+        should.not.exist(err)
+        console.log('batch ' + index + ' indexed')
+        return callback(null, 'indexed')
+      })
+  }
+
+  var batchJobs = [];
+  batchData.forEach(function (item, i) {
+    batchJobs[i] = function (callback) {
+      indexBatch(i, callback)
+    }
+  })
+
+  it('should do concurrency', function (done) {
+    async.parallel(_.shuffle(batchJobs), function(err, results) {
+      if (err) {console.log('failure dear leader ' + err)}
+      done()
+    });
+  });
+
+  it('should be able to search', function (done) {
+    var q = {}
+    q.query = {'*': ['usa']}
+    concurrentSuperrequest.get('/search?q=' + JSON.stringify(q))
+      .expect(200)
+      .end(function (err, res) {
+        should.not.exist(err)
+        should.exist(res.text)
+        _.map(JSON.parse(res.text).hits, 'id').slice(0,10).should.eql(resultForStarUSA)
+        done()
+      })
+  })
+})
+
+
+
 describe('Can I empty an index?', function () {
   it('should say that there are documents in the index', function (done) {
     superrequest.get('/tellmeaboutmynorch').expect(200).end(function (err, res) {
@@ -159,6 +213,7 @@ describe('Can I Index and search in bigger data files?', function () {
       done()
     })
   })
+
   it('should be able to search and show facets', function (done) {
     var q = {}
     q.query = {'*': ['reuter']}
@@ -167,7 +222,9 @@ describe('Can I Index and search in bigger data files?', function () {
       should.not.exist(err)
       should.exist(res.text)
       var resultSet = JSON.parse(res.text)
+//      console.log(_.map(resultSet.hits, 'id').slice(0,10))
       resultSet.should.have.property('facets')
+      _.map(resultSet.hits, 'id').slice(0,10).should.eql([ '476', '813', '73', '426', '373', '343', '332', '134', '795', '328' ])
       resultSet.totalHits.should.be.exactly(922)
       resultSet.hits.length.should.be.exactly(100)
       resultSet.facets[0].key.should.be.exactly('topics')
@@ -275,8 +332,8 @@ describe('Running norch and search-index in the same process.', function () {
 
   before(function () {
     searchIndex = require('search-index')({indexPath: sandbox + 'norch-si-combined'})
-    norch = new Norch({si: searchIndex, port: 5050})
-    superTest = supertest('localhost:5050')
+    norch = new Norch({si: searchIndex, port: 6060})
+    superTest = supertest('localhost:6060')
   })
 
   describe('Index status', function () {

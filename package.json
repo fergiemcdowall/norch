@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "0.6.11",
+  "version": "0.6.12",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
@@ -8,17 +8,20 @@
     "colors": "1.1.2",
     "commander": "2.9.0",
     "express": "4.13.1",
-    "lodash": "3.10.0",
+    "lodash": "4.2.1",
     "morgan": "1.6.1",
     "multer": "0.1.4",
-    "restify": "^4.0.3",
-    "search-index": "0.6.16"
+    "restify": "4.0.3",
+    "search-index": "0.6.17"
   },
   "devDependencies": {
+    "async": "^1.5.2",
+    "distribute-array": "0.0.3",
     "jscs": "2.0.0",
     "jshint": "2.8.0",
+    "level-out": "0.0.6",
     "mocha": "2.2.5",
-    "request": "2.60.0",
+    "request": "2.69.0",
     "reuters-21578-json": "0.0.6",
     "should": "7.0.2",
     "standard": "^5.4.1",
