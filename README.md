@@ -65,7 +65,7 @@ curl -X POST http://anotherIndex:3030/replicate --data-binary @snapshot.gz -H "C
 Norch.js is an experimental search engine built with [Node.js](http://nodejs.org/) and
 [search-index](https://github.com/fergiemcdowall/search-index)
 featuring, Full text search, Stopword removal, Faceting, Filtering,
-Matching (Autosuggest), Fielded search, Field weighting, Relevance
+Matching (Autosuggest), Phrase search, Fielded search, Field weighting, Relevance
 weighting (tf-idf), Paging (offset and resultset length),
 Virtualisation (see
 [virtual-norch](https://github.com/fergiemcdowall/virtual-norch))
