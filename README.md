@@ -1,5 +1,19 @@
 [![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url]
 
+```
+      ___           ___           ___           ___           ___      
+     /\__\         /\  \         /\  \         /\  \         /\__\     
+    /::|  |       /::\  \       /::\  \       /::\  \       /:/  /     
+   /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/__/      
+  /:/|:|  |__   /:/  \:\  \   /::\~\:\  \   /:/  \:\  \   /::\  \ ___  
+ /:/ |:| /\__\ /:/__/ \:\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/\:\  /\__\ 
+ \/__|:|/:/  / \:\  \ /:/  / \/_|::\/:/  / \:\  \  \/__/ \/__\:\/:/  / 
+     |:/:/  /   \:\  /:/  /     |:|::/  /   \:\  \            \::/  /  
+     |::/  /     \:\/:/  /      |:|\/__/     \:\  \           /:/  /   
+     /:/  /       \::/  /       |:|  |        \:\__\         /:/  /    
+     \/__/         \/__/         \|__|         \/__/         \/__/     
+
+```
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
@@ -10,7 +24,7 @@
 
 **Put stuff in**
 
-`curl --form document=@reuters-000.json http://localhost:3030/indexer`
+`curl --form document=@reuters-000.json http://localhost:3030/add`
 
 **Search for hits**
 
@@ -62,7 +76,7 @@ Virtualisation (see
 
 # License
 
-MIT, Copyright (c) 2013 Fergus McDowall
+MIT, Copyright (c) 2013-16 Fergus McDowall
 
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat

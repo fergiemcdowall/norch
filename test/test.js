@@ -1,4 +1,4 @@
-/* global it, describe, before */
+/* global it, describe */
 
 // http://stackoverflow.com/questions/10120866/how-to-unit-test-with-a-file-upload-in-mocha
 // http://thewayofcode.wordpress.com/2013/04/21/how-to-build-and-test-rest-api-with-nodejs-express-mocha/
@@ -9,57 +9,61 @@ var fs = require('fs')
 var should = require('should')
 var supertest = require('supertest')
 var request = require('request')
-var Norch = require('../lib/norch.js')
 var sandbox = './test/sandbox/'
-var norch = new Norch({indexPath: sandbox + 'norch-test'})
+// var testNorch
 var superrequest = supertest('localhost:3030')
-var _ = require('lodash');
+var _ = require('lodash')
 
 describe('Am I A Happy Norch?', function () {
-  describe('General Norchiness', function () {
-    it('should show the home page', function (done) {
-      superrequest.get('/').expect(200).end(function (err, res) {
-        should.not.exist(err)
-        done()
-      })
+  it('should initialize a norch server', function (done) {
+    require('../lib/norch.js')({
+      indexPath: sandbox + 'norch-test'
+    }, function (err, norch) {
+      if (err) false.should.eql(true)
+      //      testNorch = norch
+      done()
+    })
+  })
+  it('should show the home page', function (done) {
+    superrequest.get('/').expect(200).end(function (err, res) {
+      should.not.exist(err)
+      done()
     })
   })
 })
 
 describe('Can I Index Data?', function () {
-  describe('Indexing', function () {
-    var timeLimit = 5000
-    this.timeout(timeLimit)
-    it('should post and index a file of data', function (done) {
-      superrequest.post('/indexer')
-        .attach('document', './node_modules/reuters-21578-json/data/justTen/justTen.json')
-        .expect(200)
-        .end(function (err, res) {
-          should.not.exist(err)
-          done()
-        })
-    })
-    it('should post and index data "inline"', function (done) {
-      superrequest.post('/indexer')
-        .field('document', '[{"title":"A really interesting document","body":"This is a really interesting document"}, {"title":"Yet another really interesting document","body":"Yet again this is another really, really interesting document"}]')
-        .expect(200)
-        .end(function (err, res) {
-          should.not.exist(err)
-          done()
-        })
-    })
-    it('should be able to search', function (done) {
-      var q = {}
-      q.query = {'*': ['reuter']}
-      superrequest.get('/search?q=' + JSON.stringify(q))
-        .expect(200)
-        .end(function (err, res) {
-          should.not.exist(err)
-          should.exist(res.text)
-          should.equal(JSON.parse(res.text).totalHits, 10)
-          done()
-        })
-    })
+  var timeLimit = 5000
+  this.timeout(timeLimit)
+  it('should post and index a file of data', function (done) {
+    superrequest.post('/add')
+      .attach('document', './node_modules/reuters-21578-json/data/justTen/justTen.json')
+      .expect(200)
+      .end(function (err, res) {
+        should.not.exist(err)
+        done()
+      })
+  })
+  it('should post and index data "inline"', function (done) {
+    superrequest.post('/add')
+      .field('document', '[{"title":"A really interesting document","body":"This is a really interesting document"}, {"title":"Yet another really interesting document","body":"Yet again this is another really, really interesting document"}]')
+      .expect(200)
+      .end(function (err, res) {
+        should.not.exist(err)
+        done()
+      })
+  })
+  it('should be able to search', function (done) {
+    var q = {}
+    q.query = {'*': ['*']}
+    superrequest.get('/search?q=' + JSON.stringify(q))
+      .expect(200)
+      .end(function (err, res) {
+        should.not.exist(err)
+        should.exist(res.text)
+        should.equal(JSON.parse(res.text).totalHits, 12)
+        done()
+      })
   })
 })
 
@@ -76,12 +80,19 @@ describe('Can I do indexing and restore?', function () {
     })
   })
   describe('Restoring from a backup', function () {
-    var replicantNorch = new Norch({
-      'indexPath': sandbox + 'norch-replicant',
-      'port': 4040})
-    var replicantSuperrequest = supertest('localhost:4040')
+    var replicantSuperrequest
     var timeLimit = 5000
     this.timeout(timeLimit)
+    it('should initialize a NEW norch server', function (done) {
+      require('../lib/norch.js')({
+        indexPath: sandbox + 'norch-replicant',
+        port: 4040
+      }, function (err, norch) {
+        if (err) false.should.eql(true)
+        replicantSuperrequest = supertest('localhost:4040')
+        done()
+      })
+    })
     it('should post and index a file of data', function (done) {
       fs.createReadStream(sandbox + 'backup.gz')
         .pipe(request.post('http://localhost:4040/replicate'))
@@ -105,17 +116,14 @@ describe('Can I do indexing and restore?', function () {
 })
 
 describe('Concurrent indexing', function (done) {
-  var concurrentIndexingNorch = new Norch({
-    'indexPath': sandbox + 'norch-concurrent',
-    'port': 5050})
-  var concurrentSuperrequest = supertest('localhost:5050')
   this.timeout(60000)
+  var concurrentSuperrequest
   var batchData = da(require('../node_modules/reuters-21578-json/data/full/reuters-000.json'), 10)
   var resultForStarUSA = [ '287', '510', '998', '997', '996', '995', '994', '993', '992', '991' ]
 
-  function indexBatch(index, callback) {
+  function indexBatch (index, callback) {
     console.log('started indexing batch ' + index)
-    concurrentSuperrequest.post('/indexer')
+    concurrentSuperrequest.post('/add')
       .field('document', JSON.stringify(batchData[index]))
       .expect(200)
       .end(function (err, res) {
@@ -125,19 +133,32 @@ describe('Concurrent indexing', function (done) {
       })
   }
 
-  var batchJobs = [];
+  var batchJobs = []
   batchData.forEach(function (item, i) {
     batchJobs[i] = function (callback) {
       indexBatch(i, callback)
     }
   })
 
-  it('should do concurrency', function (done) {
-    async.parallel(_.shuffle(batchJobs), function(err, results) {
-      if (err) {console.log('failure dear leader ' + err)}
+  it('should initialize a NEW norch server', function (done) {
+    require('../lib/norch.js')({
+      indexPath: sandbox + 'norch-concurrent',
+      port: 5050
+    }, function (err, norch) {
+      if (err) false.should.eql(true)
+      concurrentSuperrequest = supertest('localhost:5050')
       done()
-    });
-  });
+    })
+  })
+
+  it('should do concurrency', function (done) {
+    async.parallel(_.shuffle(batchJobs), function (err, results) {
+      if (err) {
+        console.log('failure dear leader ' + err)
+      }
+      done()
+    })
+  })
 
   it('should be able to search', function (done) {
     var q = {}
@@ -147,13 +168,11 @@ describe('Concurrent indexing', function (done) {
       .end(function (err, res) {
         should.not.exist(err)
         should.exist(res.text)
-        _.map(JSON.parse(res.text).hits, 'id').slice(0,10).should.eql(resultForStarUSA)
+        _.map(JSON.parse(res.text).hits, 'id').slice(0, 10).should.eql(resultForStarUSA)
         done()
       })
   })
 })
-
-
 
 describe('Can I empty an index?', function () {
   it('should say that there are documents in the index', function (done) {
@@ -195,7 +214,7 @@ describe('Can I Index and search in bigger data files?', function () {
       {fieldName: 'topics', filter: true},
       {fieldName: 'organisations', filter: true}
     ]
-    superrequest.post('/indexer')
+    superrequest.post('/add')
       .field('options', JSON.stringify(options))
       .attach('document', './node_modules/reuters-21578-json/data/full/reuters-000.json')
       .expect(200)
@@ -222,9 +241,9 @@ describe('Can I Index and search in bigger data files?', function () {
       should.not.exist(err)
       should.exist(res.text)
       var resultSet = JSON.parse(res.text)
-//      console.log(_.map(resultSet.hits, 'id').slice(0,10))
+      //      console.log(_.map(resultSet.hits, 'id').slice(0,10))
       resultSet.should.have.property('facets')
-      _.map(resultSet.hits, 'id').slice(0,10).should.eql([ '476', '813', '73', '426', '373', '343', '332', '134', '795', '328' ])
+      _.map(resultSet.hits, 'id').slice(0, 10).should.eql([ '476', '813', '73', '426', '373', '343', '332', '134', '795', '328' ])
       resultSet.totalHits.should.be.exactly(922)
       resultSet.hits.length.should.be.exactly(100)
       resultSet.facets[0].key.should.be.exactly('topics')
@@ -324,21 +343,32 @@ describe('Can I Index and search in bigger data files?', function () {
 })
 
 describe('Running norch and search-index in the same process.', function () {
-  var norch
-  var searchIndex
+  var searchindex = require('search-index')
+  var si
   var superTest
   var docId = '111'
   var docTitle = 'Test'
 
-  before(function () {
-    searchIndex = require('search-index')({indexPath: sandbox + 'norch-si-combined'})
-    norch = new Norch({si: searchIndex, port: 6060})
-    superTest = supertest('localhost:6060')
+  it('should initialize a NEW norch server', function (done) {
+    searchindex({
+      indexPath: sandbox + 'norch-si-combined'
+    }, function (err, thisSi) {
+      should.not.exist(err)
+      require('../lib/norch.js')({
+        si: thisSi,
+        port: 6060
+      }, function (err, norch) {
+        if (err) false.should.eql(true)
+        si = thisSi
+        superTest = supertest('localhost:6060')
+        done()
+      })
+    })
   })
 
   describe('Index status', function () {
     it('should be empty', function (done) {
-      searchIndex.tellMeAboutMySearchIndex(function (err, msg) {
+      si.tellMeAboutMySearchIndex(function (err, msg) {
         should.not.exist(err)
         msg.totalDocs.should.be.exactly(0)
         done()
@@ -348,7 +378,7 @@ describe('Running norch and search-index in the same process.', function () {
 
   describe('indexing data through norch and si', function () {
     it('should post and index a file of data', function (done) {
-      superTest.post('/indexer')
+      superTest.post('/add')
         .attach('document', './node_modules/reuters-21578-json/data/justTen/justTen.json')
         .expect(200)
         .end(function (err) {
@@ -357,13 +387,13 @@ describe('Running norch and search-index in the same process.', function () {
         })
     })
     it("should be possible to add a doc through search-index's api", function (done) {
-      searchIndex.add([{id: docId, title: docTitle}], {batchName: 'test'}, function (err) {
+      si.add([{id: docId, title: docTitle}], {batchName: 'test'}, function (err) {
         should.not.exist(err)
         done()
       })
     })
     it('should have 11 docs now', function (done) {
-      searchIndex.tellMeAboutMySearchIndex(function (err, msg) {
+      si.tellMeAboutMySearchIndex(function (err, msg) {
         should.not.exist(err)
         msg.totalDocs.should.be.exactly(11)
         done()
@@ -384,7 +414,7 @@ describe('Running norch and search-index in the same process.', function () {
         })
     })
     it('should be able to find doc ' + docId + ' through si get', function (done) {
-      searchIndex.get(docId, function (err, res) {
+      si.get(docId, function (err, res) {
         should.not.exist(err)
         var doc = res
         doc.id.should.be.exactly(docId)
