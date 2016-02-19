@@ -20,7 +20,13 @@
 
 `npm install -g norch`
 
-`var norch = require('norch')();`
+```javascript
+require('norch')(options, function(err, norch) {
+  // Norch server started on http://localhost:3030 (or the specified host/port)
+})
+```
+
+...or simply type `norch` on the command line
 
 **Put stuff in**
 
