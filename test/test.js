@@ -10,7 +10,6 @@ var should = require('should')
 var supertest = require('supertest')
 var request = require('request')
 var sandbox = './test/sandbox/'
-// var testNorch
 var superrequest = supertest('localhost:3030')
 var _ = require('lodash')
 
@@ -20,7 +19,6 @@ describe('Am I A Happy Norch?', function () {
       indexPath: sandbox + 'norch-test'
     }, function (err, norch) {
       if (err) false.should.eql(true)
-      //      testNorch = norch
       done()
     })
   })

@@ -1,5 +1,28 @@
 #!/usr/bin/env node
 
-require('../lib/norch.js')({'indexPath':'si'});
+var listToArray = function (val) {
+  return [].concat(val.split(','))
+}
 
+var program = require('commander')
+program.version(require('../package.json').version)
+  .option('-c, --cors <items>', 'comma-delimited list of Access-Control-Allow-Origin addresses in the form of "http(s)://hostname:port" (or "*")', listToArray, '')
+  .option('-p, --port <port>', 'specify the port, defaults to NORCHPORT or 3030', Number, process.env.NORCHPORT || 3030)
+  .option('-i, --indexPath <indexPath>', 'specify the name of the index directory, defaults to norch-index', String, 'norch-index')
+  .option('-l, --logLevel <logLevel>', 'specify the loglevel- silly | debug | verbose | info | warn | error', String, 'error')
+  .option('-s, --logSilent <logSilent>', 'silent mode', String, 'false')
+  .parse(process.argv)
+
+var options = {}
+options.cors = program.cors
+options.indexPath = program.indexPath
+options.logLevel = program.logLevel
+options.logSilent = program.logSilent
+options.port = program.port
+options.si = null
+
+require('../lib/norch.js')(options, function(err, norch) {
+  //what to do here?
+  return norch
+});
 
