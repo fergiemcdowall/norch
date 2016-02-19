@@ -43,7 +43,7 @@
     "node": "0.12.x"
   },
   "scripts": {
-    "test": "rm -rf test/sandbox && mkdir test/sandbox && date && mocha && npm run test-cli",
+    "test": "standard && rm -rf test/sandbox && mkdir test/sandbox && date && mocha && npm run test-cli",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"
   },
