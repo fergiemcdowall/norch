@@ -31,8 +31,7 @@ describe('Am I A Happy Norch?', function () {
 })
 
 describe('Can I Index Data?', function () {
-  var timeLimit = 5000
-  this.timeout(timeLimit)
+  this.timeout(5000)
   it('should post and index a file of data', function (done) {
     superrequest.post('/add')
       .attach('document', './node_modules/reuters-21578-json/data/justTen/justTen.json')
@@ -63,12 +62,37 @@ describe('Can I Index Data?', function () {
         done()
       })
   })
+  it('should be able to show totalDocs', function (done) {
+    superrequest.get('/tellmeaboutmynorch').expect(200).end(function (err, res) {
+      should.not.exist(err)
+      should.exist(res.text)
+      should.equal(JSON.parse(res.text).totalDocs, 12)
+      done()
+    })
+  })
+  it('should be able to show totalDocs', function (done) {
+    superrequest.get('/tellmeaboutmynorch/totalDocs').expect(200).end(function (err, res) {
+      console.log(err)
+      should.not.exist(err)
+      should.exist(res.text)
+      should.equal(JSON.parse(res.text), '12')
+      done()
+    })
+  })
+  it('should be able to show lastupdate', function (done) {
+    superrequest.get('/tellmeaboutmynorch/lastUpdate').expect(200).end(function (err, res) {
+      should.not.exist(err)
+      should.exist(res.text)
+      JSON.parse(res.text).should.be.above('1456753328000')
+      JSON.parse(res.text).substring(0, 2).should.equal('14')
+      done()
+    })
+  })
 })
 
 describe('Can I do indexing and restore?', function () {
   describe('Making a backup', function () {
-    var timeLimit = 10000
-    this.timeout(timeLimit)
+    this.timeout(10000)
     it('should generate a backup file', function (done) {
       superrequest.get('/snapshot')
         .pipe(fs.createWriteStream(sandbox + 'backup.gz'))
@@ -79,8 +103,7 @@ describe('Can I do indexing and restore?', function () {
   })
   describe('Restoring from a backup', function () {
     var replicantSuperrequest
-    var timeLimit = 5000
-    this.timeout(timeLimit)
+    this.timeout(5000)
     it('should initialize a NEW norch server', function (done) {
       require('../lib/norch.js')({
         indexPath: sandbox + 'norch-replicant',
@@ -201,9 +224,7 @@ describe('Can I empty an index?', function () {
 })
 
 describe('Can I Index and search in bigger data files?', function () {
-  var timeLimit = 120000
-  this.timeout(timeLimit)
-
+  this.timeout(120000)
   it('should post and index a file of data with filter fields', function (done) {
     var options = {}
     options.batchName = 'reuters'
@@ -375,6 +396,7 @@ describe('Running norch and search-index in the same process.', function () {
   })
 
   describe('indexing data through norch and si', function () {
+    this.timeout(10000)
     it('should post and index a file of data', function (done) {
       superTest.post('/add')
         .attach('document', './node_modules/reuters-21578-json/data/justTen/justTen.json')
