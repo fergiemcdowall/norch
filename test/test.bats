@@ -16,7 +16,7 @@
 
 @test "Show version?" {
   run ./bin/norch -V
-  [ "${lines[0]}" = "0.6.14" ]
+  [ "${lines[0]}" = "0.6.15" ]
   [ $status = 0 ]
 }
 
