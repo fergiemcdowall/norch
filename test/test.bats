@@ -14,12 +14,6 @@
   [ $status = 0 ]
 }
 
-@test "Show version?" {
-  run ./bin/norch -V
-  [ "${lines[0]}" = "0.6.14" ]
-  [ $status = 0 ]
-}
-
 @test "Get homepage at /" {
   run curl http://localhost:9090
   echo "${output}"
