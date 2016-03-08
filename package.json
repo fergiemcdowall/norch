@@ -6,6 +6,7 @@
   "dependencies": {
     "colors": "1.1.2",
     "commander": "2.9.0",
+    "lodash": "^4.5.0",
     "restify": "4.0.3",
     "search-index": "0.7.10"
   },
@@ -13,7 +14,6 @@
     "async": "^1.5.2",
     "distribute-array": "0.0.3",
     "level-out": "0.0.6",
-    "lodash": "^4.5.0",
     "mocha": "2.2.5",
     "request": "2.69.0",
     "reuters-21578-json": "0.0.6",
