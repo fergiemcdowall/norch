@@ -52,7 +52,9 @@ describe('Can I Index Data?', function () {
   })
   it('should be able to search', function (done) {
     var q = {}
-    q.query = {'*': ['*']}
+    q.query = {
+      AND: {'*': ['*']}
+    }
     superrequest.get('/search?q=' + JSON.stringify(q))
       .expect(200)
       .end(function (err, res) {
@@ -72,7 +74,6 @@ describe('Can I Index Data?', function () {
   })
   it('should be able to show totalDocs', function (done) {
     superrequest.get('/tellmeaboutmynorch/totalDocs').expect(200).end(function (err, res) {
-      console.log(err)
       should.not.exist(err)
       should.exist(res.text)
       should.equal(JSON.parse(res.text), '12')
@@ -123,7 +124,9 @@ describe('Can I do indexing and restore?', function () {
     })
     it('should be able to search again', function (done) {
       var q = {}
-      q.query = {'*': ['reuter']}
+      q.query = {
+        AND: {'*': ['reuter']}
+      }
       replicantSuperrequest.get('/search?q=' + JSON.stringify(q))
         .expect(200)
         .end(function (err, res) {
@@ -140,7 +143,7 @@ describe('Concurrent indexing', function (done) {
   this.timeout(60000)
   var concurrentSuperrequest
   var batchData = da(require('../node_modules/reuters-21578-json/data/full/reuters-000.json'), 10)
-  var resultForStarUSA = [ '287', '510', '998', '997', '996', '995', '994', '993', '992', '991' ]
+  var resultForStarUSA = [ '510', '287', '998', '997', '996', '995', '994', '993', '992', '991' ]
 
   function indexBatch (index, callback) {
     console.log('started indexing batch ' + index)
@@ -183,7 +186,9 @@ describe('Concurrent indexing', function (done) {
 
   it('should be able to search', function (done) {
     var q = {}
-    q.query = {'*': ['usa']}
+    q.query = {
+      AND: {'*': ['usa']}
+    }
     concurrentSuperrequest.get('/search?q=' + JSON.stringify(q))
       .expect(200)
       .end(function (err, res) {
@@ -225,6 +230,7 @@ describe('Can I empty an index?', function () {
 
 describe('Can I Index and search in bigger data files?', function () {
   this.timeout(120000)
+
   it('should post and index a file of data with filter fields', function (done) {
     var options = {}
     options.batchName = 'reuters'
@@ -254,110 +260,360 @@ describe('Can I Index and search in bigger data files?', function () {
 
   it('should be able to search and show facets', function (done) {
     var q = {}
-    q.query = {'*': ['reuter']}
-    q.facets = {topics: {}, places: {}, organisations: {}}
+    q.query = {
+      AND: {'*': ['reuter']}
+    }
+    q.categories = [
+      {field: 'topics'},
+      {field: 'places'},
+      {field: 'organisations'}
+    ]
+    // q.facets = {topics: {}, places: {}, organisations: {}}
     superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
       var resultSet = JSON.parse(res.text)
-      //      console.log(_.map(resultSet.hits, 'id').slice(0,10))
-      resultSet.should.have.property('facets')
-      _.map(resultSet.hits, 'id').slice(0, 10).should.eql([ '476', '813', '73', '426', '373', '343', '332', '134', '795', '328' ])
+      resultSet.should.have.property('categories')
+      resultSet.hits.map(
+        function (hit) {
+          return hit.id
+        }
+      ).slice(0, 10).should.eql(
+        [ '476', '311', '328', '998', '997', '995', '991', '990', '989', '988' ]
+      )
       resultSet.totalHits.should.be.exactly(922)
       resultSet.hits.length.should.be.exactly(100)
-      resultSet.facets[0].key.should.be.exactly('topics')
-      resultSet.facets[0].value[0].key.should.be.exactly('earn')
-      resultSet.facets[0].value[0].value.should.be.exactly(182)
-      resultSet.facets[1].key.should.be.exactly('places')
-      resultSet.facets[1].value[2].key.should.be.exactly('japan')
-      resultSet.facets[1].value[2].value.should.be.exactly(47)
-      resultSet.facets[2].key.should.be.exactly('organisations')
-      resultSet.facets[2].value[4].key.should.be.exactly('worldbank')
-      resultSet.facets[2].value[4].value.should.be.exactly(5)
+      resultSet.categories[0].key.should.equal('topics')
+      resultSet.categories[0].value.slice(0, 5).should.eql([
+        {
+          key: 'earn',
+          value: 182
+        },
+        {
+          key: 'acq',
+          value: 100
+        },
+        {
+          key: 'crude',
+          value: 28
+        },
+        {
+          key: 'grain',
+          value: 25
+        },
+        {
+          key: 'money-fx',
+          value: 19
+        }])
+      resultSet.categories[1].key.should.equal('places')
+      resultSet.categories[1].value.slice(0, 5).should.eql([
+        {
+          key: 'usa',
+          value: 524
+        },
+        {
+          key: 'uk',
+          value: 84
+        },
+        {
+          key: 'japan',
+          value: 47
+        },
+        {
+          key: 'canada',
+          value: 42
+        },
+        {
+          key: 'brazil',
+          value: 21
+        }
+      ])
+      resultSet.categories[2].key.should.equal('organisations')
+      resultSet.categories[2].value.slice(0, 5).should.eql([
+        {
+          key: 'ico-coffee',
+          value: 10
+        },
+        {
+          key: 'imf',
+          value: 10
+        },
+        {
+          key: 'opec',
+          value: 10
+        },
+        {
+          key: 'ec',
+          value: 9
+        },
+        {
+          key: 'worldbank',
+          value: 5
+        }
+      ])
+
       done()
     })
   })
+
   it('should be able to search, show facets, and filter', function (done) {
     var q = {}
-    q['query'] = {'*': ['reuter']}
-    q['facets'] = {'topics': {}, 'places': {}, 'organisations': {}}
-    q['filter'] = {'topics': [['earn', 'earn']]}
+    q.query = {
+      AND: {'*': ['reuter']}
+    }
+    q.categories = [
+      {field: 'topics'},
+      {field: 'places'},
+      {field: 'organisations'}
+    ]
+    q.filter = [
+      {
+        field: 'topics',
+        gte: 'earn',
+        lte: 'earn'
+      }
+    ]
     superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
       var resultSet = JSON.parse(res.text)
       resultSet.hits.length.should.be.exactly(100)
-      resultSet.should.have.property('facets')
+      resultSet.should.have.property('categories')
       resultSet.totalHits.should.be.exactly(182)
-      resultSet.facets[0].key.should.be.exactly('topics')
-      resultSet.facets[0].value[0].key.should.be.exactly('earn')
-      resultSet.facets[0].value[0].value.should.be.exactly(182)
-      resultSet.facets[1].key.should.be.exactly('places')
-      resultSet.facets[1].value[5].key.should.be.exactly('hong-kong')
-      resultSet.facets[1].value[5].value.should.be.exactly(3)
-      resultSet.facets[2].key.should.be.exactly('organisations')
-      resultSet.facets[2].value.length.should.be.exactly(0)
+
+      // console.log(JSON.stringify(resultSet.categories, null, 2))
+      resultSet.categories[0].key.should.be.exactly('topics')
+      resultSet.categories[0].value.should.eql([
+        {
+          key: 'earn',
+          value: 182,
+          active: true
+        },
+        {
+          key: 'acq',
+          value: 3
+        },
+        {
+          key: 'alum',
+          value: 2
+        },
+        {
+          key: 'crude',
+          value: 1
+        }
+      ])
+
+      resultSet.categories[1].key.should.be.exactly('places')
+      resultSet.categories[1].value.slice(0, 5).should.eql([
+        {
+          key: 'usa',
+          value: 148
+        },
+        {
+          key: 'canada',
+          value: 14
+        },
+        {
+          key: 'uk',
+          value: 6
+        },
+        {
+          key: 'australia',
+          value: 4
+        },
+        {
+          key: 'hong-kong',
+          value: 3
+        }
+      ])
+
+      resultSet.categories[2].key.should.be.exactly('organisations')
+      resultSet.categories[2].value.should.eql([])
       done()
     })
   })
+
   it('can drill down on an individual result', function (done) {
     var q = {}
-    q['query'] = {'*': ['reuter']}
-    q['facets'] = {'topics': {}, 'places': {}, 'organisations': {}}
-    q['filter'] = {'topics': [['earn', 'earn'], ['alum', 'alum']]}
+    q.query = {
+      AND: {'*': ['reuter']}
+    }
+    q.categories = [
+      {field: 'topics'},
+      {field: 'places'},
+      {field: 'organisations'}
+    ]
+    q.filter = [
+      {
+        field: 'topics',
+        gte: 'earn',
+        lte: 'earn'
+      },
+      {
+        field: 'topics',
+        gte: 'alum',
+        lte: 'alum'
+      }
+    ]
     superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
       var resultSet = JSON.parse(res.text)
+      // console.log(JSON.stringify(resultSet, null, 2))
       resultSet.hits.length.should.be.exactly(2)
-      resultSet.should.have.property('facets')
+      resultSet.should.have.property('categories')
       resultSet.totalHits.should.be.exactly(2)
-      resultSet.facets[0].key.should.be.exactly('topics')
-      resultSet.facets[0].value.length.should.be.exactly(2)
-      resultSet.facets[0].value[0].key.should.be.exactly('earn')
-      resultSet.facets[0].value[0].value.should.be.exactly(2)
-      resultSet.facets[0].value[1].key.should.be.exactly('alum')
-      resultSet.facets[0].value[1].value.should.be.exactly(2)
-      resultSet.facets[1].key.should.be.exactly('places')
-      resultSet.facets[1].value.length.should.be.exactly(1)
-      resultSet.facets[1].value[0].key.should.be.exactly('australia')
-      resultSet.facets[1].value[0].value.should.be.exactly(2)
+      resultSet.hits.map(
+        function (hit) {
+          return hit.id
+        }
+      ).should.eql(
+        ['938', '921']
+      )
+      resultSet.categories[0].key.should.be.exactly('topics')
+      resultSet.categories[0].value.should.eql([
+        {
+          key: 'alum',
+          value: 2,
+          active: true
+        },
+        {
+          key: 'earn',
+          value: 2,
+          active: true
+        }
+      ])
+      resultSet.categories[1].key.should.be.exactly('places')
+      resultSet.categories[1].value.should.eql([
+        {
+          key: 'australia',
+          value: 2
+        }
+      ])
+      resultSet.categories[2].key.should.be.exactly('organisations')
+      resultSet.categories[2].value.should.eql([])
       done()
     })
   })
+
   it('should be able to do a wildcard search and return all docs in the index', function (done) {
     var q = {}
-    q['query'] = {'*': ['*']}
-    q['facets'] = {'topics': {}, 'places': {}, 'organisations': {}}
+    // q['query'] = {'*': ['*']}
+    // q['facets'] = {'topics': {}, 'places': {}, 'organisations': {}}
+    q.query = {
+      AND: {'*': ['*']}
+    }
+    q.categories = [
+      {field: 'topics'},
+      {field: 'places'},
+      {field: 'organisations'}
+    ]
+
     superrequest.get('/search?q=' + JSON.stringify(q)).expect(200).end(function (err, res) {
       should.not.exist(err)
       should.exist(res.text)
       var resultSet = JSON.parse(res.text)
       resultSet.totalHits.should.be.exactly(1000)
-      resultSet.facets[0].key.should.be.exactly('topics')
-      resultSet.facets[0].value[0].key.should.be.exactly('earn')
-      resultSet.facets[0].value[0].value.should.be.exactly(193)
-      resultSet.facets[1].key.should.be.exactly('places')
-      resultSet.facets[1].value[0].key.should.be.exactly('usa')
-      resultSet.facets[1].value[0].value.should.be.exactly(546)
+
+      resultSet.categories[0].key.should.be.exactly('topics')
+      resultSet.categories[0].value.slice(0, 5).should.eql(
+        [
+          {
+            key: 'earn',
+            value: 193
+          },
+          {
+            key: 'acq',
+            value: 108
+          },
+          {
+            key: 'crude',
+            value: 31
+          },
+          {
+            key: 'grain',
+            value: 28
+          },
+          {
+            key: 'money-supply',
+            value: 27
+          }
+        ]
+      )
+
+      resultSet.categories[1].key.should.be.exactly('places')
+      resultSet.categories[1].value.slice(0, 5).should.eql(
+        [
+          {
+            key: 'usa',
+            value: 546
+          },
+          {
+            key: 'uk',
+            value: 85
+          },
+          {
+            key: 'japan',
+            value: 47
+          },
+          {
+            key: 'canada',
+            value: 42
+          },
+          {
+            key: 'brazil',
+            value: 21
+          }
+        ]
+      )
+
+      resultSet.categories[2].key.should.be.exactly('organisations')
+      resultSet.categories[2].value.slice(0, 5).should.eql(
+        [
+          {
+            key: 'ico-coffee',
+            value: 10
+          },
+          {
+            key: 'imf',
+            value: 10
+          },
+          {
+            key: 'opec',
+            value: 10
+          },
+          {
+            key: 'ec',
+            value: 9
+          },
+          {
+            key: 'worldbank',
+            value: 5
+          }
+        ]
+      )
+
       done()
     })
   })
+
   it('should be able to match', function (done) {
     var mtch = {beginsWith: 'lon'}
-    superrequest.get('/matcher?match=' + JSON.stringify(mtch)).expect(200).end(function (err, res) {
-      should.exist(res.text)
-      should.not.exist(err)
-      var matches = JSON.parse(res.text)
-      matches.should.eql([ 'long',
-        'london',
-        'longer',
-        'longrange',
-        'longstanding',
-        'longtime' ]
-      )
-      done()
-    })
+    superrequest.get('/matcher?match=' + JSON.stringify(mtch)).expect(200).end(
+      function (err, res) {
+        should.exist(res.text)
+        should.not.exist(err)
+        var matches = JSON.parse(res.text)
+        matches.should.eql([ 'long',
+          'london',
+          'longer',
+          'longrange',
+          'longstanding',
+          'longtime' ]
+        )
+        done()
+      }
+    )
   })
 })
 
@@ -444,5 +700,3 @@ describe('Running norch and search-index in the same process.', function () {
     })
   })
 })
-
-// needs some tests to show filtering

@@ -16,7 +16,7 @@
 ```
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
+[![Join the chat at https://gitter.im/fergiemcdowall/search-index](https://badges.gitter.im/fergiemcdowall/search-index.svg)](https://gitter.im/fergiemcdowall/search-index?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 `npm install -g norch`
 
@@ -32,9 +32,9 @@ require('norch')(options, function(err, norch) {
 
 `curl --form document=@reuters-000.json http://localhost:3030/add`
 
-**Search for hits**
+**Search for hits** ([uses `search-index's` API](https://github.com/fergiemcdowall/search-index/blob/master/doc/search.md))
 
-`http://localhost:3030/search?q={"query":{"*":["usa"]}}`
+`http://localhost:3030/search?q={AND:[{"query":{"*":["usa"]}}]}`
 
 **Make autosuggest**
 
