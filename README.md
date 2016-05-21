@@ -34,7 +34,7 @@ require('norch')(options, function(err, norch) {
 
 **Search for hits** ([uses `search-index's` API](https://github.com/fergiemcdowall/search-index/blob/master/doc/search.md))
 
-`http://localhost:3030/search?q={AND:[{"query":{"*":["usa"]}}]}`
+`http://localhost:3030/search?q={"query":[{"AND":{"*":["usa"]}}]}`
 
 **Make autosuggest**
 
