@@ -4,11 +4,12 @@
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
+    "bunyan": "^1.8.1",
     "colors": "1.1.2",
     "commander": "2.9.0",
     "lodash": "^4.5.0",
     "restify": "4.0.3",
-    "search-index": "0.8.7"
+    "search-index": "0.8.9"
   },
   "devDependencies": {
     "async": "^1.5.2",
