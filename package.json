@@ -4,22 +4,22 @@
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
+    "JSONStream": "^1.2.1",
     "bunyan": "^1.8.1",
     "colors": "1.1.2",
     "commander": "2.9.0",
     "lodash": "^4.5.0",
     "restify": "4.0.3",
-    "search-index": "0.8.10"
+    "search-index": "0.9.4"
   },
   "devDependencies": {
     "async": "^1.5.2",
     "distribute-array": "0.0.3",
     "mocha": "2.2.5",
     "request": "2.69.0",
-    "reuters-21578-json": "0.0.6",
+    "reuters-21578-json": "0.0.8",
     "should": "7.0.2",
-    "standard": "^5.4.1",
-    "supertest": "1.0.1"
+    "standard": "^5.4.1"
   },
   "repository": {
     "type": "git",
