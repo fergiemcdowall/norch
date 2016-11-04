@@ -1,25 +1,22 @@
 {
   "name": "norch",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
     "JSONStream": "^1.2.1",
-    "bunyan": "^1.8.1",
-    "colors": "1.1.2",
-    "commander": "2.9.0",
-    "lodash": "^4.5.0",
-    "restify": "4.0.3",
-    "search-index": "0.9.4"
+    "bunyan": "^1.8.4",
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
+    "lodash": "^4.16.6",
+    "restify": "^4.2.0",
+    "search-index": "^0.9.5"
   },
   "devDependencies": {
-    "async": "^1.5.2",
-    "distribute-array": "0.0.3",
-    "mocha": "2.2.5",
     "request": "2.69.0",
     "reuters-21578-json": "0.0.8",
-    "should": "7.0.2",
-    "standard": "^5.4.1"
+    "standard": "^8.5.0",
+    "tape": "^4.6.2"
   },
   "repository": {
     "type": "git",
@@ -43,7 +40,7 @@
     "node": ">3"
   },
   "scripts": {
-    "test": "standard && rm -rf test/sandbox && mkdir test/sandbox && date && mocha && npm run test-cli",
+    "test": "rm -rf test/sandbox && mkdir test/sandbox && date && tape test/*.js && npm run test-cli && standard --fix",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"
   },

@@ -65,8 +65,29 @@ curl -X POST http://anotherIndex:3030/replicate --data-binary @snapshot.gz -H "C
     -c, --cors <items>           comma-delimited list of Access-Control-Allow-Origin addresses in the form of "http(s)://hostname:port" (or "*")
  ```
 
+# Endpoints
 
-### About Norch
+## GET
+
+### /buckets
+### /categorize
+### /docCount
+### /get
+### /latestSnapshot
+### /matcher
+### /search
+
+## POST
+
+### /add
+### /delete
+### /replicate
+
+## DELETE
+
+### /flush
+
+# About Norch
 
 Norch.js is an experimental search engine built with [Node.js](http://nodejs.org/) and
 [search-index](https://github.com/fergiemcdowall/search-index)
