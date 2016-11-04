@@ -18,15 +18,15 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-`npm install -g norch`
+`npm install norch` and then start with `norch`
+
+or progamatically:
 
 ```javascript
 require('norch')(options, function(err, norch) {
   // Norch server started on http://localhost:3030 (or the specified host/port)
 })
 ```
-
-...or simply type `norch` on the command line
 
 **Put stuff in**
 
@@ -37,15 +37,21 @@ require('norch')(options, function(err, norch) {
 
 `http://localhost:3030/search?q={"query":[{"AND":{"*":["usa"]}}]}`
 
+(`http://localhost:3030/search` returns everything)
+
 **Make autosuggest**
 
-`http://localhost:3030/matcher?match={"beginsWith":"usa"}`
+`http://localhost:3030/matcher?q=usa`
 
 **Replicate an index**
 
 ```bash
-curl http://localhost:3030/snapshot -o snapshot.gz
-curl -X POST http://anotherIndex:3030/replicate --data-binary @snapshot.gz -H "Content-Type: application/gzip"
+# create a snapshot on the server (available under /latestSnapshot)
+curl -X POST http://localhost:3030/snapshot
+# get latest snapshot
+curl -X GET http://anotherIndex:3030/latestSnapshot > export.json
+# replicate an export file into a new index on another server
+curl -X POST -d @export.json http://someOtherServer:3030/import
 ```
 
 **Command line startup options**

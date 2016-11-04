@@ -110,7 +110,7 @@ test('should initialize a NEW norch server', function (t) {
 test('should get latest snapshot and import in into a new norch', function (t) {
   t.plan(1)
   request(url + '/latestSnapshot')
-    .pipe(request.post('http://localhost:4040/replicate'))
+    .pipe(request.post('http://localhost:4040/import'))
     .on('data', function (data) {
       t.equal(data.toString(), '"replication complete"')
     })
