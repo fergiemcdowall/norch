@@ -87,7 +87,7 @@ test('should say that there are now 12 documents in the index', function (t) {
 
 test('should generate a backup file', function (t) {
   t.plan(1)
-  request.get(url + '/snapshot')
+  request.post(url + '/snapshot')
     .on('data', function (data) {
       t.equal(data.toString(), '"replication complete"')
     })

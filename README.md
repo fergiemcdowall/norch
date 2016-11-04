@@ -30,7 +30,8 @@ require('norch')(options, function(err, norch) {
 
 **Put stuff in**
 
-`curl --form document=@reuters-000.json http://localhost:3030/add`
+`curl -X POST -d @myData.json http://localhost:3030/add`
+(where myData.json is a newline separated file of JSON objects)
 
 **Search for hits** ([uses `search-index's` API](https://github.com/fergiemcdowall/search-index/blob/master/doc/search.md))
 
