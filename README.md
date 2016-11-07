@@ -20,7 +20,7 @@
 
 `npm install norch` and then start with `norch`
 
-or progamatically:
+or programatically:
 
 ```javascript
 require('norch')(options, function(err, norch) {
