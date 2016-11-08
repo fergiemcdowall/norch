@@ -293,13 +293,12 @@ test('should be able to get buckets', function (t) {
       gte: 'barley',
       lte: 'barley',
       set: true
-    },
-      {
-        field: 'topics',
-        gte: 'lin',
-        lte: 'oat',
-        set: true
-      }]
+    }, {
+      field: 'topics',
+      gte: 'lin',
+      lte: 'oat',
+      set: true
+    }]
   }
   q = JSON.stringify(q)
   var i = 0

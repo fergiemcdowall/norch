@@ -83,6 +83,8 @@ docs with prices in these ranges 0-200, 200-300, 300-400, >400
 
 Query parameter: **q**
 
+Example: 
+
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#buckets 
 
 ### /categorize
@@ -122,6 +124,20 @@ API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#match
 Search in the index
 
 Query parameter: **q**
+
+Example:
+
+```bash
+curl -X GET http://localhost:3030/search -G --data-urlencode q@- <<REQUEST_BODY
+{
+  "query": {
+    "AND": {
+      "*": ["marathon"]
+    }
+  }
+}
+REQUEST_BODY
+```
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search
 
