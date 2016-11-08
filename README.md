@@ -43,7 +43,7 @@ require('norch')(options, function(err, norch) {
 
 `http://localhost:3030/matcher?q=usa`
 
-**Replicate an index**
+**Export, import, and replicate an index**
 
 ```bash
 # create a snapshot on the server (available under /latestSnapshot)
@@ -77,32 +77,90 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 ## GET
 
 ### /buckets
+
+Get user defined aggregations of documents: for example: count all
+docs with prices in these ranges 0-200, 200-300, 300-400, >400
+
+Query parameter: **q**
+
+API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#buckets 
+
 ### /categorize
+
+Aggregate documents on metadata: Example: show counts by topic value
+
+Query parameter: **q**
+
+API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#categorize
+
 ### /docCount
+
+Count the documents in the index
+
 ### /get
+
+Get documents by ID
+
+Query parameter: **ids** An array of document ids
+
 ### /latestSnapshot
+
+Return the latest snapshot of the index. Generated the last time
+`/snapshot` was run
+
 ### /matcher
+
+Returns word suggestions based on frequency in the index, used for
+making autosuggest and autocomplete functions.
+
+Query parameter: **q**
+
+API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#match
+
 ### /search
+
+Search in the index
+
+Query parameter: **q**
+
+API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search
+
 
 ## POST
 
 ### /add
-### /delete
-### /replicate
+
+Add documents to the index.
+
+API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#defaultpipeline
+
+### /snapshot
+
+Creates a snapshot of the index which is then available for export
+under `/latestSnapshot`
+
 
 ## DELETE
 
+### /delete
+
+Deletes documents from the index
+
+Query parameter: **ids** An array of document ids
+
 ### /flush
+
+Deletes all documents from index
+
 
 # About Norch
 
-Norch.js is an experimental search engine built with [Node.js](http://nodejs.org/) and
+Norch.js is an experimental search engine built with
+[Node.js](http://nodejs.org/) and
 [search-index](https://github.com/fergiemcdowall/search-index)
-featuring, Full text search, Stopword removal, Faceting, Filtering,
-Matching (Autosuggest), Phrase search, Fielded search, Field weighting, Relevance
-weighting (tf-idf), Paging (offset and resultset length),
-Virtualisation (see
-[virtual-norch](https://github.com/fergiemcdowall/virtual-norch))
+featuring, Full text search, Stopword removal, aggregation Matching
+(Autosuggest), Phrase search, Fielded search, Field weighting,
+Relevance weighting (tf-idf), Paging (offset and resultset length)
 
 
 **Mailing list:** norchjs@googlegroups.com - subscribe by sending an email to norchjs+subscribe@googlegroups.com
