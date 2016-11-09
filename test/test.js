@@ -447,7 +447,7 @@ test('Can get documents by id', function (t) {
 test('Can delete document', function (t) {
   t.plan(1)
   const docID = JSON.stringify(['9', '3'])
-  request.post(url + '/delete?ids=' + docID)
+  request.del(url + '/delete?ids=' + docID)
     .on('data', function (data) {
       t.equal(data.toString(), '"batch deleted"')
     })

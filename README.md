@@ -83,6 +83,31 @@ docs with prices in these ranges 0-200, 200-300, 300-400, >400
 
 Query parameter: **q**
 
+Example:
+
+```bash
+curl -X GET http://localhost:3030/buckets -G --data-urlencode q@- <<REQUEST_BODY
+{
+  query: [{
+    AND: {
+      '*': ['reuter']
+    }
+  }],
+  buckets: [{
+    field: 'topics',
+    gte: 'barley',
+    lte: 'barley',
+    set: true
+  }, {
+    field: 'topics',
+    gte: 'lin',
+    lte: 'oat',
+    set: true
+  }]
+}
+REQUEST_BODY
+```
+
 Example: 
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#buckets 
@@ -92,6 +117,20 @@ API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#bucke
 Aggregate documents on metadata: Example: show counts by topic value
 
 Query parameter: **q**
+
+Example:
+
+```bash
+curl -X GET http://localhost:3030/categorize -G --data-urlencode q@- <<REQUEST_BODY
+{
+  "query": {
+    "AND": {
+      "*": ["reuters"]
+    }
+  }
+}
+REQUEST_BODY
+```
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#categorize
 
@@ -105,6 +144,14 @@ Get documents by ID
 
 Query parameter: **ids** An array of document ids
 
+Example:
+
+```bash
+curl -X GET http://localhost:3030/get -G --data-urlencode ids@- <<REQUEST_BODY
+["3", "7"]
+REQUEST_BODY
+```
+
 ### /latestSnapshot
 
 Return the latest snapshot of the index. Generated the last time
@@ -116,6 +163,16 @@ Returns word suggestions based on frequency in the index, used for
 making autosuggest and autocomplete functions.
 
 Query parameter: **q**
+
+Example:
+
+```bash
+curl -X GET http://localhost:3030/matcher -G --data-urlencode q@- <<REQUEST_BODY
+{
+  "beginsWith": "lon"
+}
+REQUEST_BODY
+```
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#match
 
@@ -148,6 +205,12 @@ API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#searc
 
 Add documents to the index.
 
+Example: (where justTen.json is a [newline separated object stream](https://github.com/fergiemcdowall/reuters-21578-json/blob/master/data/fullFileStream/justTen.str))
+
+```bash
+curl -X POST -d @justTen.str http://localhost:3030/add
+```
+
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#defaultpipeline
 
 ### /snapshot
@@ -163,6 +226,14 @@ under `/latestSnapshot`
 Deletes documents from the index
 
 Query parameter: **ids** An array of document ids
+
+Example:
+
+```bash
+curl -X DELETE http://localhost:3030/delete -G --data-urlencode ids@- <<REQUEST_BODY
+["7", "1"]      
+REQUEST_BODY
+```
 
 ### /flush
 
