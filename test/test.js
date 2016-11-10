@@ -28,10 +28,14 @@ test('should show the home page', function (t) {
 
 test('should post and index a file of data', function (t) {
   t.plan(1)
+  var lastMsg
   fs.createReadStream('./node_modules/reuters-21578-json/data/fullFileStream/justTen.str')
     .pipe(request.post(url + '/add'))
-    .on('data', function (data) {
-      t.equal(data.toString(), '"batch indexed"')
+    .on('data', function (d) {
+      lastMsg = d
+    })
+    .on('end', function () {
+      t.looseEqual(JSON.parse(lastMsg.toString()), { event: 'finished' })
     })
     .on('error', function (error) {
       t.error(error)
@@ -40,13 +44,17 @@ test('should post and index a file of data', function (t) {
 
 test('should post and index data "inline"', function (t) {
   t.plan(1)
+  var lastMsg
   var s = new Readable({ objectMode: true })
   s.push('{"title":"A really interesting document","body":"This is a really interesting document"}\n')
   s.push('{"title":"Yet another really interesting document","body":"Yet again this is another really, really interesting document"}\n')
   s.push(null)
   s.pipe(request.post(url + '/add'))
-    .on('data', function (data) {
-      t.equal(data.toString(), '"batch indexed"')
+    .on('data', function (d) {
+      lastMsg = d
+    })
+    .on('end', function () {
+      t.looseEqual(JSON.parse(lastMsg.toString()), { event: 'finished' })
     })
     .on('error', function (error) {
       t.error(error)
@@ -190,10 +198,14 @@ test('should say that there are now no documents in the index', function (t) {
 
 test('should post and index a file of data', function (t) {
   t.plan(1)
+  var lastMsg
   fs.createReadStream('./node_modules/reuters-21578-json/data/fullFileStream/justTen.str')
     .pipe(request.post(url + '/add'))
-    .on('data', function (data) {
-      t.equal(data.toString(), '"batch indexed"')
+    .on('data', function (d) {
+      lastMsg = d
+    })
+    .on('end', function () {
+      t.looseEqual(JSON.parse(lastMsg.toString()), { event: 'finished' })
     })
     .on('error', function (error) {
       t.error(error)
@@ -400,14 +412,16 @@ test('can make a new norch with an existing instance of search-index', function 
       s.push('{"id": "boom", "title":"A really interesting document"}\n')
       s.push('{"id": "baam", "title":"Yet another really interesting document"}\n')
       s.push(null)
+      var lastMsg
       s.pipe(request.post('http://localhost:6060/add'))
-        .on('data', function (data) {
-          t.equal(data.toString(), '"batch indexed"')
+        .on('data', function (d) {
+          lastMsg = d
         })
         .on('error', function (error) {
           t.error(error)
         })
         .on('end', function () {
+          t.looseEqual(JSON.parse(lastMsg.toString()), { event: 'finished' })
           var i = 0
           request('http://localhost:6060/search')
             .on('data', function (data) {

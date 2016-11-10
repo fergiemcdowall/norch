@@ -10,7 +10,7 @@
     "commander": "^2.9.0",
     "lodash": "^4.16.6",
     "restify": "^4.2.0",
-    "search-index": "^0.9.5"
+    "search-index": "https://github.com/fergiemcdowall/search-index"
   },
   "devDependencies": {
     "request": "2.69.0",
