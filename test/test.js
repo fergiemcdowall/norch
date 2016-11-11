@@ -182,7 +182,6 @@ test('should say that there are now no documents in the index', function (t) {
       AND: {'*': ['*']}
     }
   }
-  console.log(url)
   request(url + '/search?q=' + JSON.stringify(q))
     .on('data', function (data) {
       t.ok(false, 'document in search results (shouldn\'t be there)')
