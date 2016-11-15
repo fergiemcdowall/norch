@@ -13,7 +13,6 @@
     -i, --indexPath <indexPath>  specify the name of the index directory, defaults to norch-index
     -l, --logLevel <logLevel>    specify the loglevel- silly | debug | verbose | info | warn | error
     -s, --logSilent <logSilent>  silent mode
-    -c, --cors <items>           comma-delimited list of Access-Control-Allow-Origin addresses in the form of "http(s)://hostname:port" (or "*")
  ```
 
 # Endpoints
