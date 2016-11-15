@@ -56,7 +56,7 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 
 # API
 
-Norch is essentially an http wrapper around [search-index](https://www.npmjs.com/package/search-index). See the [API docs](doc/API.md)
+The Norch API docs [are here](doc/API.md). Norch is essentially an http wrapper around [search-index](https://www.npmjs.com/package/search-index).
 
 # About Norch
 
