@@ -16,7 +16,7 @@
 
 ```
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Ffergiemcdowall%2Fnorch&template=https%3A%2F%2Fgithub.com%2Ffergiemcdowall%2Fnorch)
 
 `npm install norch` and then start with `norch`
 
