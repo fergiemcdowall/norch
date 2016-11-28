@@ -67,6 +67,19 @@ featuring, Full text search, Stopword removal, aggregation Matching
 (Autosuggest), Phrase search, Fielded search, Field weighting,
 Relevance weighting (tf-idf), Paging (offset and resultset length)
 
+# Logging
+On Linux and OSX. Install `bunyan`, tail the log-file and pipe to bunyan.
+
+Install bunyan:
+```console
+install -g bunyan
+````
+
+Tail log-file:
+
+```console
+tail -f log-info.log |bunyan
+````
 
 **Mailing list:** norchjs@googlegroups.com - subscribe by sending an email to norchjs+subscribe@googlegroups.com
 
