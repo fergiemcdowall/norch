@@ -66,10 +66,13 @@ Example:
 ```bash
 curl -X GET http://localhost:3030/categorize -G --data-urlencode q@- <<REQUEST_BODY
 {
-  "query": {
+  "query": [{
     "AND": {
-      "*": ["reuters"]
+      "*": ["reuter"]
     }
+  }],
+  "category": {
+    "field": "topics"
   }
 }
 REQUEST_BODY
