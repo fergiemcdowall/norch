@@ -12,7 +12,7 @@ const url = 'http://localhost:3030'
 test('should initialize a norch server', function (t) {
   t.plan(1)
   Norch({
-    indexPath: sandbox + 'norch-test'
+    norchHome: sandbox + 'norch-test'
   }, function (err, thisNorch) {
     norch = thisNorch
     t.error(err)
@@ -107,7 +107,7 @@ test('should generate a backup file', function (t) {
 test('should initialize a NEW norch server', function (t) {
   t.plan(1)
   Norch({
-    indexPath: sandbox + 'norch-replicant',
+    norchHome: sandbox + 'norch-replicant',
     port: 4040
   }, function (err, norch) {
     norchReplicant = norch
@@ -398,7 +398,7 @@ test('should be able to match', function (t) {
 test('can make a new norch with an existing instance of search-index', function (t) {
   t.plan(6)
   SearchIndex({
-    indexPath: sandbox + 'norch-si-combined'
+    norchHome: sandbox + 'norch-si-combined'
   }, function (err, thisSi) {
     t.error(err)
     Norch({

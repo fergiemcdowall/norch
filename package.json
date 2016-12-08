@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
@@ -15,8 +15,8 @@
   "devDependencies": {
     "browser-run": "^3.3.0",
     "browserify": "^13.1.1",
-    "request": "2.69.0",
-    "reuters-21578-json": "0.0.8",
+    "request": "^2.69.0",
+    "reuters-21578-json": "^0.0.8",
     "standard": "^8.5.0",
     "tape": "^4.6.2"
   },
