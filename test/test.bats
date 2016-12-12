@@ -18,4 +18,3 @@
   echo "${output}"
   [[ $output =~ "doctype html" ]]
 }
-

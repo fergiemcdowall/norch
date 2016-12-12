@@ -82,6 +82,19 @@ test('search should return 12 docs', function (t) {
     })
 })
 
+test('totalHits is 12', function (t) {
+  t.plan(2)
+  var i = 0
+  request(url + '/totalHits')
+    .on('data', function (data) {
+      t.equal(JSON.parse(data.toString()).totalHits, 12)
+      i++
+    })
+    .on('end', function (data) {
+      t.equal(i, 1)
+    })
+})
+
 test('should say that there are now 12 documents in the index', function (t) {
   t.plan(1)
   request(url + '/docCount')
