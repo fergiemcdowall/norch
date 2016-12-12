@@ -380,13 +380,13 @@ test('should be able to search and filter', function (t) {
 test('should be able to match', function (t) {
   t.plan(12)
   var expectedMatches = [ 'loan',
-                          'lower',
-                          'loans',
-                          'long',
-                          'longer',
-                          'lose',
-                          'losses',
-                          'lowered' ]
+    'lower',
+    'loans',
+    'long',
+    'longer',
+    'lose',
+    'losses',
+    'lowered' ]
   var i = 0
   var mtch = { beginsWith: 'lo', threshold: 2 }
   request.get(url + '/matcher?q=' + JSON.stringify(mtch))
