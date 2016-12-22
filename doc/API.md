@@ -10,9 +10,9 @@
     -h, --help                   output usage information
     -V, --version                output the version number
     -p, --port <port>            specify the port, defaults to 3030
-    -i, --indexPath <indexPath>  specify the name of the index directory, defaults to norch-index
+    -i, --norchHome <indexPath>  specify the name of the index directory, defaults to norch-index
     -l, --logLevel <logLevel>    specify the loglevel- silly | debug | verbose | info | warn | error
-    -s, --logSilent <logSilent>  silent mode
+    -m, --machineReadable        machine readable, logo not printed, all stdout/stderr is JSON
  ```
 
 # Endpoints
