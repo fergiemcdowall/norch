@@ -144,6 +144,25 @@ REQUEST_BODY
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search
 
+### /totalHits
+
+Get the total number of hits for any given query. Can contain filters on buckets and categories, just like the queries you use on the /search endpoint.
+
+Query parameter: **q**
+
+Example:
+
+```bash
+curl -X GET http://localhost:3030/totalHits -G --data-urlencode q@- <<REQUEST_BODY
+{
+  "query": {
+    "AND": {
+      "*": ["marathon"]
+    }
+  }
+}
+REQUEST_BODY
+```
 
 ## POST
 
