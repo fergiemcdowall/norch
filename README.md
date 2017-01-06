@@ -58,7 +58,7 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 
 | Endpoint | Method | Response | Typical Use Case |
 | :--- | :--- | :--- | :--- |
-| [`/add`](API.md#add) | `POST` | status code | Add documents to the index |
+| [`/add`](doc/API.md#add) | `POST` | status code | Add documents to the index |
 | [`/availableFields`](API.md#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
 | [`/buckets`](API.md#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
 | [`/categorize`](API.md#categorize) | `GET` | stream | Aggregate documents on single metadata values |
