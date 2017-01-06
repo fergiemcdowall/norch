@@ -24,7 +24,7 @@
 | [`/buckets`](#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
 | [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
 | [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
-| [`/createSnapshot`](#createsnapshot) | `POST` | status code | Create a snapshot of the index |
+| [`/createSnapshot`](#createSnapshot) | `POST` | status code | Create a snapshot of the index |
 | [`/delete`](#delete) | `DELETE` | status code | Remove documents from index |
 | [`/docCount`](#docCount) | `GET` | object | Counts total document in index |
 | [`/flush`](#flush) | `DELETE` | status code | Remove all documents from index |
