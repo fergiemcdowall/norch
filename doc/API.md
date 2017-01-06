@@ -23,8 +23,7 @@
 | [`/availableFields`](#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
 | [`/buckets`](#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
 | [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
-| [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
-| [`/createSnapshot`](#createSnapshot) | `POST` | status code | Create a snapshot of the index |
+| [`/createSnapshot`](#createsnapshot) | `POST` | status code | Create a snapshot of the index |
 | [`/delete`](#delete) | `DELETE` | status code | Remove documents from index |
 | [`/docCount`](#docCount) | `GET` | object | Counts total document in index |
 | [`/flush`](#flush) | `DELETE` | status code | Remove all documents from index |
@@ -178,7 +177,7 @@ curl -X POST -d @justTen.str http://localhost:3030/add
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#defaultpipeline
 
-### /snapshot
+### /createSnapshot
 
 Creates a snapshot of the index which is then available for export
 under `/latestSnapshot`
