@@ -1,4 +1,4 @@
-**Command line startup options**
+# Startup Options
 
 ```bash
  $ norch --help
@@ -17,12 +17,35 @@
 
 # Endpoints
 
+| Endpoint | Method | Response | Typical Use Case |
+| :--- | :--- | :--- | :--- |
+| [`/add`](#add) | `POST` | status code | Add documents to the index |
+| [`/availableFields`](#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
+| [`/buckets`](#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
+| [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
+| [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
+| [`/createSnapshot`](#createsnapshot) | `POST` | status code | Create a snapshot of the index |
+| [`/delete`](#delete) | `DELETE` | status code | Remove documents from index |
+| [`/docCount`](#docCount) | `GET` | object | Counts total document in index |
+| [`/flush`](#flush) | `DELETE` | status code | Remove all documents from index |
+| [`/get`](#get) | `GET` | stream | Get documents by ID |
+| [`/latestSnapshot`](#latestsnapshot) | `GET` | file | Download the latest index snapshot |
+| [`/match`](#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
+| [`/search`](#search) | `GET` | stream | Search in the index |
+
+# API
+
 ## GET
+
+### /availableFields
+
+TODO
 
 ### /buckets
 
-Get user defined aggregations of documents: for example: count all
-docs with prices in these ranges 0-200, 200-300, 300-400, >400
+Wrapper for search-index's
+[`buckets`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#buckets)
+method. Get user defined aggregations of documents.
 
 Query parameter: **q**
 
@@ -51,13 +74,11 @@ curl -X GET http://localhost:3030/buckets -G --data-urlencode q@- <<REQUEST_BODY
 REQUEST_BODY
 ```
 
-Example: 
-
-API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#buckets 
-
 ### /categorize
 
-Aggregate documents on metadata: Example: show counts by topic value
+Wrapper for search-index's
+[`categorize`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#categorize)
+method. Aggregate documents on metadata: Example: show counts by topic value
 
 Query parameter: **q**
 
@@ -77,8 +98,6 @@ curl -X GET http://localhost:3030/categorize -G --data-urlencode q@- <<REQUEST_B
 }
 REQUEST_BODY
 ```
-
-API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#categorize
 
 ### /docCount
 
@@ -103,9 +122,11 @@ REQUEST_BODY
 Return the latest snapshot of the index. Generated the last time
 `/snapshot` was run
 
-### /matcher
+### /match
 
-Returns word suggestions based on frequency in the index, used for
+Wrapper for search-index's
+[`match`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#match)
+method. Returns word suggestions based on frequency in the index, used for
 making autosuggest and autocomplete functions.
 
 Query parameter: **q**
@@ -113,18 +134,18 @@ Query parameter: **q**
 Example:
 
 ```bash
-curl -X GET http://localhost:3030/matcher -G --data-urlencode q@- <<REQUEST_BODY
+curl -X GET http://localhost:3030/match -G --data-urlencode q@- <<REQUEST_BODY
 {
   "beginsWith": "lon"
 }
 REQUEST_BODY
 ```
 
-API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#match
-
 ### /search
 
-Search in the index
+Wrapper for search-index's
+[`search`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search)
+method. Search in the index.
 
 Query parameter: **q**
 
@@ -141,8 +162,6 @@ curl -X GET http://localhost:3030/search -G --data-urlencode q@- <<REQUEST_BODY
 }
 REQUEST_BODY
 ```
-
-API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search
 
 
 ## POST

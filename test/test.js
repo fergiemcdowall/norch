@@ -69,6 +69,21 @@ test('should be able to search', function (t) {
   })
 })
 
+test('should show available fields', function (t) {
+  t.plan(10)
+  var results = ['*', 'body', 'date', 'id', 'places', 'title', 'topics']
+  request(url + '/availableFields', function (err, res, body) {
+    t.error(err)
+    t.equal(res.statusCode, 200)
+  })
+    .on('data', function (data) {
+      t.ok(data.toString(), results.shift())
+    })
+    .on('end', function (data) {
+      t.equal(results.length, 0)
+    })
+})
+
 test('search should return 12 docs', function (t) {
   t.plan(13)
   var i = 0
@@ -389,7 +404,7 @@ test('should be able to match', function (t) {
     'lowered' ]
   var i = 0
   var mtch = { beginsWith: 'lo', threshold: 2 }
-  request.get(url + '/matcher?q=' + JSON.stringify(mtch))
+  request.get(url + '/match?q=' + JSON.stringify(mtch))
     .on('data', function (d) {
       i++
       var expected = expectedMatches.shift()
