@@ -25,7 +25,7 @@
 | [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
 | [`/createSnapshot`](#createsnapshot) | `POST` | status code | Create a snapshot of the index |
 | [`/delete`](#delete) | `DELETE` | status code | Remove documents from index |
-| [`/docCount`](#docCount) | `GET` | object | Counts total document in index |
+| [`/docCount`](#doccount) | `GET` | object | Counts total document in index |
 | [`/flush`](#flush) | `DELETE` | status code | Remove all documents from index |
 | [`/get`](#get) | `GET` | stream | Get documents by ID |
 | [`/latestSnapshot`](#latestsnapshot) | `GET` | file | Download the latest index snapshot |
