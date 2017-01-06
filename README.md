@@ -70,6 +70,7 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 | [`/latestSnapshot`](doc/API.md#latestsnapshot) | `GET` | file | Download the latest index snapshot |
 | [`/match`](doc/API.md#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
 | [`/search`](doc/API.md#search) | `GET` | stream | Search in the index |
+| [`/totalHits`](doc/API.md#totalhits) | `GET` | object | Show number of hits that a given query returns |
 
 The Norch API docs [are here](doc/API.md). Norch is essentially an http wrapper around [search-index](https://www.npmjs.com/package/search-index).
 

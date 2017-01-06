@@ -98,9 +98,12 @@ test('search should return 12 docs', function (t) {
 })
 
 test('totalHits is 12', function (t) {
-  t.plan(2)
+  t.plan(4)
   var i = 0
-  request(url + '/totalHits')
+  request(url + '/totalHits', function (err, res, body) {
+    t.error(err)
+    t.equal(res.statusCode, 200)
+  })
     .on('data', function (data) {
       t.equal(JSON.parse(data.toString()).totalHits, 12)
       i++
@@ -111,10 +114,13 @@ test('totalHits is 12', function (t) {
 })
 
 test('should say that there are now 12 documents in the index', function (t) {
-  t.plan(1)
-  request(url + '/docCount')
+  t.plan(3)
+  request(url + '/docCount', function (err, res, body) {
+    t.error(err)
+    t.equal(res.statusCode, 200)
+  })
     .on('data', function (data) {
-      t.equal(data.toString(), '"12"')
+      t.equal(JSON.parse(data.toString()).docCount, '12')
     })
     .on('error', function (error) {
       t.error(error)

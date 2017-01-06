@@ -31,6 +31,7 @@
 | [`/latestSnapshot`](#latestsnapshot) | `GET` | file | Download the latest index snapshot |
 | [`/match`](#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
 | [`/search`](#search) | `GET` | stream | Search in the index |
+| [`/totalHits`](#totalhits) | `GET` | object | Show number of hits that a given query returns |
 
 # API
 
@@ -162,6 +163,10 @@ curl -X GET http://localhost:3030/search -G --data-urlencode q@- <<REQUEST_BODY
 REQUEST_BODY
 ```
 
+### /totalHits
+
+Show total number of hits for a qiven query. Queries take the same
+format as for `/search`
 
 ## POST
 
