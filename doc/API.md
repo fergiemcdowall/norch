@@ -23,12 +23,15 @@
 | [`/availableFields`](#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
 | [`/buckets`](#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
 | [`/categorize`](#categorize) | `GET` | stream | Aggregate documents on single metadata values |
+| [`/concurrentAdd`](#concurrentadd) | `POST` | status code | For when more than one source is adding documents to the index at the same time |
 | [`/createSnapshot`](#createsnapshot) | `POST` | status code | Create a snapshot of the index |
 | [`/delete`](#delete) | `DELETE` | status code | Remove documents from index |
 | [`/docCount`](#doccount) | `GET` | object | Counts total document in index |
 | [`/flush`](#flush) | `DELETE` | status code | Remove all documents from index |
 | [`/get`](#get) | `GET` | stream | Get documents by ID |
+| [`/import`](#import) | `POST` | file | Import/merge an existing index into this one |
 | [`/latestSnapshot`](#latestsnapshot) | `GET` | file | Download the latest index snapshot |
+| [`/listSnapshots`](#listsnapshots) | `GET` | file | See list of snapshots |
 | [`/match`](#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
 | [`/search`](#search) | `GET` | stream | Search in the index |
 | [`/totalHits`](#totalhits) | `GET` | object | Show number of hits that a given query returns |
@@ -122,6 +125,10 @@ REQUEST_BODY
 Return the latest snapshot of the index. Generated the last time
 `/snapshot` was run
 
+### /listSnapshot
+
+Show a list of all available snapshots
+
 ### /match
 
 Wrapper for search-index's
@@ -182,11 +189,18 @@ curl -X POST -d @justTen.str http://localhost:3030/add
 
 API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#defaultpipeline
 
+### /concurrentAdd
+
+Use this method when several sources are adding documents simultaneously
+
 ### /createSnapshot
 
 Creates a snapshot of the index which is then available for export
 under `/latestSnapshot`
 
+### /import
+
+Import or merge an existing snapshot into this index
 
 ## DELETE
 

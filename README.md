@@ -62,12 +62,15 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 | [`/availableFields`](doc/API.md#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
 | [`/buckets`](doc/API.md#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
 | [`/categorize`](doc/API.md#categorize) | `GET` | stream | Aggregate documents on single metadata values |
+| [`/concurrentAdd`](doc/API.md#concurrentadd) | `POST` | status code | For when more than one source is adding documents to the index at the same time |
 | [`/createSnapshot`](doc/API.md#createsnapshot) | `POST` | status code | Create a snapshot of the index |
 | [`/delete`](doc/API.md#delete) | `DELETE` | status code | Remove documents from index |
 | [`/docCount`](doc/API.md#doccount) | `GET` | object | Counts total document in index |
 | [`/flush`](doc/API.md#flush) | `DELETE` | status code | Remove all documents from index |
 | [`/get`](doc/API.md#get) | `GET` | stream | Get documents by ID |
+| [`/import`](doc/API.md#import) | `POST` | file | Import/merge an existing index into this one |
 | [`/latestSnapshot`](doc/API.md#latestsnapshot) | `GET` | file | Download the latest index snapshot |
+| [`/listSnapshots`](doc/API.md#listsnapshots) | `GET` | file | See list of snapshots |
 | [`/match`](doc/API.md#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
 | [`/search`](doc/API.md#search) | `GET` | stream | Search in the index |
 | [`/totalHits`](doc/API.md#totalhits) | `GET` | object | Show number of hits that a given query returns |
