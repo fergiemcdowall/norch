@@ -67,7 +67,7 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 | [`/delete`](doc/API.md#delete) | `DELETE` | status code | Remove documents from index |
 | [`/docCount`](doc/API.md#doccount) | `GET` | object | Counts total document in index |
 | [`/flush`](doc/API.md#flush) | `DELETE` | status code | Remove all documents from index |
-| [`/get`](doc/API.md#get) | `GET` | stream | Get documents by ID |
+| [`/get`](doc/API.md#get-1) | `GET` | stream | Get documents by ID |
 | [`/import`](doc/API.md#import) | `POST` | file | Import/merge an existing index into this one |
 | [`/latestSnapshot`](doc/API.md#latestsnapshot) | `GET` | file | Download the latest index snapshot |
 | [`/listSnapshots`](doc/API.md#listsnapshots) | `GET` | file | See list of snapshots |
