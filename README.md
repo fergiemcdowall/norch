@@ -91,7 +91,7 @@ On Linux and OSX. Install `bunyan`, tail the log-file and pipe to bunyan.
 
 Install bunyan:
 ```console
-install -g bunyan
+npm install -g bunyan
 ````
 
 Tail log-file:
