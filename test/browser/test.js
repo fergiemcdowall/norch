@@ -20,9 +20,17 @@ test('can add a doc', function (t) {
   })
 })
 
+// this probably shouldn't be needed? Maybe wait for a stream instead?
+test('breather', function (t) {
+  t.plan(1)
+  setTimeout(function () {
+    t.ok(true)
+  }, 1000)
+})
+
 test('can search for a doc', function (t) {
   t.plan(3)
-  fetch('http://lvh.me:9999/search', {
+  fetch('http://lvh.me:9999/search?q="one"', {
     method: 'GET',
     mode: 'cors'
   }).then(function (r) {
