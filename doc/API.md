@@ -152,7 +152,8 @@ REQUEST_BODY
 
 Wrapper for search-index's
 [`search`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search)
-method. Search in the index.
+method. Search in the index. Filtering on buckets and categories are applied as fielded
+search for the regular query object.
 
 Query parameter: **q**
 
@@ -164,6 +165,38 @@ curl -X GET http://localhost:3030/search -G --data-urlencode q@- <<REQUEST_BODY
   "query": {
     "AND": {
       "*": ["marathon"]
+    }
+  }
+}
+REQUEST_BODY
+```
+Example, filtering on buckets:
+
+```bash
+curl -X GET http://localhost:3030/search -G --data-urlencode q@- <<REQUEST_BODY
+{
+  "query": {
+    "AND": {
+      "*": ["marathon"],
+      "finishingTime": [{
+        "gte": "7200",
+        "lte": "8999"
+      }]
+    }
+  }
+}
+REQUEST_BODY
+```
+
+Example, filtering on categories:
+
+```bash
+curl -X GET http://localhost:3030/search -G --data-urlencode q@- <<REQUEST_BODY
+{
+  "query": {
+    "AND": {
+      "*": ["marathon"],
+      "equipment": ["shoes"]
     }
   }
 }
