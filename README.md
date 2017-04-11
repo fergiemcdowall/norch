@@ -33,7 +33,7 @@ require('norch')(options, function(err, norch) {
 `curl -X POST -d @myData.json http://localhost:3030/add`
 (where myData.json is a newline separated file of JSON objects)
 
-**Search for hits** ([uses `search-index's` API](https://github.com/fergiemcdowall/search-index/blob/master/doc/search.md))
+**Search for hits** ([uses `search-index's` API](https://github.com/fergiemcdowall/search-index/blob/master/docs/search.md))
 
 `http://localhost:3030/search?q={"query":[{"AND":{"*":["usa"]}}]}`
 
@@ -58,24 +58,24 @@ curl -X POST -d @export.json http://someOtherServer:3030/import
 
 | Endpoint | Method | Response | Typical Use Case |
 | :--- | :--- | :--- | :--- |
-| [`/add`](doc/API.md#add) | `POST` | status code | Add documents to the index |
-| [`/availableFields`](doc/API.md#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
-| [`/buckets`](doc/API.md#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
-| [`/categorize`](doc/API.md#categorize) | `GET` | stream | Aggregate documents on single metadata values |
-| [`/concurrentAdd`](doc/API.md#concurrentadd) | `POST` | status code | For when more than one source is adding documents to the index at the same time |
-| [`/createSnapshot`](doc/API.md#createsnapshot) | `POST` | status code | Create a snapshot of the index |
-| [`/delete`](doc/API.md#delete) | `DELETE` | status code | Remove documents from index |
-| [`/docCount`](doc/API.md#doccount) | `GET` | object | Counts total document in index |
-| [`/flush`](doc/API.md#flush) | `DELETE` | status code | Remove all documents from index |
-| [`/get`](doc/API.md#get-1) | `GET` | stream | Get documents by ID |
-| [`/import`](doc/API.md#import) | `POST` | file | Import/merge an existing index into this one |
-| [`/latestSnapshot`](doc/API.md#latestsnapshot) | `GET` | file | Download the latest index snapshot |
-| [`/listSnapshots`](doc/API.md#listsnapshots) | `GET` | file | See list of snapshots |
-| [`/match`](doc/API.md#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
-| [`/search`](doc/API.md#search) | `GET` | stream | Search in the index |
-| [`/totalHits`](doc/API.md#totalhits) | `GET` | object | Show number of hits that a given query returns |
+| [`/add`](docs/API.md#add) | `POST` | status code | Add documents to the index |
+| [`/availableFields`](docs/API.md#availablefields) | `GET` | stream | Discover the name of fields which can be searched in |
+| [`/buckets`](docs/API.md#buckets) | `GET` | stream | Aggregate documents on ranges of metadata |
+| [`/categorize`](docs/API.md#categorize) | `GET` | stream | Aggregate documents on single metadata values |
+| [`/concurrentAdd`](docs/API.md#concurrentadd) | `POST` | status code | For when more than one source is adding documents to the index at the same time |
+| [`/createSnapshot`](docs/API.md#createsnapshot) | `POST` | status code | Create a snapshot of the index |
+| [`/delete`](docs/API.md#delete) | `DELETE` | status code | Remove documents from index |
+| [`/docCount`](docs/API.md#doccount) | `GET` | object | Counts total document in index |
+| [`/flush`](docs/API.md#flush) | `DELETE` | status code | Remove all documents from index |
+| [`/get`](docs/API.md#get-1) | `GET` | stream | Get documents by ID |
+| [`/import`](docs/API.md#import) | `POST` | file | Import/merge an existing index into this one |
+| [`/latestSnapshot`](docs/API.md#latestsnapshot) | `GET` | file | Download the latest index snapshot |
+| [`/listSnapshots`](docs/API.md#listsnapshots) | `GET` | file | See list of snapshots |
+| [`/match`](docs/API.md#match) | `GET` | stream | Match by linguistic similarity- autosuggest, autocomplete |
+| [`/search`](docs/API.md#search) | `GET` | stream | Search in the index |
+| [`/totalHits`](docs/API.md#totalhits) | `GET` | object | Show number of hits that a given query returns |
 
-The Norch API docs [are here](doc/API.md). Norch is essentially an http wrapper around [search-index](https://www.npmjs.com/package/search-index).
+The Norch API docs [are here](docs/API.md). Norch is essentially an http wrapper around [search-index](https://www.npmjs.com/package/search-index).
 
 # About Norch
 

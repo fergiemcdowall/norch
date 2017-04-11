@@ -47,7 +47,7 @@ TODO
 ### /buckets
 
 Wrapper for search-index's
-[`buckets`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#buckets)
+[`buckets`](https://github.com/fergiemcdowall/search-index/blob/master/docs/API.md#buckets)
 method. Get user defined aggregations of documents.
 
 Query parameter: **q**
@@ -80,7 +80,7 @@ REQUEST_BODY
 ### /categorize
 
 Wrapper for search-index's
-[`categorize`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#categorize)
+[`categorize`](https://github.com/fergiemcdowall/search-index/blob/master/docs/API.md#categorize)
 method. Aggregate documents on metadata: Example: show counts by topic value
 
 Query parameter: **q**
@@ -132,7 +132,7 @@ Show a list of all available snapshots
 ### /match
 
 Wrapper for search-index's
-[`match`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#match)
+[`match`](https://github.com/fergiemcdowall/search-index/blob/master/docs/API.md#match)
 method. Returns word suggestions based on frequency in the index, used for
 making autosuggest and autocomplete functions.
 
@@ -151,7 +151,7 @@ REQUEST_BODY
 ### /search
 
 Wrapper for search-index's
-[`search`](https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#search)
+[`search`](https://github.com/fergiemcdowall/search-index/blob/master/docs/API.md#search)
 method. Search in the index. Filtering on buckets and categories are applied as fielded
 search for the regular query object.
 
@@ -220,7 +220,7 @@ Example: (where justTen.json is a [newline separated object stream](https://gith
 curl -X POST -d @justTen.str http://localhost:3030/add
 ```
 
-API: https://github.com/fergiemcdowall/search-index/blob/master/doc/API.md#defaultpipeline
+API: https://github.com/fergiemcdowall/search-index/blob/master/docs/API.md#defaultpipeline
 
 ### /concurrentAdd
 
