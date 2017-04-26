@@ -276,7 +276,7 @@ test('should be able to categorize', function (t) {
     { key: 'corn', value: 2 },
     { key: 'earn', value: 1 },
     { key: 'grain', value: 2 },
-    { key: 'lin', value: 1 },
+    { key: 'lin-oil', value: 1 },
     { key: 'linseed', value: 1 },
     { key: 'oat', value: 1 }
   ]
@@ -304,7 +304,7 @@ test('should be able to categorize', function (t) {
       t.equal(r.statusMessage, 'OK')
     })
     .on('end', function () {
-      t.equal(i, 19)
+      t.equal(i, 18)
       t.equal(results.length, 0)
     })
 })
