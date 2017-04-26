@@ -6,6 +6,7 @@
   "dependencies": {
     "JSONStream": "^1.2.1",
     "bunyan": "^1.8.4",
+    "byline": "^5.0.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "lodash": "^4.16.6",

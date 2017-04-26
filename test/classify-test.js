@@ -68,7 +68,7 @@ test('should classify some text', function (t) {
   var text = 'this is some interesting text that is about reuter and also some marathon'
     .split(' ')
   var textStream = new Readable()
-  text.forEach(function (token) { textStream.push(token) })
+  text.forEach(function (token) { textStream.push(token + '\n') })
   textStream.push(null)
   textStream
     .pipe(request.post(url + '/classify'))
@@ -94,7 +94,7 @@ test('should classify some text with ngrams', function (t) {
   var text = 'this is some interesting text that is about reuter and also some marathon oil and some other stuff'
     .split(' ')
   var textStream = new Readable()
-  text.forEach(function (token) { textStream.push(token) })
+  text.forEach(function (token) { textStream.push(token + '\n') })
   textStream.push(null)
   textStream
     .pipe(request.post(url + '/classify?maxNGramLength=2'))
