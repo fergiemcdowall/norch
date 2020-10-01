@@ -7,6 +7,7 @@ const SearchIndex = require('search-index')
 const Norch = require('../')
 
 var norch, norchReplicant, combinedNorch
+url = req.url
 const url = 'http://localhost:3030'
 
 test('should initialize a norch server', function (t) {
