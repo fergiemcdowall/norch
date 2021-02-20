@@ -1,0 +1,155 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Norch</title>
+  </head>
+  <body>
+    <pre>
+      ___           ___           ___           ___           ___      
+     /\__\         /\  \         /\  \         /\  \         /\__\     
+    /::|  |       /::\  \       /::\  \       /::\  \       /:/  /     
+   /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/__/      
+  /:/|:|  |__   /:/  \:\  \   /::\~\:\  \   /:/  \:\  \   /::\  \ ___  
+ /:/ |:| /\__\ /:/__/ \:\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/\:\  /\__\ 
+ \/__|:|/:/  / \:\  \ /:/  / \/_|::\/:/  / \:\  \  \/__/ \/__\:\/:/  / 
+     |:/:/  /   \:\  /:/  /     |:|::/  /   \:\  \            \::/  /  
+     |::/  /     \:\/:/  /      |:|\/__/     \:\  \           /:/  /   
+     /:/  /       \::/  /       |:|  |        \:\__\         /:/  /    
+     \/__/         \/__/         \|__|         \/__/         \/__/   
+
+      (c) 2013-2021 <b>Fergus McDowall</b>, <a href="#">MIT licenced</a>
+
+      index contains <a href="/document-count" id="document-count">0</a> documents
+      created <a href="/created" id="created"></a>
+      last updated <a href="/last-updated" id="last-updated"></a>
+
+      Try out the <a href="openapi/">API</a>!
+      
+    </pre>
+
+
+    <h2 onclick="toggle('all_documents')">
+      /all_documents
+    </h2>
+    <form id="all_documents"
+          style="display:none"
+          action="/all_documents"
+          method="get">
+      limit
+      <input name="limit" default="10" />
+      <button>go</button>
+    </form>
+    
+    <h2 onclick="toggle('buckets')">
+      /buckets
+    </h2>
+    <form id="buckets" style="display:none" action="/buckets" method="get">
+      <textarea rows="10" cols="70" name="q"></textarea>
+      <br>
+      <button>Query</button>
+    </form>
+
+    <h2 onclick="toggle('delete')">
+      /delete
+    </h2>
+    <form id="delete" style="display:none" action="/delete" method="delete">
+      <textarea rows="10" cols="70" name="q"></textarea>
+      <br>
+      <button>Query</button>
+    </form>
+
+    <h2>
+      /dictionary
+    </h2>
+
+    <h2>
+      /documents
+    </h2>
+
+    <h2>
+      /distinct
+    </h2>
+
+    <h2>
+      /document_count
+    </h2>
+
+    <h2>
+      /export
+    </h2>
+
+    <h2>
+      /facets
+    </h2>
+
+    <h2>
+      /fields
+    </h2>
+
+    <h2>
+      /import
+    </h2>
+
+    <h2>
+      /max
+    </h2>
+
+    <h2>
+      /min
+    </h2>    
+
+    <h2 onclick="toggle('put')">
+      /put
+    </h2>
+    <form id="put" style="display:none" action="/put?form=docs" method="post">
+      <textarea name="docs" rows="10" cols="70">
+[{
+  "text": "bring the boom"
+}]
+      </textarea>
+      <br>
+      <button type="submit">Add</button>
+    </form>
+    <h2>
+      /put_raw
+    </h2>
+
+    <h2 onclick="toggle('query')">
+      /query
+    </h2>
+    <form id="query" style="display:none" action="/query" method="get">
+      <textarea rows="10" cols="70" name="q"></textarea>
+      <textarea rows="10" cols="70" name="ops"></textarea>
+      <br>
+      <button>Query</button>
+    </form>
+
+    <script>
+     
+     const toggle = id => {
+       const d = document.getElementById(id).style.display
+       document.getElementById(id).style.display = (d === 'none' ? 'block' : 'none')
+     }
+     
+     fetch('/document-count')
+       .then(response => response.text())
+       .then(count => {
+         document.getElementById('document-count').innerHTML = count
+       })
+
+     fetch('/created')
+       .then(response => response.text())
+       .then(lc => {
+         document.getElementById('created').innerHTML = new Date(+lc).toString()
+       })
+
+     fetch('/last-updated')
+       .then(response => response.text())
+       .then(lc => {
+         document.getElementById('last-updated').innerHTML = new Date(+lc).toString()
+       })
+     
+    </script>
+    
+  </body>
+</html>

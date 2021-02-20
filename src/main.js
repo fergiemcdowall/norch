@@ -1,31 +1,11 @@
 const fs = require('fs')
 const http = require('http')
+const mime = require('mime')
+const path = require('path')
 const querystring = require('querystring')
 const si = require('search-index')
 const url = require('url')
 
-
-const sendJSONResponse = (_JSON, res) => {
-  res.setHeader("Content-Type", "application/json")
-  res.writeHead(200)
-  res.end(JSON.stringify(_JSON, null, 2))
-}
-
-const sendHTMLResponse = (HTML, res) => {
-  res.setHeader("Content-Type", "text/html; charset=utf-8")
-  res.writeHead(200)
-  res.end(HTML)
-}
-
-const sendTextResponse = (text, res) => {
-  res.setHeader("Content-Type", "text/plain; charset=utf-8")
-  res.writeHead(200)
-  res.end(text + '')
-}
-
-const root = (req, res) => sendHTMLResponse(
-  fs.readFileSync(__dirname + '/index.html'), res
-)
 
 // curl -H "Content-Type: application/json" --data @testdata.json http://localhost:8081/put
 // if ?form=[fieldName] then read from that form field
@@ -46,23 +26,108 @@ const put = (req, res, index) => {
 
 const get = (req, res) => res.end('This is GET yo!')
 
-const documentCount = (req, res, index) =>
-      index.DOCUMENT_COUNT().then(td => sendTextResponse(td, res))
+
+const params = _url => url.parse(_url, {
+  parseQueryString: true
+}).query
+
+const allDocuments = (req, res, index) => index.ALL_DOCUMENTS(
+  +params(req.url).limit || undefined
+).then(ad => sendJSONResponse(ad, res))
+
+const buckets = (req, res, index) => index.BUCKETS(
+  ...JSON.parse(params(req.url).q)
+).then(b => sendJSONResponse(b, res))
+
+const documentCount = (req, res, index) => index.DOCUMENT_COUNT().then(
+  td => sendResponse(td + '', res, 'text/plain')
+)
+
+const created = (req, res, index) => index.CREATED().then(
+  c => sendResponse(c + '', res, 'text/plain')
+)
+
+const lastUpdated = (req, res, index) => index.LAST_UPDATED().then(
+  lu => sendResponse(lu + '', res, 'text/plain')
+)
+
+const query = (req, res, index) => index.QUERY(
+  params(req.url).q,
+  JSON.parse(params(req.url).ops)
+).then(r => sendJSONResponse(r, res))
 
 // default ("page not found?")
 const def = (req, res) => {
-  res.write('This is DEFAULT yo!')
-  res.end()
+  res.setHeader("Content-Type", "text/html; charset=utf-8")
+  res.writeHead(404)
+  res.end('<html>nothing here bro!</html>')
+}
+
+
+const sendResponse = (body, res, type) => {
+  res.setHeader("Content-Type", type + '; charset=utf-8')
+  res.writeHead(200)
+  res.end(body)
+}
+
+const sendFileResponse = (name, res) => sendResponse(
+  fs.readFileSync(path.resolve(__dirname + '/../www_root' + name)) + '',
+  res,
+  mime.getType(name)
+)
+
+const files = dirs => {
+  const getFilesInDir = name => fs.readdirSync(
+    '/Users/fergie/projects/norch/www_root' + name, {
+      withFileTypes: true
+    }
+  ).filter(dirent => dirent.isFile()).map(f => name + f.name)
+  return dirs.map(d => getFilesInDir(d)).flat()
 }
 
 //create a server object:
 si({ name: 'norch-data' }).then(index =>
   http.createServer((req, res) => {
-    const _url = url.parse(req.url)
-    if (_url.pathname == '/') return root(req, res)
-    if (_url.pathname == '/put') return put(req, res, index)
-    if (_url.pathname == '/document-count') return documentCount(req, res, index)
-    if (_url.pathname == '/get') return get(req, res)
+
+    const fileDirs = [ '/', '/openapi/' ]
+    const pathname = url.parse(req.url).pathname
+    
+    // Files
+    if (files(fileDirs).includes(pathname)) return sendFileResponse(pathname, res)
+
+    // Files (default to index.html when only directory is specified)
+    if (fileDirs.includes(pathname)) return sendFileResponse(pathname + 'index.html', res)
+ 
+    // API endpoints
+    if (pathname == '/all_documents') return allDocuments(req, res, index)
+    if (pathname == '/buckets') return buckets(req, res, index)
+    if (pathname == '/created') return created(req, res, index)
+    if (pathname == '/document-count') return documentCount(req, res, index)
+    if (pathname == '/get') return get(req, res)
+    if (pathname == '/last-updated') return lastUpdated(req, res, index)
+    if (pathname == '/query') return query(req, res, index)
+    if (pathname == '/put') return put(req, res, index)
+
+
+
+// ALL_DOCUMENTS
+// BUCKETS
+// DELETE
+// CREATED
+// DICTIONARY
+// DOCUMENTS
+// DISTINCT
+// DOCUMENT_COUNT
+// EXPORT
+// FACETS
+// FIELDS
+// IMPORT
+// INDEX
+// MAX
+// MIN
+// PUT
+// PUT_RAW
+    
     return def(req, res)
-  }).listen(8081) //the server object listens on port 8080 
+  }).listen(3030) //the server object listens on port 8080 
 )
