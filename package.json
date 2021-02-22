@@ -4,15 +4,7 @@
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./lib/norch",
   "dependencies": {
-    "JSONStream": "^1.2.1",
-    "bunyan": "^1.8.4",
-    "byline": "^5.0.0",
-    "colors": "^1.1.2",
-    "commander": "^2.9.0",
-    "level-out": "^1.0.1",
-    "lodash": "^4.16.6",
     "mime": "^2.5.2",
-    "restify": "^4.2.0",
     "search-index": "^2.1.1",
     "swagger-ui-dist": "^3.43.0"
   },
@@ -41,10 +33,11 @@
     "node": ">12"
   },
   "scripts": {
+    "build": "rm -rf www_root/openapi && cp -R node_modules/swagger-ui-dist www_root/openapi && sed -i -e 's/https:\\/\\/petstore\\.swagger\\.io\\/v2//' www_root/openapi/index.html",
     "test": "rm -rf test/sandbox && mkdir test/sandbox && date && tape test/*test.js && npm run test-cli && npm run test-browser && standard --fix",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "test-browser": "./bin/norch -i test/sandbox/browser-test -p 9999 & tape test/browser/runtest.js && kill $!",
-    "start": "./bin/norch"
+    "start": "node src/main.js"
   },
   "license": "MIT"
 }
