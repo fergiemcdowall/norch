@@ -5,11 +5,13 @@
   "main": "./lib/norch",
   "dependencies": {
     "mime": "^2.5.2",
-    "search-index": "^2.1.1",
+    "search-index": "^2.2.0",
     "swagger-ui-dist": "^3.43.0"
   },
   "devDependencies": {
-    "browser-run": "^3.3.0"
+    "browser-run": "^3.3.0",
+    "level-out": "^1.0.1",
+    "levelout": "^1.0.0"
   },
   "repository": {
     "type": "git",

@@ -16,30 +16,38 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "document",
+      "name": "aggregation",
+      "description": "Export and import indices",
+    },
+
+    {
+      "name": "documents",
       "description": "Find and return documents",
     },
+    
     {
       "name": "metadata",
       "description": "Get metadata about your index"
     },
+    
     {
       "name": "linguistic",
       "description": "Get information about the tokens in the index",
+    },
+    
+    {
+      "name": "replication",
+      "description": "Export and import indices",
     }
-  ],
-  
-  "schemes": [
-    "http"
   ],
   
   "paths": {
 
-    "/document": {
+    "/documents": {
 
       "post": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "Add new documents",
         "description": "TODO...",
@@ -48,6 +56,20 @@
         ],
         "produces": [
           "application/json",
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of Document object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Document"
+              }
+            }
+          }
         ],
         "responses": {
           "default": {
@@ -58,7 +80,7 @@
 
       "get": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "return specified documents",
         "description": "return specified documents",
@@ -85,7 +107,7 @@
       
       "delete": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "delete documents",
         "description": "Delete documents from the index by id.",
@@ -112,10 +134,10 @@
       }      
     },
 
-    "/document/all": {
+    "/documents/all": {
       "get": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "return all documents",
         "description": "Return all documents",
@@ -141,10 +163,10 @@
       }
     },
 
-    "/document/count": {
+    "/documents/count": {
       "get": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "total number of documents",
         "description": "Total number of documents",
@@ -162,16 +184,23 @@
       }
     },    
 
-    "/document/query": {
+    "/documents/query": {
       "get": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "query document index",
         "description": "TODO",
         "produces": [
           "application/json"
         ],
+        "parameters": [{
+          "in": "query",
+          "name": "query",
+          "description": "a search query",
+          "required": false,
+          "type": "object"
+        }],
         "responses": {
           "200": {
             "description": "successful operation",
@@ -183,10 +212,10 @@
       }
     },    
 
-    "/document/raw": {
+    "/documents/raw": {
       "post": {
         "tags": [
-          "document"
+          "documents"
         ],
         "summary": "Adds raw documents",
         "description": "TODO...",
@@ -863,6 +892,22 @@
     }
   },
   "definitions": {
+
+    "Document": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "note": "if _id id not provided, an _id field will be automatically generated"
+        },
+        "otherFields": {
+          "type": "string",
+          "note": "every object can contain an arbitrary number of fields"
+        }
+      }
+    },
+
+    
     "ApiResponse": {
       "type": "object",
       "properties": {
