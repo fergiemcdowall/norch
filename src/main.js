@@ -65,14 +65,14 @@ si({ name: 'norch-data' }).then(index =>
         return sendFileResponse(pathname + 'index.html', res)
 
       return routes({
-        '/buckets': api.buckets,
-        '/created': api.created,
-        '/document-count': api.documentCount,
+        '/aggregate/buckets': api.buckets,
         '/documents/all': api.allDocuments,
+        '/documents/count': api.documentCount,
         '/documents/query': api.query,
+        '/meta/created': api.created,
+        '/meta/last-updated': api.lastUpdated,
+
         '/get': api.get,  // not sure if this should be here...
-        '/last-updated': api.lastUpdated,
-        '/put': api.put
       })[pathname]
 
     }
@@ -82,7 +82,7 @@ si({ name: 'norch-data' }).then(index =>
       return routes({
         '/documents': api.put,
       })[pathname]
-    }    
+    }
                     
                     // DELETE
                     // DICTIONARY

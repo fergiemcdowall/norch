@@ -38,7 +38,7 @@ module.exports = (index, sendResponse) => {
   ).then(ad => sendJSONResponse(ad, res))
 
   const buckets = (req, res) => index.BUCKETS(
-    ...JSON.parse(params(req.url).q)
+    ...JSON.parse('[' + params(req.url).q + ']')
   ).then(b => sendJSONResponse(b, res))
 
   const documentCount = (req, res) => index.DOCUMENT_COUNT().then(
@@ -53,15 +53,10 @@ module.exports = (index, sendResponse) => {
     lu => sendResponse(lu + '', res, 'text/plain')
   )
 
-  const query = (req, res) => {
-    console.log('BOOOOOOM')
-    console.log(params(req.url).query)
-    console.log(params(req.url).ops)
-    return index.QUERY(
-      JSON.parse(params(req.url).query || '{}'),
-      JSON.parse(params(req.url).ops || '{}')
-    ).then(r => sendJSONResponse(r, res))
-  }
+  const query = (req, res) => index.QUERY(
+    JSON.parse(params(req.url).query || '{}'),
+    JSON.parse(params(req.url).ops || '{}')
+  ).then(r => sendJSONResponse(r, res))
 
   return {
     put: put,
