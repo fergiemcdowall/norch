@@ -37,7 +37,10 @@ const sendResponse = (body, res, type) => {
 }
 
 //create a server object:
-si({ name: 'norch-data' }).then(index =>
+si({
+  name: 'norch-data',
+  storeVectors: true
+}).then(index =>
   http.createServer((req, res) => {
 
     const api = API(index, sendResponse)
@@ -66,11 +69,14 @@ si({ name: 'norch-data' }).then(index =>
 
       return routes({
         '/aggregate/buckets': api.buckets,
+        '/aggregate/facets': api.facets,
+        '/documents': api.documents,
         '/documents/all': api.allDocuments,
         '/documents/count': api.documentCount,
         '/documents/query': api.query,
         '/meta/created': api.created,
         '/meta/last-updated': api.lastUpdated,
+        '/replicate': api.replicate,
 
         '/get': api.get,  // not sure if this should be here...
       })[pathname]
@@ -83,7 +89,14 @@ si({ name: 'norch-data' }).then(index =>
         '/documents': api.put,
       })[pathname]
     }
-                    
+
+    if (req.method == 'DELETE') {
+      return routes({
+        '/documents': api.del,
+      })[pathname]
+    }
+
+    
                     // DELETE
                     // DICTIONARY
                     // DOCUMENTS

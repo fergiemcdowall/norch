@@ -1,48 +1,489 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Norch API",
-    "description": "Congratulations, you have now installed Norch",
-    "version": "1.0.0"
+    "title": "Norch",
+    "description": "This is your Norch server. Add documents. Find them again.",
+    "contact": {
+      "email": "fergus@norch.io"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/fergiemcdowall/search-index/blob/master/LICENSE"
+    },
+    "version": "1.0.5"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
   },
   "servers": [
     {
-      "url": "http://localhost:3030"
+      "url": "//localhost:3030/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "aggregation",
+      "description": "Export and import indices"
+    },
+    {
+      "name": "documents",
+      "description": "Find and return documents"
+    },
+    {
+      "name": "metadata",
+      "description": "Get metadata about your index"
+    },
+    {
+      "name": "linguistic",
+      "description": "Get information about the tokens in the index"
+    },
+    {
+      "name": "replication",
+      "description": "Export and import indices"
     }
   ],
   "paths": {
-    "/documents/all": {
+    "/documents": {
       "get": {
-        "description": "Auto generated using Swagger Inspector",
+        "tags": [
+          "documents"
+        ],
+        "summary": "return specified documents",
+        "description": "return specified documents",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "document ids",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Add new documents",
+        "description": "TODO...",
+        "requestBody": {
+          "description": "List of Document objects",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "default": {
-            "description": "Auto generated using Swagger Inspector"
+            "description": "successful operation",
+            "content": {}
           }
         },
-        "servers": [
-          {
-            "url": "http://localhost:3030"
-          }
-        ]
+        "x-codegen-request-body-name": "documents"
       },
-      "servers": [
-        {
-          "url": "http://localhost:3030"
+      "delete": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "delete documents",
+        "description": "Delete documents from the index by id",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "The ids of the documents to be deleted",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "TODO",
+            "content": {}
+          },
+          "404": {
+            "description": "TODO",
+            "content": {}
+          }
         }
-      ]
+      }
+    },
+    "/documents/all": {
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "return all documents",
+        "description": "Return all documents",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of documents",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/documents/count": {
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "total number of documents",
+        "description": "Total number of documents",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/documents/query": {
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "query document index",
+        "description": "TODO",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "a search query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/raw": {
+      "post": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Adds raw documents",
+        "description": "TODO...",
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/aggregate/buckets": {
+      "get": {
+        "tags": [
+          "aggregation"
+        ],
+        "summary": "return an aggregation of document ids",
+        "description": "TODO: explain what a bucket is",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "specify buckets",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/aggregate/facets": {
+      "get": {
+        "tags": [
+          "aggregation"
+        ],
+        "summary": "return an aggregation of document ids",
+        "description": "TODO: explain what a facet is",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "The fields to create facets on",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/linguistic/dictionary": {
+      "get": {
+        "tags": [
+          "linguistic"
+        ],
+        "summary": "returns all tokens in the index",
+        "description": "TODO: explain",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of documents",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/linguistic/distinct": {
+      "get": {
+        "tags": [
+          "linguistic"
+        ],
+        "summary": "returns distinct tokens per field",
+        "description": "TODO: explain (also, why is this different to dictionary)",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of documents",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/linguistic/max": {
+      "get": {
+        "tags": [
+          "linguistic"
+        ],
+        "summary": "max alphabetical value per field",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/linguistic/min": {
+      "get": {
+        "tags": [
+          "linguistic"
+        ],
+        "summary": "min alphabetical value per field",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/meta/created": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "timestamp of when the index was created",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "plain/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meta/last-updated": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "timestamp of when the index was last updated",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "plain/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/replicate": {
+      "get": {
+        "tags": [
+          "replication"
+        ],
+        "summary": "export the index",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "replication"
+        ],
+        "summary": "import an index",
+        "description": "TODO...",
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "otherFields": {
+            "type": "string"
+          }
+        }
+      },
       "Token": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
+          "FIELD": {
+            "type": "string"
+          },
+          "VALUE": {
+            "type": "object",
+            "properties": {
+              "GTE": {
+                "type": "string"
+              },
+              "LTE": {
+                "type": "string"
+              }
+            }
           }
-        },
-        "description": "Booom"
+        }
+      }
+    },
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      },
+      "petstore_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://petstore.swagger.io/oauth/authorize",
+            "scopes": {
+              "read:pets": "read your pets",
+              "write:pets": "modify pets in your account"
+            }
+          }
+        }
       }
     }
   }

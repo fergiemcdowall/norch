@@ -26,11 +26,16 @@ module.exports = (index, sendResponse) => {
       formField
         ? querystring.decode(body)[formField]
         : body
-    )).then(idxRes => {
-      sendJSONResponse(idxRes, res)
-    }))
+    )).then(
+      idxRes => sendJSONResponse(idxRes, res)
+    ))
   }
 
+
+  const del = (req, res) => index.DELETE(
+    [params(req.url).ids].flat()
+  ).then(idxRes => sendJSONResponse(idxRes, res))
+  
   const get = (req, res) => res.end('This is GET yo!')
 
   const allDocuments = (req, res) => index.ALL_DOCUMENTS(
@@ -41,6 +46,14 @@ module.exports = (index, sendResponse) => {
     ...JSON.parse('[' + params(req.url).q + ']')
   ).then(b => sendJSONResponse(b, res))
 
+  const documents = (req, res) => index.DOCUMENTS(
+    params(req.url).ids
+  ).then(b => sendJSONResponse(b, res))
+  
+  const facets = (req, res) => index.FACETS(
+    JSON.parse(params(req.url).q)
+  ).then(b => sendJSONResponse(b, res))
+  
   const documentCount = (req, res) => index.DOCUMENT_COUNT().then(
     td => sendResponse(td + '', res, 'text/plain')
   )
@@ -58,15 +71,23 @@ module.exports = (index, sendResponse) => {
     JSON.parse(params(req.url).ops || '{}')
   ).then(r => sendJSONResponse(r, res))
 
+  const replicate = (req, res) => index.EXPORT().then(
+    exp => sendJSONResponse(exp, res)
+  )
+  
   return {
-    put: put,
-    get: get,
     allDocuments: allDocuments,
     buckets: buckets,
-    documentCount: documentCount,
     created: created,
+    del: del,
+    documentCount: documentCount,
+    documents: documents,
+    facets: facets,
+    get: get,
     lastUpdated: lastUpdated,
-    query: query
+    put: put,
+    query: query,
+    replicate: replicate
   }
 
 }
