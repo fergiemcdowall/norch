@@ -94,6 +94,7 @@ si({
       console.log('in POST ' + pathname)
       return routes({
         '/documents': api.put,
+        '/documents/raw': api.putRaw,
         '/replicate': api.imprt,
       })[pathname]
     }
@@ -105,7 +106,5 @@ si({
       })[pathname]
     }
 
-    // PUT_RAW
-                    
   }).listen(3030) //the server object listens on port 8080 
 )

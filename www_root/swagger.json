@@ -225,21 +225,40 @@
         }
       }
     },
+    
     "/documents/raw": {
+
       "post": {
         "tags": [
           "documents"
         ],
-        "summary": "Adds raw documents",
+        "summary": "Adds only the raw documents",
         "description": "TODO...",
+        "requestBody": {
+          "description": "List of Document objects",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "default": {
             "description": "successful operation",
             "content": {}
           }
-        }
-      }
+        },
+        "x-codegen-request-body-name": "documents"
+      },
     },
+
     "/aggregate/buckets": {
       "get": {
         "tags": [

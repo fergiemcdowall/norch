@@ -27,123 +27,21 @@
       
     </pre>
 
-
-    <h2 onclick="toggle('all_documents')">
-      /all_documents
-    </h2>
-    <form id="all_documents"
-          style="display:none"
-          action="/all_documents"
-          method="get">
-      limit
-      <input name="limit" default="10" />
-      <button>go</button>
-    </form>
-    
-    <h2 onclick="toggle('buckets')">
-      /buckets
-    </h2>
-    <form id="buckets" style="display:none" action="/buckets" method="get">
-      <textarea rows="10" cols="70" name="q"></textarea>
-      <br>
-      <button>Query</button>
-    </form>
-
-    <h2 onclick="toggle('delete')">
-      /delete
-    </h2>
-    <form id="delete" style="display:none" action="/delete" method="delete">
-      <textarea rows="10" cols="70" name="q"></textarea>
-      <br>
-      <button>Query</button>
-    </form>
-
-    <h2>
-      /dictionary
-    </h2>
-
-    <h2>
-      /documents
-    </h2>
-
-    <h2>
-      /distinct
-    </h2>
-
-    <h2>
-      /document_count
-    </h2>
-
-    <h2>
-      /export
-    </h2>
-
-    <h2>
-      /facets
-    </h2>
-
-    <h2>
-      /fields
-    </h2>
-
-    <h2>
-      /import
-    </h2>
-
-    <h2>
-      /max
-    </h2>
-
-    <h2>
-      /min
-    </h2>    
-
-    <h2 onclick="toggle('put')">
-      /put
-    </h2>
-    <form id="put" style="display:none" action="/put?form=docs" method="post">
-      <textarea name="docs" rows="10" cols="70">
-[{
-  "text": "bring the boom"
-}]
-      </textarea>
-      <br>
-      <button type="submit">Add</button>
-    </form>
-    <h2>
-      /put_raw
-    </h2>
-
-    <h2 onclick="toggle('query')">
-      /query
-    </h2>
-    <form id="query" style="display:none" action="/query" method="get">
-      <textarea rows="10" cols="70" name="q"></textarea>
-      <textarea rows="10" cols="70" name="ops"></textarea>
-      <br>
-      <button>Query</button>
-    </form>
-
     <script>
      
-     const toggle = id => {
-       const d = document.getElementById(id).style.display
-       document.getElementById(id).style.display = (d === 'none' ? 'block' : 'none')
-     }
-     
-     fetch('/document-count')
+     fetch('/documents/count')
        .then(response => response.text())
        .then(count => {
          document.getElementById('document-count').innerHTML = count
        })
 
-     fetch('/created')
+     fetch('/meta/created')
        .then(response => response.text())
        .then(lc => {
          document.getElementById('created').innerHTML = new Date(+lc).toString()
        })
 
-     fetch('/last-updated')
+     fetch('/meta/last-updated')
        .then(response => response.text())
        .then(lc => {
          document.getElementById('last-updated').innerHTML = new Date(+lc).toString()

@@ -42,6 +42,14 @@ module.exports = (index, sendResponse) => {
     ))
   }
 
+  const putRaw = (req, res) => {
+    var body = ''
+    req.on('data', d => body += d.toString())
+    req.on('end', () => index.PUT_RAW(JSON.parse(body)).then(
+      idxRes => sendJSONResponse(idxRes, res)
+    ))
+  }
+  
   const del = (req, res) => index.DELETE(
     [params(req.url).ids].flat()
   ).then(idxRes => sendJSONResponse(idxRes, res))
@@ -123,6 +131,7 @@ module.exports = (index, sendResponse) => {
     max: max,
     min: min,
     put: put,
+    putRaw: putRaw,
     query: query,
     replicate: replicate
   }
