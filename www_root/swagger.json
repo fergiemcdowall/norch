@@ -28,14 +28,14 @@
     },
     {
       "name": "documents",
-      "description": "Find and return documents"
+      "description": "Create, update, remove and retrieve documents"
     },
     {
       "name": "metadata",
       "description": "Get metadata about your index"
     },
     {
-      "name": "linguistic",
+      "name": "values",
       "description": "Get information about the tokens in the index"
     },
     {
@@ -71,6 +71,7 @@
           }
         }
       },
+      
       "post": {
         "tags": [
           "documents"
@@ -100,11 +101,12 @@
         },
         "x-codegen-request-body-name": "documents"
       },
+      
       "delete": {
         "tags": [
           "documents"
         ],
-        "summary": "delete documents",
+        "summary": "delete specified documents",
         "description": "Delete documents from the index by id",
         "parameters": [
           {
@@ -132,6 +134,7 @@
         }
       }
     },
+    
     "/documents/all": {
       "get": {
         "tags": [
@@ -158,6 +161,7 @@
         }
       }
     },
+    
     "/documents/count": {
       "get": {
         "tags": [
@@ -173,6 +177,23 @@
         }
       }
     },
+
+    "/documents/flush": {
+      "delete": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "clear the index (delete all documents)",
+        "description": "TODO",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    
     "/documents/query": {
       "get": {
         "tags": [
@@ -275,10 +296,10 @@
         }
       }
     },
-    "/linguistic/dictionary": {
+    "/values/dictionary": {
       "get": {
         "tags": [
-          "linguistic"
+          "values"
         ],
         "summary": "returns all tokens in the index",
         "description": "TODO: explain",
@@ -301,24 +322,13 @@
         }
       }
     },
-    "/linguistic/distinct": {
+    "/values/distinct": {
       "get": {
         "tags": [
-          "linguistic"
+          "values"
         ],
         "summary": "returns distinct tokens per field",
         "description": "TODO: explain (also, why is this different to dictionary)",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "max number of documents",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "successful operation",
@@ -333,10 +343,10 @@
         }
       }
     },
-    "/linguistic/max": {
+    "/values/max": {
       "get": {
         "tags": [
-          "linguistic"
+          "values"
         ],
         "summary": "max alphabetical value per field",
         "description": "TODO: explain",
@@ -348,10 +358,10 @@
         }
       }
     },
-    "/linguistic/min": {
+    "/values/min": {
       "get": {
         "tags": [
-          "linguistic"
+          "values"
         ],
         "summary": "min alphabetical value per field",
         "description": "TODO: explain",
@@ -369,6 +379,27 @@
           "metadata"
         ],
         "summary": "timestamp of when the index was created",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "plain/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meta/fields": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "list of every available fieldname",
         "description": "TODO: explain",
         "responses": {
           "200": {
@@ -419,12 +450,29 @@
           }
         }
       },
+
       "post": {
         "tags": [
           "replication"
         ],
         "summary": "import an index",
         "description": "TODO...",
+        "requestBody": {
+          "description": "List of Document objects",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "required": true
+        },
+
         "responses": {
           "default": {
             "description": "successful operation",

@@ -43,6 +43,7 @@ si({
 }).then(index =>
   http.createServer((req, res) => {
 
+    // TODO: req/res should probably go here
     const api = API(index, sendResponse)
     const pathname = url.parse(req.url).pathname
     console.log(req.method)
@@ -75,8 +76,13 @@ si({
         '/documents/count': api.documentCount,
         '/documents/query': api.query,
         '/meta/created': api.created,
+        '/meta/fields': api.fields,
         '/meta/last-updated': api.lastUpdated,
         '/replicate': api.replicate,
+        '/values/dictionary': api.dictionary,
+        '/values/distinct': api.distinct,
+        '/values/max': api.max,
+        '/values/min': api.min,
 
         '/get': api.get,  // not sure if this should be here...
       })[pathname]
@@ -85,30 +91,21 @@ si({
 
     
     if (req.method == 'POST') {
+      console.log('in POST ' + pathname)
       return routes({
         '/documents': api.put,
+        '/replicate': api.imprt,
       })[pathname]
     }
 
     if (req.method == 'DELETE') {
       return routes({
         '/documents': api.del,
+        '/documents/flush': api.flush,
       })[pathname]
     }
 
-    
-                    // DELETE
-                    // DICTIONARY
-                    // DOCUMENTS
-                    // DISTINCT
-                    // EXPORT
-                    // FACETS
-                    // FIELDS
-                    // IMPORT
-                    // MAX
-                    // MIN
-                    // PUT
-                    // PUT_RAW
+    // PUT_RAW
                     
   }).listen(3030) //the server object listens on port 8080 
 )
