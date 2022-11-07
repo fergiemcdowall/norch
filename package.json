@@ -6,7 +6,7 @@
   "dependencies": {
     "commander": "^7.1.0",
     "mime": "^2.5.2",
-    "search-index": "^2.2.0",
+    "search-index": "^3.2.0",
     "swagger-ui-dist": "^3.43.0"
   },
   "devDependencies": {

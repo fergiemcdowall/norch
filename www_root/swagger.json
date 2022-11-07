@@ -21,34 +21,26 @@
       "url": "//localhost:3030/"
     }
   ],
+
   "tags": [
     {
-      "name": "aggregation",
-      "description": "Export and import indices"
+      "name": "delete",
+      "description": "Delete from index"
     },
     {
-      "name": "documents",
-      "description": "Create, update, remove and retrieve documents"
+      "name": "read",
+      "description": "Read from index"
     },
     {
-      "name": "metadata",
-      "description": "Get metadata about your index"
-    },
-    {
-      "name": "values",
-      "description": "Get information about the tokens in the index"
-    },
-    {
-      "name": "replication",
-      "description": "Export and import indices"
+      "name": "write",
+      "description": "Write to index"
     }
   ],
+
   "paths": {
-    "/documents": {
+    "/DOCUMENTS": {
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["read"],
         "summary": "return specified documents",
         "description": "return specified documents",
         "parameters": [
@@ -70,43 +62,13 @@
             "content": {}
           }
         }
-      },
-      
-      "post": {
-        "tags": [
-          "documents"
-        ],
-        "summary": "Add new documents",
-        "description": "TODO...",
-        "requestBody": {
-          "description": "List of Document objects",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {}
-          }
-        },
-        "x-codegen-request-body-name": "documents"
-      },
-      
+      }
+    },
+
+    "/DELETE": {
       "delete": {
-        "tags": [
-          "documents"
-        ],
-        "summary": "delete specified documents",
+        "tags": ["delete"],
+        "summary": "Delete specified documents by id",
         "description": "Delete documents from the index by id",
         "parameters": [
           {
@@ -134,12 +96,40 @@
         }
       }
     },
-    
-    "/documents/all": {
+
+    "/PUT": {
+      "post": {
+        "tags": ["write"],
+        "summary": "Add new documents",
+        "description": "TODO...",
+        "requestBody": {
+          "description": "List of Document objects",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "documents"
+      }
+    },
+
+    "/ALL_DOCUMENTS": {
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["read"],
         "summary": "return all documents",
         "description": "Return all documents",
         "parameters": [
@@ -161,12 +151,10 @@
         }
       }
     },
-    
-    "/documents/count": {
+
+    "/DOCUMENT_COUNT": {
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["read"],
         "summary": "total number of documents",
         "description": "Total number of documents",
         "responses": {
@@ -178,12 +166,24 @@
       }
     },
 
-    "/documents/flush": {
+    "/EXPORT": {
+      "get": {
+        "tags": ["read"],
+        "summary": "Dump index to text",
+        "description": "Dump index to text",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/FLUSH": {
       "delete": {
-        "tags": [
-          "documents"
-        ],
-        "summary": "clear the index (delete all documents)",
+        "tags": ["delete"],
+        "summary": "Clear the index (delete all documents)",
         "description": "TODO",
         "responses": {
           "200": {
@@ -193,17 +193,15 @@
         }
       }
     },
-    
-    "/documents/query": {
+
+    "/QUERY": {
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["read"],
         "summary": "query document index",
         "description": "TODO",
         "parameters": [
           {
-            "name": "query",
+            "name": "TOKEN",
             "in": "query",
             "description": "a search query",
             "schema": {
@@ -225,13 +223,40 @@
         }
       }
     },
-    
-    "/documents/raw": {
 
-      "post": {
-        "tags": [
-          "documents"
+    "/SEARCH": {
+      "get": {
+        "tags": ["read"],
+        "summary": "query document index",
+        "description": "TODO",
+        "parameters": [
+          {
+            "name": "TOKEN",
+            "in": "query",
+            "description": "a search query",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/PUT_RAW": {
+      "post": {
+        "tags": ["write"],
         "summary": "Adds only the raw documents",
         "description": "TODO...",
         "requestBody": {
@@ -256,14 +281,12 @@
           }
         },
         "x-codegen-request-body-name": "documents"
-      },
+      }
     },
 
-    "/aggregate/buckets": {
+    "/BUCKETS": {
       "get": {
-        "tags": [
-          "aggregation"
-        ],
+        "tags": ["read"],
         "summary": "return an aggregation of document ids",
         "description": "TODO: explain what a bucket is",
         "parameters": [
@@ -290,11 +313,10 @@
         }
       }
     },
-    "/aggregate/facets": {
+
+    "/FACETS": {
       "get": {
-        "tags": [
-          "aggregation"
-        ],
+        "tags": ["read"],
         "summary": "return an aggregation of document ids",
         "description": "TODO: explain what a facet is",
         "parameters": [
@@ -315,11 +337,10 @@
         }
       }
     },
-    "/values/dictionary": {
+
+    "/DICTIONARY": {
       "get": {
-        "tags": [
-          "values"
-        ],
+        "tags": ["read"],
         "summary": "returns all tokens in the index",
         "description": "TODO: explain",
         "parameters": [
@@ -341,11 +362,10 @@
         }
       }
     },
-    "/values/distinct": {
+
+    "/DISTINCT": {
       "get": {
-        "tags": [
-          "values"
-        ],
+        "tags": ["read"],
         "summary": "returns distinct tokens per field",
         "description": "TODO: explain (also, why is this different to dictionary)",
         "responses": {
@@ -362,13 +382,23 @@
         }
       }
     },
-    "/values/max": {
+
+    "/MAX": {
       "get": {
-        "tags": [
-          "values"
+        "tags": ["read"],
+        "summary": "Maximum value of a given field",
+        "description": "Get the maximum value of a given field",
+        "parameters": [
+          {
+            "name": "TOKEN",
+            "in": "query",
+            "description": "A field",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
-        "summary": "max alphabetical value per field",
-        "description": "TODO: explain",
+
         "responses": {
           "200": {
             "description": "OK",
@@ -377,13 +407,23 @@
         }
       }
     },
-    "/values/min": {
+
+    "/MIN": {
       "get": {
-        "tags": [
-          "values"
+        "tags": ["read"],
+        "summary": "Minimum value of a given field",
+        "description": "Get the minimum value of a given field",
+        "parameters": [
+          {
+            "name": "TOKEN",
+            "in": "query",
+            "description": "A field",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
-        "summary": "min alphabetical value per field",
-        "description": "TODO: explain",
+
         "responses": {
           "200": {
             "description": "OK",
@@ -392,11 +432,10 @@
         }
       }
     },
-    "/meta/created": {
+
+    "/CREATED": {
       "get": {
-        "tags": [
-          "metadata"
-        ],
+        "tags": ["read"],
         "summary": "timestamp of when the index was created",
         "description": "TODO: explain",
         "responses": {
@@ -413,11 +452,10 @@
         }
       }
     },
-    "/meta/fields": {
+
+    "/FIELDS": {
       "get": {
-        "tags": [
-          "metadata"
-        ],
+        "tags": ["read"],
         "summary": "list of every available fieldname",
         "description": "TODO: explain",
         "responses": {
@@ -434,11 +472,10 @@
         }
       }
     },
+
     "/meta/last-updated": {
       "get": {
-        "tags": [
-          "metadata"
-        ],
+        "tags": ["metadata"],
         "summary": "timestamp of when the index was last updated",
         "description": "TODO: explain",
         "responses": {
@@ -455,26 +492,11 @@
         }
       }
     },
-    "/replicate": {
-      "get": {
-        "tags": [
-          "replication"
-        ],
-        "summary": "export the index",
-        "description": "TODO: explain",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {}
-          }
-        }
-      },
 
+    "/IMPORT": {
       "post": {
-        "tags": [
-          "replication"
-        ],
-        "summary": "import an index",
+        "tags": ["write"],
+        "summary": "import an (entire?) index",
         "description": "TODO...",
         "requestBody": {
           "description": "List of Document objects",
