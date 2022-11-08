@@ -14,13 +14,6 @@ module.exports = (index, sendResponse) => {
 
   // *************
 
-  const del = (req, res) =>
-    index
-      .DELETE([params(req.url).ids].flat())
-      .then(idxRes => sendJSONResponse(idxRes, res))
-
-  const get = (req, res) => res.end('This is GET yo!')
-
   const lastUpdated = (req, res) =>
     index.LAST_UPDATED().then(lu => sendResponse(lu + '', res, 'text/plain'))
 
@@ -38,7 +31,11 @@ module.exports = (index, sendResponse) => {
     CREATED: (req, res) =>
       index.CREATED().then(c => sendResponse(c + '', res, 'text/plain')),
 
-    del: del,
+    DELETE: (req, res) =>
+      index
+        // .DELETE([params(req.url).ids].flat())
+        .DELETE(params(req.url).ids)
+        .then(idxRes => sendJSONResponse(idxRes, res)),
 
     DICTIONARY: (req, res) =>
       index.DICTIONARY().then(d => sendJSONResponse(d, res)),
@@ -67,8 +64,6 @@ module.exports = (index, sendResponse) => {
 
     FLUSH: (req, res) =>
       index.FLUSH().then(idxRes => sendJSONResponse(idxRes, res)),
-
-    get: get,
 
     IMPORT: (req, res) => {
       console.log('in imprt')

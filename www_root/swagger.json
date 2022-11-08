@@ -24,16 +24,20 @@
 
   "tags": [
     {
-      "name": "delete",
-      "description": "Delete from index"
+      "name": "write",
+      "description": "Write to index"
     },
     {
       "name": "read",
       "description": "Read from index"
     },
     {
-      "name": "write",
-      "description": "Write to index"
+      "name": "delete",
+      "description": "Delete from index"
+    },
+    {
+      "name": "other",
+      "description": "Other stuff you can do"
     }
   ],
 
