@@ -66,4 +66,7 @@ module.exports = ops =>
     storeVectors: true
   })
     .then(createServer)
-    .then(server => server.listen(ops.port))
+    .then(server => {
+      server.listen(ops.port)
+      return server
+    })

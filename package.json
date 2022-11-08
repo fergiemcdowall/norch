@@ -12,7 +12,8 @@
   "devDependencies": {
     "browser-run": "^3.3.0",
     "level-out": "^1.0.1",
-    "levelout": "^1.0.0"
+    "levelout": "^1.0.0",
+    "tape": "^5.6.1"
   },
   "repository": {
     "type": "git",

@@ -130,6 +130,14 @@ module.exports = (index, sendResponse) => {
           JSON.parse(params(req.url).TOKEN),
           JSON.parse(params(req.url).ops || '{}')
         )
-        .then(r => sendJSONResponse(r, res))
+        .then(r => sendJSONResponse(r, res)),
+
+    STATUS: (req, res) =>
+      sendJSONResponse(
+        {
+          isAlive: true
+        },
+        res
+      )
   }
 }

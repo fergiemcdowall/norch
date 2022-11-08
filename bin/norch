@@ -5,11 +5,26 @@ const { Command } = require('commander')
 
 const program = new Command()
 
-program.version(require('../package.json').version)
-  .option('-o, --search-index-options <search-index-options>', 'specify search-index options', String, '{}')
-  .option('-p, --port <port>', 'specify the port, defaults to PORT or 3030', Number, 3030)
-  .option('-i, --norch-home <name>', 'specify the name of the directory that stores the data and the logs, defaults to norch-index', String, 'norch-data')
+program
+  .version(require('../package.json').version)
+  .option(
+    '-o, --search-index-options <search-index-options>',
+    'specify search-index options',
+    String,
+    '{}'
+  )
+  .option(
+    '-p, --port <port>',
+    'specify the port, defaults to PORT or 3030',
+    Number,
+    3030
+  )
+  .option(
+    '-i, --norch-home <name>',
+    'specify the name of the directory that stores the data and the logs, defaults to norch-index',
+    String,
+    'norch-data'
+  )
   .parse(process.argv)
 
 norch(program.opts())
-
