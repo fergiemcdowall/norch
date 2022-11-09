@@ -7,7 +7,7 @@
     "commander": "^7.1.0",
     "mime": "^2.5.2",
     "search-index": "^3.3.0",
-    "swagger-ui-dist": "^3.43.0"
+    "swagger-ui-dist": "^4.15.5"
   },
   "devDependencies": {
     "standard": "^17.0.0",
