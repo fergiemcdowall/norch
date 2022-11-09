@@ -6,13 +6,11 @@
   "dependencies": {
     "commander": "^7.1.0",
     "mime": "^2.5.2",
-    "search-index": "^3.2.0",
+    "search-index": "^3.3.0",
     "swagger-ui-dist": "^3.43.0"
   },
   "devDependencies": {
-    "browser-run": "^3.3.0",
-    "level-out": "^1.0.1",
-    "levelout": "^1.0.0",
+    "standard": "^17.0.0",
     "tape": "^5.6.1"
   },
   "repository": {
@@ -34,13 +32,12 @@
     "fergiemcdowall <fergusmcdowall@gmail.com>"
   ],
   "engines": {
-    "node": ">12"
+    "node": ">18"
   },
   "scripts": {
     "build": "rm -rf www_root/openapi && cp -R node_modules/swagger-ui-dist www_root/openapi && sed -i -e 's/https:\\/\\/petstore\\.swagger\\.io\\/v2//' www_root/openapi/index.html",
-    "test": "rm -rf test/sandbox && mkdir test/sandbox && date && tape test/*test.js && npm run test-cli && npm run test-browser && standard --fix",
+    "test": "rm -rf tmp && date && tape test/tape/* && standard --fix src",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
-    "test-browser": "./bin/norch -i test/sandbox/browser-test -p 9999 & tape test/browser/runtest.js && kill $!",
     "start": "node src/main.js"
   },
   "license": "MIT"

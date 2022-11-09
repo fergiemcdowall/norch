@@ -19,9 +19,9 @@
 
       (c) 2013-2021 <b>Fergus McDowall</b>, <a href="#">MIT licenced</a>
 
-      index contains <a href="/document-count" id="document-count">0</a> documents
-      created <a href="/created" id="created"></a>
-      last updated <a href="/last-updated" id="last-updated"></a>
+      index contains <a href="/DOCUMENT_COUNT" id="document-count">0</a> documents
+      created <a href="/CREATED" id="created"></a>
+      last updated <a href="/LAST_UPDATED" id="last-updated"></a>
 
       Try out the <a href="openapi/">API</a>!
       
@@ -29,19 +29,19 @@
 
     <script>
      
-     fetch('/documents/count')
+     fetch('/DOCUMENT_COUNT')
        .then(response => response.text())
        .then(count => {
          document.getElementById('document-count').innerHTML = count
        })
 
-     fetch('/meta/created')
+     fetch('/CREATED')
        .then(response => response.text())
        .then(lc => {
          document.getElementById('created').innerHTML = new Date(+lc).toString()
        })
 
-     fetch('/meta/last-updated')
+     fetch('/LAST_UPDATED')
        .then(response => response.text())
        .then(lc => {
          document.getElementById('last-updated').innerHTML = new Date(+lc).toString()

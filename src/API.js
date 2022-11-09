@@ -1,10 +1,8 @@
-const url = require('url')
-
 module.exports = (index, sendResponse) => {
-  const params = _url =>
-    url.parse(_url, {
-      parseQueryString: true
-    }).query
+  const param = (req, name) =>
+    new URLSearchParams(
+      new URL(req.url, `http://${req.headers.host}/`).search
+    ).get(name)
 
   const sendJSONResponse = (body, res) => {
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -14,18 +12,15 @@ module.exports = (index, sendResponse) => {
 
   // *************
 
-  const lastUpdated = (req, res) =>
-    index.LAST_UPDATED().then(lu => sendResponse(lu + '', res, 'text/plain'))
-
   return {
     ALL_DOCUMENTS: (req, res) =>
       index
-        .ALL_DOCUMENTS(+params(req.url).limit || undefined)
+        .ALL_DOCUMENTS(+param(req, 'limit') || undefined)
         .then(ad => sendJSONResponse(ad, res)),
 
     BUCKETS: (req, res) =>
       index
-        .BUCKETS(...JSON.parse('[' + params(req.url).q + ']'))
+        .BUCKETS(...JSON.parse('[' + param(req, 'q') + ']'))
         .then(b => sendJSONResponse(b, res)),
 
     CREATED: (req, res) =>
@@ -33,8 +28,7 @@ module.exports = (index, sendResponse) => {
 
     DELETE: (req, res) =>
       index
-        // .DELETE([params(req.url).ids].flat())
-        .DELETE(params(req.url).ids)
+        .DELETE(param(req, 'ids'))
         .then(idxRes => sendJSONResponse(idxRes, res)),
 
     DICTIONARY: (req, res) =>
@@ -50,14 +44,14 @@ module.exports = (index, sendResponse) => {
 
     // TODO: DOCUMENTS doesnt seem to work for docs with ID of type int
     DOCUMENTS: (req, res) =>
-      index.DOCUMENTS(params(req.url).ids).then(b => sendJSONResponse(b, res)),
+      index.DOCUMENTS(param(req, 'ids')).then(b => sendJSONResponse(b, res)),
 
     EXPORT: (req, res) =>
       index.EXPORT().then(exp => sendJSONResponse(exp, res)),
 
     FACETS: (req, res) =>
       index
-        .FACETS(JSON.parse(params(req.url).q))
+        .FACETS(JSON.parse(param(req, 'q')))
         .then(b => sendJSONResponse(b, res)),
 
     FIELDS: (req, res) => index.FIELDS().then(f => sendJSONResponse(f, res)),
@@ -67,7 +61,7 @@ module.exports = (index, sendResponse) => {
 
     IMPORT: (req, res) => {
       console.log('in imprt')
-      var body = ''
+      let body = ''
       req.on('data', d => (body += d.toString()))
       req.on('end', () =>
         index
@@ -76,38 +70,33 @@ module.exports = (index, sendResponse) => {
       )
     },
 
-    lastUpdated: lastUpdated,
+    // TODO: move this to STATUS perhaps?
+    LAST_UPDATED: (req, res) =>
+      index.LAST_UPDATED().then(lu => sendResponse(lu + '', res, 'text/plain')),
 
     MAX: (req, res) =>
       index
-        .MAX(JSON.parse(params(req.url).TOKEN))
+        .MAX(JSON.parse(param(req, 'TOKEN')))
         .then(m => sendJSONResponse(m, res)),
 
     MIN: (req, res) =>
       index
-        .MIN(JSON.parse(params(req.url).TOKEN))
+        .MIN(JSON.parse(param(req, 'TOKEN')))
         .then(m => sendJSONResponse(m, res)),
 
-    // TODO: do we still need the formField hack?
     // curl -H "Content-Type: application/json" --data @testdata.json http://localhost:8081/put
-    // if ?form=[fieldName] then read from that form field
     PUT: (req, res) => {
-      const formField = url.parse(req.url, {
-        parseQueryString: true
-      }).query.form
-      var body = ''
+      let body = ''
       req.on('data', d => (body += d.toString()))
       req.on('end', () =>
         index
-          .PUT(
-            JSON.parse(formField ? querystring.decode(body)[formField] : body)
-          )
+          .PUT(JSON.parse(body))
           .then(idxRes => sendJSONResponse(idxRes, res))
       )
     },
 
     PUT_RAW: (req, res) => {
-      var body = ''
+      let body = ''
       req.on('data', d => (body += d.toString()))
       req.on('end', () =>
         index
@@ -119,16 +108,16 @@ module.exports = (index, sendResponse) => {
     QUERY: (req, res) =>
       index
         .QUERY(
-          JSON.parse(params(req.url).TOKEN),
-          JSON.parse(params(req.url).ops || '{}')
+          JSON.parse(param(req, 'TOKEN')),
+          JSON.parse(param(req, 'ops') || '{}')
         )
         .then(r => sendJSONResponse(r, res)),
 
     SEARCH: (req, res) =>
       index
         .SEARCH(
-          JSON.parse(params(req.url).TOKEN),
-          JSON.parse(params(req.url).ops || '{}')
+          JSON.parse(param(req, 'TOKEN')),
+          JSON.parse(param(req, 'ops') || '{}')
         )
         .then(r => sendJSONResponse(r, res)),
 

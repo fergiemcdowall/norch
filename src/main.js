@@ -4,13 +4,12 @@ const http = require('http')
 const mime = require('mime')
 const path = require('path')
 const si = require('search-index')
-const url = require('url')
 
 // ("404: page not found")
 const _404 = (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.writeHead(404)
-  res.end('<html>nothing here bro!</html>')
+  res.end('<html><h1>404</h1>nothing here bro!</html>')
 }
 
 const files = dirs => {
@@ -26,7 +25,7 @@ const files = dirs => {
 
 const sendFileResponse = (name, res) =>
   sendResponse(
-    fs.readFileSync(path.resolve(__dirname + '/../www_root' + name)) + '',
+    fs.readFileSync(path.resolve(__dirname, '../www_root' + name)) + '',
     res,
     mime.getType(name)
   )
@@ -39,26 +38,39 @@ const sendResponse = (body, res, type) => {
 
 const createServer = index =>
   http.createServer((req, res) => {
-    const pathname = url.parse(req.url).pathname
+    const api = API(index, sendResponse)
+    let pathname = new URL(req.url, `http://${req.headers.host}/`).pathname
     console.log(req.method)
     console.log(pathname)
 
-    if (req.method == 'GET') {
+    if (req.method === 'GET') {
       const fileDirs = ['/', '/openapi/']
 
-      // Serve up static files files
-      if (files(fileDirs).includes(pathname))
-        return sendFileResponse(pathname, res)
-
       // default to index.html when only file-directory is specified
-      if (fileDirs.includes(pathname))
-        return sendFileResponse(pathname + 'index.html', res)
+      if (fileDirs.includes(pathname)) pathname += 'index.html'
+
+      console.log('pathname -> ' + pathname)
+      console.log(files(fileDirs))
+      console.log(files(fileDirs))
+
+      // Serve up static files files
+      if (files(fileDirs).includes(pathname)) {
+        console.log('yes it does!')
+        return sendFileResponse(pathname, res)
+      }
+
+      // // default to index.html when only file-directory is specified
+      // if (fileDirs.includes(pathname)) {
+      //   return sendFileResponse('index.html', res)
+      // }
     }
 
-    return API(index, sendResponse)[pathname.slice(1)](req, res)
+    return api[pathname.slice(1)]
+      ? api[pathname.slice(1)](req, res)
+      : _404(req, res)
   })
 
-//create a server object:
+// create a server object:
 module.exports = ops =>
   si({
     ...JSON.parse(ops.searchIndexOptions),
