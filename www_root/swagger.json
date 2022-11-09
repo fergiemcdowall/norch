@@ -10,7 +10,7 @@
       "name": "MIT",
       "url": "https://github.com/fergiemcdowall/search-index/blob/master/LICENSE"
     },
-    "version": "1.0.5"
+    "version": "1.0.0"
   },
   "externalDocs": {
     "description": "Find out more about Swagger",
@@ -34,14 +34,95 @@
     {
       "name": "delete",
       "description": "Delete from index"
-    },
-    {
-      "name": "other",
-      "description": "Other stuff you can do"
     }
   ],
 
   "paths": {
+    "/IMPORT": {
+      "post": {
+        "tags": ["write"],
+        "summary": "import an (entire?) index",
+        "description": "TODO...",
+        "requestBody": {
+          "description": "List of Document objects",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "required": true
+        },
+
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/ALL_DOCUMENTS": {
+      "get": {
+        "tags": ["read"],
+        "summary": "return all documents",
+        "description": "Return all documents",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of documents",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/BUCKETS": {
+      "get": {
+        "tags": ["read"],
+        "summary": "return an aggregation of document ids",
+        "description": "TODO: explain what a bucket is",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "specify buckets",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
     "/DOCUMENTS": {
       "get": {
         "tags": ["read"],
@@ -101,6 +182,51 @@
       }
     },
 
+    "/DICTIONARY": {
+      "get": {
+        "tags": ["read"],
+        "summary": "returns all tokens in the index",
+        "description": "TODO: explain",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of documents",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/DISTINCT": {
+      "get": {
+        "tags": ["read"],
+        "summary": "returns distinct tokens per field",
+        "description": "TODO: explain (also, why is this different to dictionary)",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/PUT": {
       "post": {
         "tags": ["write"],
@@ -131,45 +257,6 @@
       }
     },
 
-    "/ALL_DOCUMENTS": {
-      "get": {
-        "tags": ["read"],
-        "summary": "return all documents",
-        "description": "Return all documents",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "max number of documents",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DOCUMENT_COUNT": {
-      "get": {
-        "tags": ["read"],
-        "summary": "total number of documents",
-        "description": "Total number of documents",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
     "/EXPORT": {
       "get": {
         "tags": ["read"],
@@ -184,11 +271,105 @@
       }
     },
 
+    "/FACETS": {
+      "get": {
+        "tags": ["read"],
+        "summary": "return an aggregation of document ids",
+        "description": "TODO: explain what a facet is",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "The fields to create facets on",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/FIELDS": {
+      "get": {
+        "tags": ["read"],
+        "summary": "list of every available fieldname",
+        "description": "TODO: explain",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/FLUSH": {
       "delete": {
         "tags": ["delete"],
         "summary": "Clear the index (delete all documents)",
         "description": "TODO",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/MAX": {
+      "get": {
+        "tags": ["read"],
+        "summary": "Maximum value of a given field",
+        "description": "Get the maximum value of a given field",
+        "parameters": [
+          {
+            "name": "TOKEN",
+            "in": "query",
+            "description": "A field",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/MIN": {
+      "get": {
+        "tags": ["read"],
+        "summary": "Minimum value of a given field",
+        "description": "Get the minimum value of a given field",
+        "parameters": [
+          {
+            "name": "TOKEN",
+            "in": "query",
+            "description": "A field",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+
         "responses": {
           "200": {
             "description": "OK",
@@ -288,240 +469,35 @@
       }
     },
 
-    "/BUCKETS": {
+    "/STATUS": {
       "get": {
         "tags": ["read"],
-        "summary": "return an aggregation of document ids",
-        "description": "TODO: explain what a bucket is",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "description": "specify buckets",
-            "required": true,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/FACETS": {
-      "get": {
-        "tags": ["read"],
-        "summary": "return an aggregation of document ids",
-        "description": "TODO: explain what a facet is",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "description": "The fields to create facets on",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DICTIONARY": {
-      "get": {
-        "tags": ["read"],
-        "summary": "returns all tokens in the index",
-        "description": "TODO: explain",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "max number of documents",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DISTINCT": {
-      "get": {
-        "tags": ["read"],
-        "summary": "returns distinct tokens per field",
-        "description": "TODO: explain (also, why is this different to dictionary)",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/MAX": {
-      "get": {
-        "tags": ["read"],
-        "summary": "Maximum value of a given field",
-        "description": "Get the maximum value of a given field",
-        "parameters": [
-          {
-            "name": "TOKEN",
-            "in": "query",
-            "description": "A field",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/MIN": {
-      "get": {
-        "tags": ["read"],
-        "summary": "Minimum value of a given field",
-        "description": "Get the minimum value of a given field",
-        "parameters": [
-          {
-            "name": "TOKEN",
-            "in": "query",
-            "description": "A field",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/CREATED": {
-      "get": {
-        "tags": ["read"],
-        "summary": "timestamp of when the index was created",
+        "summary": "info about the index",
         "description": "TODO: explain",
         "responses": {
           "200": {
             "description": "successful operation",
             "content": {
-              "plain/text": {
+              "application/json:": {
                 "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/FIELDS": {
-      "get": {
-        "tags": ["read"],
-        "summary": "list of every available fieldname",
-        "description": "TODO: explain",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "plain/text": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/meta/last-updated": {
-      "get": {
-        "tags": ["metadata"],
-        "summary": "timestamp of when the index was last updated",
-        "description": "TODO: explain",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "plain/text": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/IMPORT": {
-      "post": {
-        "tags": ["write"],
-        "summary": "import an (entire?) index",
-        "description": "TODO...",
-        "requestBody": {
-          "description": "List of Document objects",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "IS_ALIVE": {
+                      "type": "boolean"
+                    },
+                    "CREATED": {
+                      "type": "number"
+                    },
+                    "DOCUMENT_COUNT": {
+                      "type": "number"
+                    },
+                    "LAST_UPDATED": {
+                      "type": "number"
+                    }
+                  }
                 }
               }
             }
-          },
-          "required": true
-        },
-
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {}
           }
         }
       }
@@ -555,25 +531,6 @@
               "LTE": {
                 "type": "string"
               }
-            }
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
-      },
-      "petstore_auth": {
-        "type": "oauth2",
-        "flows": {
-          "implicit": {
-            "authorizationUrl": "https://petstore.swagger.io/oauth/authorize",
-            "scopes": {
-              "read:pets": "read your pets",
-              "write:pets": "modify pets in your account"
             }
           }
         }

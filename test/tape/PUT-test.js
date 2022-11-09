@@ -25,7 +25,7 @@ test('init', t => {
 
 test('is alive', t => {
   t.plan(1)
-  get('STATUS').then(res => t.deepEqual(res, { isAlive: true }))
+  get('STATUS').then(res => t.deepEqual(res.IS_ALIVE, true))
 })
 
 test('FLUSH', t => {

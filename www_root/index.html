@@ -19,34 +19,24 @@
 
       (c) 2013-2021 <b>Fergus McDowall</b>, <a href="#">MIT licenced</a>
 
-      index contains <a href="/DOCUMENT_COUNT" id="document-count">0</a> documents
-      created <a href="/CREATED" id="created"></a>
-      last updated <a href="/LAST_UPDATED" id="last-updated"></a>
+      index contains <a href="/STATUS" id="DOCUMENT_COUNT">0</a> documents
+      created <a href="/STATUS" id="CREATED"></a>
+      last updated <a href="/STATUS" id="LAST_UPDATED"></a>
 
       Try out the <a href="openapi/">API</a>!
       
     </pre>
 
     <script>
-     
-     fetch('/DOCUMENT_COUNT')
-       .then(response => response.text())
-       .then(count => {
-         document.getElementById('document-count').innerHTML = count
-       })
 
-     fetch('/CREATED')
-       .then(response => response.text())
-       .then(lc => {
-         document.getElementById('created').innerHTML = new Date(+lc).toString()
-       })
-
-     fetch('/LAST_UPDATED')
-       .then(response => response.text())
-       .then(lc => {
-         document.getElementById('last-updated').innerHTML = new Date(+lc).toString()
-       })
-     
+      fetch('/STATUS')
+         .then(response => response.json())
+         .then(({ CREATED, DOCUMENT_COUNT, LAST_UPDATED }) => {
+           document.getElementById('DOCUMENT_COUNT').innerHTML = DOCUMENT_COUNT
+           document.getElementById('CREATED').innerHTML = new Date(+CREATED).toString()
+           document.getElementById('LAST_UPDATED').innerHTML = new Date(+LAST_UPDATED).toString()
+         })
+           
     </script>
     
   </body>
