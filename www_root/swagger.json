@@ -24,15 +24,15 @@
 
   "tags": [
     {
-      "name": "write",
+      "name": "WRITE",
       "description": "Write to index"
     },
     {
-      "name": "read",
+      "name": "READ",
       "description": "Read from index"
     },
     {
-      "name": "delete",
+      "name": "DELETE",
       "description": "Delete from index"
     }
   ],
@@ -40,7 +40,7 @@
   "paths": {
     "/IMPORT": {
       "post": {
-        "tags": ["write"],
+        "tags": ["WRITE"],
         "summary": "import an (entire?) index",
         "description": "TODO...",
         "requestBody": {
@@ -70,7 +70,7 @@
 
     "/ALL_DOCUMENTS": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "return all documents",
         "description": "Return all documents",
         "parameters": [
@@ -95,7 +95,7 @@
 
     "/BUCKETS": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "return an aggregation of document ids",
         "description": "TODO: explain what a bucket is",
         "parameters": [
@@ -125,7 +125,7 @@
 
     "/DOCUMENTS": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "return specified documents",
         "description": "return specified documents",
         "parameters": [
@@ -152,7 +152,7 @@
 
     "/DELETE": {
       "delete": {
-        "tags": ["delete"],
+        "tags": ["DELETE"],
         "summary": "Delete specified documents by id",
         "description": "Delete documents from the index by id",
         "parameters": [
@@ -184,7 +184,7 @@
 
     "/DICTIONARY": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "returns all tokens in the index",
         "description": "TODO: explain",
         "parameters": [
@@ -209,7 +209,7 @@
 
     "/DISTINCT": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "returns distinct tokens per field",
         "description": "TODO: explain (also, why is this different to dictionary)",
         "responses": {
@@ -229,7 +229,7 @@
 
     "/PUT": {
       "post": {
-        "tags": ["write"],
+        "tags": ["WRITE"],
         "summary": "Add new documents",
         "description": "TODO...",
         "requestBody": {
@@ -259,7 +259,7 @@
 
     "/EXPORT": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "Dump index to text",
         "description": "Dump index to text",
         "responses": {
@@ -273,7 +273,7 @@
 
     "/FACETS": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "return an aggregation of document ids",
         "description": "TODO: explain what a facet is",
         "parameters": [
@@ -297,7 +297,7 @@
 
     "/FIELDS": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "list of every available fieldname",
         "description": "TODO: explain",
         "responses": {
@@ -317,7 +317,7 @@
 
     "/FLUSH": {
       "delete": {
-        "tags": ["delete"],
+        "tags": ["DELETE"],
         "summary": "Clear the index (delete all documents)",
         "description": "TODO",
         "responses": {
@@ -331,7 +331,7 @@
 
     "/MAX": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "Maximum value of a given field",
         "description": "Get the maximum value of a given field",
         "parameters": [
@@ -356,7 +356,7 @@
 
     "/MIN": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "Minimum value of a given field",
         "description": "Get the minimum value of a given field",
         "parameters": [
@@ -381,7 +381,7 @@
 
     "/QUERY": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "query document index",
         "description": "TODO",
         "parameters": [
@@ -411,7 +411,7 @@
 
     "/SEARCH": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "query document index",
         "description": "TODO",
         "parameters": [
@@ -441,7 +441,7 @@
 
     "/PUT_RAW": {
       "post": {
-        "tags": ["write"],
+        "tags": ["WRITE"],
         "summary": "Adds only the raw documents",
         "description": "TODO...",
         "requestBody": {
@@ -471,7 +471,7 @@
 
     "/STATUS": {
       "get": {
-        "tags": ["read"],
+        "tags": ["READ"],
         "summary": "info about the index",
         "description": "TODO: explain",
         "responses": {
