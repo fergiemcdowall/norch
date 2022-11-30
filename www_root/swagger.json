@@ -21,7 +21,6 @@
       "url": "//localhost:3030/"
     }
   ],
-
   "tags": [
     {
       "name": "WRITE",
@@ -36,502 +35,569 @@
       "description": "Delete from index"
     }
   ],
-
-  "paths": {
-    "/IMPORT": {
-      "post": {
-        "tags": ["WRITE"],
-        "summary": "import an (entire?) index",
-        "description": "TODO...",
-        "requestBody": {
-          "description": "List of Document objects",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
-          },
-          "required": true
-        },
-
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/ALL_DOCUMENTS": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "return all documents",
-        "description": "Return all documents",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "max number of documents",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/BUCKETS": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "return an aggregation of document ids",
-        "description": "TODO: explain what a bucket is",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "description": "specify buckets",
-            "required": true,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DOCUMENTS": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "return specified documents",
-        "description": "return specified documents",
-        "parameters": [
-          {
-            "name": "ids",
-            "in": "query",
-            "description": "document ids",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DELETE": {
-      "delete": {
-        "tags": ["DELETE"],
-        "summary": "Delete specified documents by id",
-        "description": "Delete documents from the index by id",
-        "parameters": [
-          {
-            "name": "ids",
-            "in": "query",
-            "description": "The ids of the documents to be deleted",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "TODO",
-            "content": {}
-          },
-          "404": {
-            "description": "TODO",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DICTIONARY": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "returns all tokens in the index",
-        "description": "TODO: explain",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "max number of documents",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/DISTINCT": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "returns distinct tokens per field",
-        "description": "TODO: explain (also, why is this different to dictionary)",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/PUT": {
-      "post": {
-        "tags": ["WRITE"],
-        "summary": "Add new documents",
-        "description": "TODO...",
-        "requestBody": {
-          "description": "List of Document objects",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {}
-          }
-        },
-        "x-codegen-request-body-name": "documents"
-      }
-    },
-
-    "/EXPORT": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "Dump index to text",
-        "description": "Dump index to text",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/FACETS": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "return an aggregation of document ids",
-        "description": "TODO: explain what a facet is",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "description": "The fields to create facets on",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/FIELDS": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "list of every available fieldname",
-        "description": "TODO: explain",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/FLUSH": {
-      "delete": {
-        "tags": ["DELETE"],
-        "summary": "Clear the index (delete all documents)",
-        "description": "TODO",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/MAX": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "Maximum value of a given field",
-        "description": "Get the maximum value of a given field",
-        "parameters": [
-          {
-            "name": "TOKEN",
-            "in": "query",
-            "description": "A field",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/MIN": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "Minimum value of a given field",
-        "description": "Get the minimum value of a given field",
-        "parameters": [
-          {
-            "name": "TOKEN",
-            "in": "query",
-            "description": "A field",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/QUERY": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "query document index",
-        "description": "TODO",
-        "parameters": [
-          {
-            "name": "TOKEN",
-            "in": "query",
-            "description": "a search query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/SEARCH": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "query document index",
-        "description": "TODO",
-        "parameters": [
-          {
-            "name": "TOKEN",
-            "in": "query",
-            "description": "a search query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/PUT_RAW": {
-      "post": {
-        "tags": ["WRITE"],
-        "summary": "Adds only the raw documents",
-        "description": "TODO...",
-        "requestBody": {
-          "description": "List of Document objects",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {}
-          }
-        },
-        "x-codegen-request-body-name": "documents"
-      }
-    },
-
-    "/STATUS": {
-      "get": {
-        "tags": ["READ"],
-        "summary": "info about the index",
-        "description": "TODO: explain",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json:": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "IS_ALIVE": {
-                      "type": "boolean"
-                    },
-                    "CREATED": {
-                      "type": "number"
-                    },
-                    "DOCUMENT_COUNT": {
-                      "type": "number"
-                    },
-                    "LAST_UPDATED": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
+    "parameters": {
+      "TokenSpace": {
+        "name": "TOKENSPACE",
+        "in": "query",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Token"
+            }
+          }
+        },
+        "description": "Describes a single tokenspace"
+      },
+      "TokenSpaces": {
+        "name": "TOKENSPACE",
+        "in": "query",
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Token"
+          }
+        },
+        "description": "Describes one or many tokenspaces"
+      },
+      "Ids": {
+        "name": "ID",
+        "in": "query",
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Id"
+          }
+        },
+        "description": "One or many Ids, each of which describes a document"
+      },
+      "Limit": {
+        "name": "LIMIT",
+        "in": "query",
+        "schema": {
+          "type": "number",
+          "default": 10
+        },
+        "description": "Limits the amount of results returned"
+      }
+    },
     "schemas": {
       "Document": {
         "type": "object",
         "properties": {
           "_id": {
             "type": "string"
-          },
-          "otherFields": {
-            "type": "string"
           }
         }
+      },
+      "Id": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          }
+        ]
       },
       "Token": {
         "type": "object",
         "properties": {
           "FIELD": {
-            "type": "string"
-          },
-          "VALUE": {
-            "type": "object",
-            "properties": {
-              "GTE": {
+            "oneOf": [
+              {
                 "type": "string"
               },
-              "LTE": {
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "VALUE": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "GTE": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  },
+                  "LTE": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
                 "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/ALL_DOCUMENTS": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Return all documents in the index",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of documents"
+          }
+        }
+      }
+    },
+    "/BUCKETS": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Aggregate documents into predefined buckets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenSpaces"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of buckets"
+          }
+        }
+      }
+    },
+    "/DELETE": {
+      "delete": {
+        "tags": [
+          "DELETE"
+        ],
+        "summary": "Delete specified documents by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Ids"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted"
+          }
+        }
+      }
+    },
+    "/DICTIONARY": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Returns tokens described by TOKENSPACE",
+        "description": "If no TOKENSPACE is described, return all tokens in index. DICTIONARY returns only the tokens, whereas DISTINCT returns field-token pairs",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/TokenSpace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of tokens"
+          }
+        }
+      }
+    },
+    "/DISTINCT": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Returns all field-token pairs in the given TOKENSPACE",
+        "description": "If no TOKENSPACE is described, return all field-token pairs in the index. DICTIONARY returns only the tokens, whereas DISTINCT returns field-token pairs.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/TokenSpace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of field-token pairs"
+          }
+        }
+      }
+    },
+    "/DOCUMENTS": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Returns all documents with the given ids",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Ids"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of documents"
+          }
+        }
+      }
+    },
+    "/EXPORT": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Dumps the index to text",
+        "description": "See also IMPORT",
+        "responses": {
+          "200": {
+            "description": "A dump of the index"
+          }
+        }
+      }
+    },
+    "/FACETS": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Aggregate documents into their distinct values",
+        "description": "Take every unique field-value pair of a TOKENSPACE and return every document for which that field-value pair is present",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenSpaces"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of facets"
+          }
+        }
+      }
+    },
+    "/FIELDS": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Return all field names known to the index",
+        "responses": {
+          "200": {
+            "description": "An array of field names"
+          }
+        }
+      }
+    },
+    "/FLUSH": {
+      "delete": {
+        "tags": [
+          "DELETE"
+        ],
+        "summary": "Delete everything in the index",
+        "responses": {
+          "200": {
+            "description": "Successfully deleted"
+          }
+        }
+      }
+    },
+    "/IMPORT": {
+      "post": {
+        "tags": [
+          "WRITE"
+        ],
+        "summary": "Import an index",
+        "responses": {
+          "200": {
+            "description": "Successfully imported"
+          }
+        }
+      }
+    },
+    "/MAX": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Get maximum value from the given TOKENSPACE",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenSpace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The maximum value"
+          }
+        }
+      }
+    },
+    "/MIN": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Get minimum value from the given TOKENSPACE",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenSpace"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The minimum value"
+          }
+        }
+      }
+    },
+    "/PUT": {
+      "post": {
+        "tags": [
+          "WRITE"
+        ],
+        "summary": "Add documents to the index",
+        "requestBody": {
+          "description": "Optional description in *Markdown*",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Document"
+                }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully imported"
+          }
+        }
+      }
+    },
+    "/PUT_RAW": {
+      "post": {
+        "tags": [
+          "WRITE"
+        ],
+        "summary": "Add documents to the index",
+        "requestBody": {
+          "description": "Adds a raw file that is not tokenized or indexed",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully imported"
+          }
+        }
+      }
+    },
+    "/QUERY": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Query the index",
+        "description": "Query objects can be composed of any combination of boolean verbs (AND, OR, NOT) combined with query options",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "QUERY",
+            "schema": {
+              "type": "object"
+            },
+            "description": "# Describes a QUERY\n\n#### ALL_DOCUMENTS\n\n```javascript\n// returns all documents. Use PAGE to limit how many you see\n{\n  ALL_DOCUMENTS: true\n}\n```\n\n#### AND\n\n```javascript\n// Boolean AND: Return results that contain all tokens\n{\n  AND: [ token1, token2, ... ]\n}\n```\n\n#### NOT\n\n```javascript\n{\n  INCLUDE: queryExpression1,\n  EXCLUDE: queryExpression2\n}\n```\n\n\n#### OR\n\n```javascript\n// Boolean OR: Return results that contain one or more tokens\n{\n  OR: [ token1, token2, ... ]\n}\n```\n\nQuery verbs can be nested to create powerful expressions:\n```javascript\n// Example: AND with a nested OR with a nested AND\n{\n  AND: [ token1, token2, {\n    OR: [ token3, {\n      AND: [ token4, token5 ]\n    }]\n  }]\n}\n```\n"
+          },
+          {
+            "in": "query",
+            "name": "BUCKETS",
+            "style": "form",
+            "explode": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Token"
+                  }
+                }
+              }
+            },
+            "description": "Describes one or many BUCKETs"
+          },
+          {
+            "in": "query",
+            "name": "DOCUMENTS",
+            "schema": {
+              "type": "boolean"
+            },
+            "default": false,
+            "description": "Attach document to result"
+          },
+          {
+            "in": "query",
+            "name": "FACETS",
+            "style": "form",
+            "explode": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Token"
+                  }
+                }
+              }
+            },
+            "description": "Describes one or many FACETs"
+          },
+          {
+            "in": "query",
+            "name": "PAGE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "default": {
+              "NUMBER": 0,
+              "SIZE": 20
+            },
+            "description": "Pagination"
+          },
+          {
+            "in": "query",
+            "name": "SCORE",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CONCAT",
+                "PRODUCT",
+                "SUM",
+                "TFIDF",
+                "VALUE"
+              ]
+            },
+            "default": "TFIDF",
+            "description": "Scoring schemes:\n * `CONCAT` - Concatenate values together\n * `PRODUCT` - Multiply values together\n * `SUM` - Add values up\n * `TFIDF` - Determine TFIDF score\n * `VALUE` - Set score to be the value itself\n"
+          },
+          {
+            "in": "query",
+            "name": "SORT",
+            "style": "form",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "TYPE": {
+                      "type": "string",
+                      "enum": [
+                        "NUMERIC",
+                        "ALPHABETIC"
+                      ],
+                      "default": "NUMERIC"
+                    },
+                    "DIRECTION": {
+                      "type": "string",
+                      "enum": [
+                        "ASCENDING",
+                        "DESCENDING"
+                      ],
+                      "default": "DESCENDING"
+                    },
+                    "FIELD": {
+                      "type": "string",
+                      "default": "_score"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Describes how the results will be sorted"
+          },
+          {
+            "in": "query",
+            "name": "WEIGHT",
+            "style": "form",
+            "explode": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "FIELD": {
+                        "type": "string"
+                      },
+                      "VALUE": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "WEIGHT": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Describes how the results will be weighted"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A query result"
           }
         }
       }

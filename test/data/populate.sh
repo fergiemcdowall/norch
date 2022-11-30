@@ -11,4 +11,4 @@ done
 curl -H "Content-Type: application/json" --data @$datafile $serverroot/PUT
 
 # for example:
-# curl -H "Content-Type: application/json" --data @data.json http://localhost:3030
+# ./populate.sh -d "./MOCK_DATA_1.json" -s "http://localhost:3030"
