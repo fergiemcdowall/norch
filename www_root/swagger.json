@@ -37,6 +37,135 @@
   ],
   "components": {
     "parameters": {
+      "Buckets": {
+        "in": "query",
+        "name": "BUCKETS",
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Token"
+          }
+        },
+        "description": "Describes one or many BUCKETs"
+      },
+      "Documents": {
+        "in": "query",
+        "name": "DOCUMENTS",
+        "schema": {
+          "type": "boolean"
+        },
+        "default": false,
+        "description": "Attach document to result"
+      },
+      "Facets": {
+        "in": "query",
+        "name": "FACETS",
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Token"
+          }
+        },
+        "description": "Describes one or many FACETs"
+      },
+      "Ids": {
+        "name": "ID",
+        "in": "query",
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Id"
+          }
+        },
+        "description": "One or many Ids, each of which describes a document"
+      },
+      "Limit": {
+        "name": "LIMIT",
+        "in": "query",
+        "schema": {
+          "type": "number",
+          "default": 10
+        },
+        "description": "Limits the amount of results returned"
+      },
+      "Page": {
+        "name": "PAGE",
+        "in": "query",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "NUMBER": {
+                  "type": "integer"
+                },
+                "SIZE": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "default": {
+          "NUMBER": 0,
+          "SIZE": 20
+        },
+        "description": "Pagination"
+      },
+      "Score": {
+        "in": "query",
+        "name": "SCORE",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "TYPE": {
+                  "type": "string",
+                  "default": "TFIDF"
+                }
+              }
+            }
+          }
+        },
+        "description": "TODO: can sort also be boolean `true`?\nScoring schemes:\n * `CONCAT` - Concatenate values together\n * `PRODUCT` - Multiply values together\n * `SUM` - Add values up\n * `TFIDF` - Determine TFIDF score\n * `VALUE` - Set score to be the value itself\n\nYou can also optionally specify an array of FIELDs to score on:\n```javascript\n// EXAMPLE: specify fields to score on\n{\n  TYPE: 'CONCAT',\n  FIELDS: [ 'lat', 'lon' ]\n}\n```\n"
+      },
+      "Sort": {
+        "in": "query",
+        "name": "SORT",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "TYPE": {
+                  "type": "string",
+                  "default": "NUMERIC"
+                },
+                "DIRECTION": {
+                  "type": "string",
+                  "enum": [
+                    "ASCENDING",
+                    "DESCENDING"
+                  ],
+                  "default": "DESCENDING"
+                },
+                "FIELD": {
+                  "type": "string",
+                  "default": "_score"
+                }
+              }
+            }
+          }
+        },
+        "description": "Describes how the results will be sorted"
+      },
       "TokenSpace": {
         "name": "TOKENSPACE",
         "in": "query",
@@ -62,27 +191,36 @@
         },
         "description": "Describes one or many tokenspaces"
       },
-      "Ids": {
-        "name": "ID",
+      "Weight": {
         "in": "query",
+        "name": "WEIGHT",
         "style": "form",
         "explode": true,
         "schema": {
           "type": "array",
           "items": {
-            "$ref": "#/components/schemas/Id"
+            "type": "object",
+            "properties": {
+              "FIELD": {
+                "type": "string"
+              },
+              "VALUE": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "WEIGHT": {
+                "type": "number"
+              }
+            }
           }
         },
-        "description": "One or many Ids, each of which describes a document"
-      },
-      "Limit": {
-        "name": "LIMIT",
-        "in": "query",
-        "schema": {
-          "type": "number",
-          "default": 10
-        },
-        "description": "Limits the amount of results returned"
+        "description": "Describes how the results will be weighted"
       }
     },
     "schemas": {
@@ -90,7 +228,7 @@
         "type": "object",
         "properties": {
           "_id": {
-            "type": "string"
+            "$ref": "#/components/schemas/Id"
           }
         }
       },
@@ -444,160 +582,102 @@
           {
             "in": "query",
             "name": "QUERY",
-            "schema": {
-              "type": "object"
-            },
-            "description": "# Describes a QUERY\n\n#### ALL_DOCUMENTS\n\n```javascript\n// returns all documents. Use PAGE to limit how many you see\n{\n  ALL_DOCUMENTS: true\n}\n```\n\n#### AND\n\n```javascript\n// Boolean AND: Return results that contain all tokens\n{\n  AND: [ token1, token2, ... ]\n}\n```\n\n#### NOT\n\n```javascript\n{\n  INCLUDE: queryExpression1,\n  EXCLUDE: queryExpression2\n}\n```\n\n\n#### OR\n\n```javascript\n// Boolean OR: Return results that contain one or more tokens\n{\n  OR: [ token1, token2, ... ]\n}\n```\n\nQuery verbs can be nested to create powerful expressions:\n```javascript\n// Example: AND with a nested OR with a nested AND\n{\n  AND: [ token1, token2, {\n    OR: [ token3, {\n      AND: [ token4, token5 ]\n    }]\n  }]\n}\n```\n"
-          },
-          {
-            "in": "query",
-            "name": "BUCKETS",
-            "style": "form",
-            "explode": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Token"
-                  }
-                }
-              }
-            },
-            "description": "Describes one or many BUCKETs"
-          },
-          {
-            "in": "query",
-            "name": "DOCUMENTS",
-            "schema": {
-              "type": "boolean"
-            },
-            "default": false,
-            "description": "Attach document to result"
-          },
-          {
-            "in": "query",
-            "name": "FACETS",
-            "style": "form",
-            "explode": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Token"
-                  }
-                }
-              }
-            },
-            "description": "Describes one or many FACETs"
-          },
-          {
-            "in": "query",
-            "name": "PAGE",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "default": {
-              "NUMBER": 0,
-              "SIZE": 20
-            },
-            "description": "Pagination"
-          },
-          {
-            "in": "query",
-            "name": "SCORE",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "CONCAT",
-                "PRODUCT",
-                "SUM",
-                "TFIDF",
-                "VALUE"
-              ]
-            },
-            "default": "TFIDF",
-            "description": "Scoring schemes:\n * `CONCAT` - Concatenate values together\n * `PRODUCT` - Multiply values together\n * `SUM` - Add values up\n * `TFIDF` - Determine TFIDF score\n * `VALUE` - Set score to be the value itself\n"
-          },
-          {
-            "in": "query",
-            "name": "SORT",
-            "style": "form",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "TYPE": {
-                      "type": "string",
-                      "enum": [
-                        "NUMERIC",
-                        "ALPHABETIC"
-                      ],
-                      "default": "NUMERIC"
-                    },
-                    "DIRECTION": {
-                      "type": "string",
-                      "enum": [
-                        "ASCENDING",
-                        "DESCENDING"
-                      ],
-                      "default": "DESCENDING"
-                    },
-                    "FIELD": {
-                      "type": "string",
-                      "default": "_score"
-                    }
+                  "default": {
+                    "ALL_DOCUMENTS": -1
                   }
                 }
               }
             },
-            "description": "Describes how the results will be sorted"
+            "description": "# Describes a QUERY\n\n#### ALL_DOCUMENTS\n\n```javascript\n// returns all documents. Use PAGE to limit how many you see\n{\n  ALL_DOCUMENTS: true\n}\n```\n\n#### AND\n\n```javascript\n// Boolean AND: Return results that contain all tokens\n{\n  AND: [ token1, token2, ... ]\n}\n```\n\n#### NOT\n\n```javascript\n{\n  INCLUDE: queryExpression1,\n  EXCLUDE: queryExpression2\n}\n```\n\n\n#### OR\n\n```javascript\n// Boolean OR: Return results that contain one or more tokens\n{\n  OR: [ token1, token2, ... ]\n}\n```\n\nQuery verbs can be nested to create powerful expressions:\n```javascript\n// Example: AND with a nested OR with a nested AND\n{\n  AND: [ token1, token2, {\n    OR: [ token3, {\n      AND: [ token4, token5 ]\n    }]\n  }]\n}\n```\n"
           },
           {
-            "in": "query",
-            "name": "WEIGHT",
-            "style": "form",
-            "explode": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "FIELD": {
-                        "type": "string"
-                      },
-                      "VALUE": {
-                        "oneOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          }
-                        ]
-                      },
-                      "WEIGHT": {
-                        "type": "number"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "description": "Describes how the results will be weighted"
+            "$ref": "#/components/parameters/Buckets"
+          },
+          {
+            "$ref": "#/components/parameters/Documents"
+          },
+          {
+            "$ref": "#/components/parameters/Facets"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/Score"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Weight"
           }
         ],
         "responses": {
           "200": {
             "description": "A query result"
+          }
+        }
+      }
+    },
+    "/SEARCH": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Search the index",
+        "description": "This is a utility endpoint equivalent to\n`?QUERY={AND:[\"search\",\"terms\"]}&SCORE=TFIDF&SORT=true`\n",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "STRING",
+            "schema": {
+              "type": "string"
+            },
+            "description": "STRING is split on whitespace so that `?STRING=search terms` is\nequivalent to `?STRING={AND: ['search', 'terms']}`\n"
+          },
+          {
+            "$ref": "#/components/parameters/Buckets"
+          },
+          {
+            "$ref": "#/components/parameters/Documents"
+          },
+          {
+            "$ref": "#/components/parameters/Facets"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/Score"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Weight"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A search result"
+          }
+        }
+      }
+    },
+    "/STATUS": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Display information about the index",
+        "description": "Display information about the index",
+        "responses": {
+          "200": {
+            "description": "Information about the index"
           }
         }
       }

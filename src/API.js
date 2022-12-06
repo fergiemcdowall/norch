@@ -1,7 +1,12 @@
 const params = (req, name) =>
   new URLSearchParams(new URL(req.url, `http://${req.headers.host}/`).search)
     .getAll(name)
-    .map(JSON.parse)
+    .map(item => {
+      try {
+        item = JSON.parse(item)
+      } catch (e) {}
+      return item
+    })
 
 const param = (req, name) => params(req, name)[0]
 
@@ -300,8 +305,11 @@ module.exports = (index, sendResponse) => ({
    *     parameters:
    *       - in: query
    *         name: QUERY
-   *         schema:
-   *           type: object
+   *         content:
+   *           'application/json':
+   *             schema:
+   *               type: object
+   *               default: { ALL_DOCUMENTS: -1 }
    *         description: |
    *           # Describes a QUERY
    *
@@ -353,135 +361,79 @@ module.exports = (index, sendResponse) => ({
    *             }]
    *           }
    *           ```
-   *
-   *       - in: query
-   *         name: BUCKETS
-   *         style: form
-   *         explode: true
-   *         content:
-   *           'application/json':
-   *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/Token'
-   *         description: Describes one or many BUCKETs
-   *       - in: query
-   *         name: DOCUMENTS
-   *         schema:
-   *           type: boolean
-   *         default: false
-   *         description: Attach document to result
-   *       - in: query
-   *         name: FACETS
-   *         style: form
-   *         explode: true
-   *         content:
-   *           'application/json':
-   *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/Token'
-   *         description: Describes one or many FACETs
-   *       - in: query
-   *         name: PAGE
-   *         content:
-   *           'application/json':
-   *             schema:
-   *               type: object
-   *         default: {NUMBER: 0, SIZE: 20}
-   *         description: Pagination
-   *       - in: query
-   *         name: SCORE
-   *         schema:
-   *           type: string
-   *           enum:
-   *             - CONCAT
-   *             - PRODUCT
-   *             - SUM
-   *             - TFIDF
-   *             - VALUE
-   *         default: 'TFIDF'
-   *         description: >
-   *           Scoring schemes:
-   *            * `CONCAT` - Concatenate values together
-   *            * `PRODUCT` - Multiply values together
-   *            * `SUM` - Add values up
-   *            * `TFIDF` - Determine TFIDF score
-   *            * `VALUE` - Set score to be the value itself
-   *       - in: query
-   *         name: SORT
-   *         style: form
-   *         content:
-   *           'application/json':
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 TYPE:
-   *                   type: string
-   *                   enum:
-   *                     - NUMERIC
-   *                     - ALPHABETIC
-   *                   default: NUMERIC
-   *                 DIRECTION:
-   *                   type: string
-   *                   enum:
-   *                     - ASCENDING
-   *                     - DESCENDING
-   *                   default: DESCENDING
-   *                 FIELD:
-   *                   type: string
-   *                   default: _score
-   *         description: Describes how the results will be sorted
-   *       - in: query
-   *         name: WEIGHT
-   *         style: form
-   *         explode: true
-   *         content:
-   *           'application/json':
-   *             schema:
-   *               type: array
-   *               items:
-   *                 type: object
-   *                 properties:
-   *                   FIELD:
-   *                     type: string
-   *                   VALUE:
-   *                     oneOf:
-   *                       - type: string
-   *                       - type: number
-   *                   WEIGHT:
-   *                     type: number
-   *         description: Describes how the results will be weighted
+   *       - $ref: '#/components/parameters/Buckets'
+   *       - $ref: '#/components/parameters/Documents'
+   *       - $ref: '#/components/parameters/Facets'
+   *       - $ref: '#/components/parameters/Page'
+   *       - $ref: '#/components/parameters/Score'
+   *       - $ref: '#/components/parameters/Sort'
+   *       - $ref: '#/components/parameters/Weight'
    *     responses:
    *       200:
    *         description: A query result
    */
-  QUERY: (req, res) => {
-    console.log('in query ->')
-    let q = param(req, 'QUERY')
-    console.log(q)
-
-    return index
-      .QUERY(q, {
-        BUCKETS: param(req, 'BUCKETS'),
+  QUERY: (req, res) =>
+    index
+      .QUERY(param(req, 'QUERY'), {
+        BUCKETS: params(req, 'BUCKETS'),
         DOCUMENTS: param(req, 'DOCUMENTS'),
-        FACETS: param(req, 'FACETS'),
+        // // TODO: option to suppress empty facets?
+        FACETS: params(req, 'FACETS').length
+          ? params(req, 'FACETS')
+          : undefined,
         PAGE: param(req, 'PAGE'),
-        //TODO: PIPELINE!
+        // //TODO: PIPELINE!
         SCORE: param(req, 'SCORE'),
         SORT: param(req, 'SORT')
       })
-      .then(r => sendJSONResponse(r, res))
-  },
-
-  SEARCH: (req, res) =>
-    index
-      .SEARCH(
-        JSON.parse(params(req, 'TOKEN')),
-        JSON.parse(params(req, 'ops') || '{}')
-      )
       .then(r => sendJSONResponse(r, res)),
 
+  /**
+   * @openapi
+   * /SEARCH:
+   *   get:
+   *     tags: [READ]
+   *     summary: Search the index
+   *     description: |
+   *       This is a utility endpoint equivalent to
+   *       `?QUERY={AND:["search","terms"]}&SCORE=TFIDF&SORT=true`
+   *     parameters:
+   *       - in: query
+   *         name: STRING
+   *         schema:
+   *           type: string
+   *         description: |
+   *           STRING is split on whitespace so that `?STRING=search terms` is
+   *           equivalent to `?STRING={AND: ['search', 'terms']}`
+   *       - $ref: '#/components/parameters/Buckets'
+   *       - $ref: '#/components/parameters/Documents'
+   *       - $ref: '#/components/parameters/Facets'
+   *       - $ref: '#/components/parameters/Page'
+   *       - $ref: '#/components/parameters/Score'
+   *       - $ref: '#/components/parameters/Sort'
+   *       - $ref: '#/components/parameters/Weight'
+   *     responses:
+   *       200:
+   *         description: A search result
+   */
+  SEARCH: (req, res) =>
+    index
+      .SEARCH(param(req, 'STRING').trim().split(/\s+/), {
+        PAGE: param(req, 'PAGE')
+      })
+      .then(r => sendJSONResponse(r, res)),
+
+  /**
+   * @openapi
+   * /STATUS:
+   *   get:
+   *     tags: [READ]
+   *     summary: Display information about the index
+   *     description: Display information about the index
+   *     responses:
+   *       200:
+   *         description: Information about the index
+   */
   STATUS: (req, res) =>
     Promise.all([
       index.LAST_UPDATED(),
