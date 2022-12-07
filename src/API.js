@@ -443,9 +443,11 @@ module.exports = (index, sendResponse) => ({
       sendJSONResponse(
         {
           IS_ALIVE: true,
-          CREATED,
           DOCUMENT_COUNT,
-          LAST_UPDATED
+          // Update these lines when https://github.com/fergiemcdowall/search-index/issues/600
+          // is rolled out
+          CREATED: new Date(CREATED).toISOString(),
+          LAST_UPDATED: new Date(LAST_UPDATED).toISOString()
         },
         res
       )
