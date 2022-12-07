@@ -40,7 +40,7 @@
     "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js",
     "test": "rm -rf tmp && date && tape test/tape/* && standard --fix src",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
-    "start": "node src/main.js"
+    "start": "./bin/norch"
   },
   "license": "MIT"
 }

@@ -59,6 +59,37 @@ const createServer = index =>
       : _404(req, res)
   })
 
+const splash = index =>
+  Promise.all([
+    index.LAST_UPDATED(),
+    index.CREATED(),
+    index.DOCUMENT_COUNT()
+  ]).then(res => {
+    console.log(
+      `
+      ___           ___           ___           ___           ___      
+     /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\     
+    /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /     
+   /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/      
+  /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___  
+ /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\ 
+ \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  / 
+     |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /  
+     |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /   
+     /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /    
+     \\/__/         \\/__/         \\|__|         \\/__/         \\/__/   
+
+      (c) 2013-2021 \x1b[1mFergus McDowall\x1b[0m
+
+      index contains \x1b[1m${res[2]}\x1b[0m documents
+      created ${new Date(res[1]).toISOString()}
+      last updated ${new Date(res[0]).toISOString()}
+
+  `
+    )
+    return index
+  })
+
 // create a server object:
 module.exports = ops =>
   si({
@@ -66,6 +97,7 @@ module.exports = ops =>
     name: ops.norchHome,
     storeVectors: true
   })
+    .then(splash)
     .then(createServer)
     .then(server => {
       server.listen(ops.port)
