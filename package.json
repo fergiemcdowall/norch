@@ -5,12 +5,11 @@
   "main": "./lib/norch",
   "dependencies": {
     "commander": "^7.1.0",
-    "level-out": "^1.0.1",
     "mime": "^2.5.2",
-    "search-index": "^3.3.0",
-    "swagger-ui-dist": "^4.15.5"
+    "search-index": "^3.3.0"
   },
   "devDependencies": {
+    "level-out": "^1.0.1",
     "standard": "^17.0.0",
     "swagger-jsdoc": "^6.2.5",
     "tape": "^5.6.1"
@@ -38,7 +37,7 @@
   },
   "scripts": {
     "build": "npm run build-openapi-docs",
-    "build-openapi-docs": "rm -rf www_root/openapi && cp -R node_modules/swagger-ui-dist www_root/openapi && node src/buildSwaggerDoc.js && sed -i -e 's/https:\\/\\/petstore\\.swagger\\.io\\/v2//' www_root/openapi/swagger-initializer.js",
+    "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js",
     "test": "rm -rf tmp && date && tape test/tape/* && standard --fix src",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "node src/main.js"
