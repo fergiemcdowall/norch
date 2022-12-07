@@ -282,6 +282,6 @@ const openapiSpecification = swaggerJsdoc(options)
 // console.log(JSON.stringify(openapiSpecification, null, 2))
 
 fs.writeFileSync(
-  'www_root/openapi/openapi.json',
+  'www_root/openapi.json',
   JSON.stringify(openapiSpecification, null, 2)
 )

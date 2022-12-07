@@ -43,13 +43,15 @@ const createServer = index =>
     console.info(pathname)
 
     if (req.method === 'GET') {
-      const fileDirs = ['/', '/openapi/']
+      const fileDirs = ['/']
 
       // default to index.html when only file-directory is specified
       if (fileDirs.includes(pathname)) pathname += 'index.html'
 
       // Serve up static files files
-      if (files(fileDirs).includes(pathname)) { return sendFileResponse(pathname, res) }
+      if (files(fileDirs).includes(pathname)) {
+        return sendFileResponse(pathname, res)
+      }
     }
 
     return api[pathname.slice(1)]
