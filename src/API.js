@@ -264,7 +264,7 @@ module.exports = (index, sendResponse) => ({
     )
   },
 
-  //TODO: how to deal with PUT pipelines?
+  // TODO: how to deal with PUT pipelines?
 
   /**
    * @openapi
