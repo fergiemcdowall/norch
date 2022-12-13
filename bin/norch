@@ -20,11 +20,13 @@ program
     3030
   )
   .option(
-    '-i, --norch-home <name>',
-    'specify the name of the directory that stores the data and the logs, defaults to norch-index',
+    '-d, --data <data>',
+    'specify the name of the directory that stores the data, defaults to norch-data',
     String,
     'norch-data'
   )
   .parse(process.argv)
+
+// console.log(program.opts())
 
 norch(program.opts())

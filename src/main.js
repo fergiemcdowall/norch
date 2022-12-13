@@ -94,7 +94,7 @@ const splash = index =>
 module.exports = ops =>
   si({
     ...JSON.parse(ops.searchIndexOptions),
-    name: ops.norchHome,
+    name: ops.data,
     storeVectors: true
   })
     .then(splash)

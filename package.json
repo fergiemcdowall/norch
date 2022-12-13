@@ -39,7 +39,7 @@
     "build": "npm run build-openapi-docs",
     "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js",
     "lint": "standard --fix src",
-    "test": "rm -rf tmp && date && tape test/tape/* && npm run lint",
+    "test": "export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && node test/*-test.js && npm run lint",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"
   },
