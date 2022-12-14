@@ -18,6 +18,7 @@
     "type": "git",
     "url": "https://github.com/fergiemcdowall/norch.git"
   },
+  "homepage": "https://github.com/fergiemcdowall/norch",
   "keywords": [
     "elasticsearch",
     "search",
@@ -33,7 +34,7 @@
     "fergiemcdowall <fergusmcdowall@gmail.com>"
   ],
   "engines": {
-    "node": ">18"
+    "node": ">=18"
   },
   "scripts": {
     "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js && npm run lint",
