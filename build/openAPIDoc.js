@@ -6,14 +6,17 @@ const swaggerDefinition = {
   openapi: '3.0.1',
   info: {
     title: 'Norch',
-    description: 'This is your Norch server. Add documents. Find them again.',
+    description:
+      'This is the API documentation for norch@' +
+      norchVersion +
+      '. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than localhost, fill out the URL of your server in the server variable input box below labeled "yourNorchServerURL"',
     contact: {
       email: 'fergus@norch.io'
     },
-    license: {
-      name: 'MIT',
-      url: 'https://github.com/fergiemcdowall/search-index/blob/master/LICENSE'
-    },
+    // license: {
+    //   name: 'MIT',
+    //   url: 'https://github.com/fergiemcdowall/search-index/blob/master/LICENSE'
+    // },
     version: norchVersion
   },
   externalDocs: {
@@ -22,7 +25,12 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: '//localhost:3030/'
+      url: '{yourNorchServerURL}',
+      variables: {
+        yourNorchServerURL: {
+          default: 'http://localhost:3030'
+        }
+      }
     }
   ],
   tags: [
@@ -273,16 +281,14 @@ const swaggerDefinition = {
   }
 }
 
-const options = {
-  swaggerDefinition,
-  apis: ['src/API.js']
-}
-
-const openapiSpecification = swaggerJsdoc(options)
-
-// console.log(JSON.stringify(openapiSpecification, null, 2))
-
 fs.writeFileSync(
   'www_root/openapi-norch-' + norchVersion + '.json',
-  JSON.stringify(openapiSpecification, null, 2)
+  JSON.stringify(
+    swaggerJsdoc({
+      swaggerDefinition,
+      apis: ['src/API.js']
+    }),
+    null,
+    2
+  )
 )

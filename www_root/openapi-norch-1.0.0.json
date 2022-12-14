@@ -2,13 +2,9 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Norch",
-    "description": "This is your Norch server. Add documents. Find them again.",
+    "description": "This is the API documentation for norch@1.0.0. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than localhost, fill out the URL of your server in the server variable input box below labeled \"yourNorchServerURL\"",
     "contact": {
       "email": "fergus@norch.io"
-    },
-    "license": {
-      "name": "MIT",
-      "url": "https://github.com/fergiemcdowall/search-index/blob/master/LICENSE"
     },
     "version": "1.0.0"
   },
@@ -18,7 +14,12 @@
   },
   "servers": [
     {
-      "url": "//localhost:3030/"
+      "url": "{yourNorchServerURL}",
+      "variables": {
+        "yourNorchServerURL": {
+          "default": "http://localhost:3030"
+        }
+      }
     }
   ],
   "tags": [
