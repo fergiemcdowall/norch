@@ -7,9 +7,9 @@ const swaggerDefinition = {
   info: {
     title: 'Norch',
     description:
-      'This is the API documentation for norch@' +
+      'This is the API documentation for `norch@' +
       norchVersion +
-      '. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than localhost, fill out the URL of your server in the server variable input box below labeled "yourNorchServerURL"',
+      '`. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than `localhost`, fill out the server variable below in the input box labeled `URL`',
     contact: {
       email: 'fergus@norch.io'
     },
@@ -25,9 +25,9 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: '{yourNorchServerURL}',
+      url: '{URL}',
       variables: {
-        yourNorchServerURL: {
+        URL: {
           default: 'http://localhost:3030'
         }
       }

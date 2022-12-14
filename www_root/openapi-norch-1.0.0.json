@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Norch",
-    "description": "This is the API documentation for norch@1.0.0. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than localhost, fill out the URL of your server in the server variable input box below labeled \"yourNorchServerURL\"",
+    "description": "This is the API documentation for `norch@1.0.0`. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than `localhost`, fill out the server variable below in the input box labeled `URL`",
     "contact": {
       "email": "fergus@norch.io"
     },
@@ -14,9 +14,9 @@
   },
   "servers": [
     {
-      "url": "{yourNorchServerURL}",
+      "url": "{URL}",
       "variables": {
-        "yourNorchServerURL": {
+        "URL": {
           "default": "http://localhost:3030"
         }
       }
