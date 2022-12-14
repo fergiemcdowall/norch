@@ -1,4 +1,4 @@
-[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url] [![Join the chat at https://gitter.im/fergiemcdowall/search-index](https://badges.gitter.im/fergiemcdowall/search-index.svg)](https://gitter.im/fergiemcdowall/search-index?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![NPM version][npm-version-image]][npm-url] [![MIT License][license-image]][license-url] [![Join the chat at https://gitter.im/fergiemcdowall/search-index](https://badges.gitter.im/fergiemcdowall/search-index.svg)](https://gitter.im/fergiemcdowall/search-index?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 ```
@@ -24,7 +24,7 @@ In the terminal type `npm i norch` (or install globally with `npm i -g norch`)
 
 # Usage
 
-## Running from the terminal
+## Invoking from the terminal
 
 Simply type `norch` and a norch server will be available at
 http://localhost:3030 (or the port/url of your choosing)
@@ -39,7 +39,7 @@ The following options are available
   -h, --help                      display help
 ```
 
-## Running from a node application
+## Invoking from a node application
 
 ```javascript
 const norch = require('norch')
@@ -50,7 +50,7 @@ await norch(options)
 
 ## API
 
-See the online [API documentation](docs/API.md), or open `/api.html` on your own norch installation
+See the online [API documentation](http://fergiemcdowall.github.io/norch/www_root/api.html), or open `/api.html` on your own norch server.
 
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
@@ -58,7 +58,3 @@ See the online [API documentation](docs/API.md), or open `/api.html` on your own
 
 [npm-url]: https://npmjs.org/package/norch
 [npm-version-image]: http://img.shields.io/npm/v/norch.svg?style=flat
-[npm-downloads-image]: http://img.shields.io/npm/dm/norch.svg?style=flat
-
-[travis-url]: http://travis-ci.org/fergiemcdowall/norch
-[travis-image]: http://img.shields.io/travis/fergiemcdowall/norch.svg?style=flat

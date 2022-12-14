@@ -1,5 +1,6 @@
 const fs = require('fs')
 const swaggerJsdoc = require('swagger-jsdoc')
+const norchVersion = require('../package.json').version
 
 const swaggerDefinition = {
   openapi: '3.0.1',
@@ -13,7 +14,7 @@ const swaggerDefinition = {
       name: 'MIT',
       url: 'https://github.com/fergiemcdowall/search-index/blob/master/LICENSE'
     },
-    version: '1.0.0'
+    version: norchVersion
   },
   externalDocs: {
     description: 'Find out more about Swagger',
@@ -282,6 +283,6 @@ const openapiSpecification = swaggerJsdoc(options)
 // console.log(JSON.stringify(openapiSpecification, null, 2))
 
 fs.writeFileSync(
-  'www_root/openapi.json',
+  'www_root/openapi-norch-' + norchVersion + '.json',
   JSON.stringify(openapiSpecification, null, 2)
 )
