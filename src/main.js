@@ -15,7 +15,7 @@ const _404 = (req, res) => {
 const files = dirs => {
   const getFilesInDir = name =>
     fs
-      .readdirSync('/Users/fergie/projects/norch/www_root' + name, {
+      .readdirSync('www_root' + name, {
         withFileTypes: true
       })
       .filter(dirent => dirent.isFile())
