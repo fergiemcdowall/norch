@@ -91,15 +91,13 @@ const splash = index =>
   })
 
 // create a server object:
-module.exports = ops =>
+module.exports = (ops = {}) =>
   si({
-    ...JSON.parse(ops.searchIndexOptions),
-    name: ops.data,
-    storeVectors: true
+    name: ops.data
   })
     .then(splash)
     .then(createServer)
     .then(server => {
-      server.listen(ops.port)
+      server.listen(ops.port || 3030)
       return server
     })

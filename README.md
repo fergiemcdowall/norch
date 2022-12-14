@@ -33,28 +33,24 @@ http://localhost:3030 (or the port/url of your choosing)
 The following options are available
 
 ```
-  -V, --version                                      output the version number
-  -o, --search-index-options <search-index-options>  specify search-index options (default: "{}")
-  -p, --port <port>                                  specify the port, defaults to PORT or 3030 (default: 3030)
-  -i, --norch-home <name>                            specify the name of the directory that stores the data and the logs,
-                                                     defaults to norch-index (default: "norch-data")
-  -h, --help                                         display help for command
+  -V, --version                   output the version number
+  -p, --port <port>               specify the port, defaults to PORT or 3030 (default: 3030)
+  -d, --data <name>               specify the name of the directory that stores the data (default: "norch-data")
+  -h, --help                      display help
 ```
 
 ## Running from a node application
 
 ```javascript
+const norch = require('norch')
+const options = { /* options here */ }
 
-// TODO: this is totally wrong
-
-require('norch')(options, function(err, norch) {
-  // Norch server started on http://localhost:3030 (or the specified host/port)
-})
+await norch(options)
 ```
 
 ## API
 
-See the API documentation
+See the online [API documentation](docs/API.md), or open `/api.html` on your own norch installation
 
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
