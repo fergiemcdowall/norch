@@ -1,18 +1,18 @@
-const test = require('tape')
+const enableDestroy = require('server-destroy')
+const filename = process.env.SANDBOX + '/' + __filename.split('/').pop()
 const norch = require('../')
+const test = require('tape')
 
-let proc
-
-const delay = (t, v) => new Promise(resolve => setTimeout(resolve, t, v))
+test(__filename, t => {
+  t.end()
+})
 
 test('start a norch', async t => {
-  t.plan(3)
-
-  await norch({
-    data: process.env.SANDBOX + '/' + __filename.split('/').pop()
+  const nrch = await norch({
+    data: filename
   })
 
-  await delay(1000)
+  enableDestroy(nrch)
 
   await fetch('http://localhost:3030/STATUS')
     .then(res => res.json())
@@ -67,4 +67,6 @@ test('start a norch', async t => {
       )
     )
     .catch(t.error)
+
+  nrch.destroy()
 })

@@ -5,6 +5,10 @@ let proc
 
 const delay = (t, v) => new Promise(resolve => setTimeout(resolve, t, v))
 
+test(__filename, t => {
+  t.end()
+})
+
 test('start a norch', async t => {
   const tests = [
     data =>

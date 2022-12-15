@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "level-out": "^1.0.1",
+    "server-destroy": "^1.0.1",
     "standard": "^17.0.0",
     "swagger-jsdoc": "^6.2.5",
     "tape": "^5.6.1"
@@ -39,7 +40,7 @@
   "scripts": {
     "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js && npm run lint",
     "lint": "standard --fix src build",
-    "test": "export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && node test/*-test.js && npm run lint",
+    "test": "export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && tape test/*-test.js && npm run lint",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"
   },
