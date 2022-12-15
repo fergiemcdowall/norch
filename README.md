@@ -33,19 +33,18 @@ http://localhost:3030 (or the port/url of your choosing)
 The following options are available
 
 ```
-  -V, --version                   output the version number
-  -p, --port <port>               specify the port, defaults to PORT or 3030 (default: 3030)
-  -d, --data <name>               specify the name of the directory that stores the data (default: "norch-data")
-  -h, --help                      display help
+  -V, --version           output the version number
+  -p, --port              specify the port (default: 3030)
+  -i, --index             specify the location of the index (default: "norch-data")
+  -h, --help              display help
 ```
 
 ## Invoking from a node application
 
 ```javascript
 const norch = require('norch')
-const options = { /* options here */ }
 
-await norch(options)
+const myNorch = await norch(options)
 ```
 
 ## API

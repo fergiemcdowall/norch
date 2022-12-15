@@ -9,7 +9,7 @@ test(__filename, t => {
 
 test('start a norch', async t => {
   const nrch = await norch({
-    data: filename
+    index: filename
   })
 
   enableDestroy(nrch)

@@ -7,15 +7,10 @@ const program = new Command()
 
 program
   .version(require('../package.json').version)
+  .option('-p, --port <port>', 'specify the port', Number, 3030)
   .option(
-    '-p, --port <port>',
-    'specify the port, defaults to PORT or 3030',
-    Number,
-    3030
-  )
-  .option(
-    '-d, --data <data>',
-    'specify the name of the directory that stores the data, defaults to norch-data',
+    '-i, --index <index>',
+    'specify the location of the index',
     String,
     'norch-data'
   )

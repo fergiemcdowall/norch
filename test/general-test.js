@@ -32,7 +32,7 @@ test('start a norch', async t => {
   t.plan(7)
 
   proc = spawn('./bin/norch', [
-    '-d',
+    '-i',
     process.env.SANDBOX + '/' + __filename.split('/').pop()
   ])
 

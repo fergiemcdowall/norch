@@ -93,7 +93,7 @@ const splash = index =>
 // create a server object:
 module.exports = (ops = {}) =>
   si({
-    name: ops.data
+    name: ops.index
   })
     .then(splash)
     .then(createServer)
