@@ -12,6 +12,7 @@
     "level-out": "^1.0.1",
     "server-destroy": "^1.0.1",
     "standard": "^17.0.0",
+    "stopword": "^2.0.5",
     "swagger-jsdoc": "^6.2.5",
     "tape": "^5.6.1"
   },

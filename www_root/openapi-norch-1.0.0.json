@@ -477,6 +477,19 @@
           "WRITE"
         ],
         "summary": "Import an index",
+        "requestBody": {
+          "description": "An index dump to be imported (generate this dump using EXPORT)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successfully imported"
@@ -527,7 +540,7 @@
         ],
         "summary": "Add documents to the index",
         "requestBody": {
-          "description": "Optional description in *Markdown*",
+          "description": "An array of objects (documents). If objects contain a property called `_id` then that will be used to identify the document, if not then an `_id` field with be automatically assigned.",
           "content": {
             "application/json": {
               "schema": {
@@ -539,6 +552,85 @@
             }
           }
         },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "caseSensitive",
+            "schema": {
+              "type": "boolean"
+            },
+            "default": true,
+            "description": "index everything in a case-insensitive manner (lower case)"
+          },
+          {
+            "in": "query",
+            "name": "nGrams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "default": {
+                    "lengths": [
+                      1
+                    ],
+                    "join": " ",
+                    "fields": []
+                  }
+                }
+              }
+            },
+            "description": "Property `lengths` describes the length of n\\-grams, `join` describes how they will be joined for indexing (`['one', 'two']` would be indexed as `'one two'` if `join: ' '`). `fields` is an array describing which fields to create n\\-grams on`\n"
+          },
+          {
+            "in": "query",
+            "name": "replace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "default": {
+                    "fields": [],
+                    "values": {}
+                  }
+                }
+              }
+            },
+            "description": "`fields` is an array that specifies the fields where replacements will happen, `values` is an array that specifies the tokens to be swapped in, for example: `{ values: { sheep: [ 'animal', 'livestock' ] } }`\n"
+          },
+          {
+            "in": "query",
+            "name": "skipField",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "default": [],
+            "description": "These fields will not be searchable, but they will still be stored"
+          },
+          {
+            "in": "query",
+            "name": "stopwords",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "default": [],
+            "description": "A list of words to be ignored when indexing"
+          },
+          {
+            "in": "query",
+            "name": "tokenSplitRegex",
+            "schema": {
+              "type": "string"
+            },
+            "default": "/[\\p{L}\\d]+/gu",
+            "description": "The regular expression that splits strings into tokens"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successfully imported"

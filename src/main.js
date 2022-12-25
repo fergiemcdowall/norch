@@ -91,13 +91,20 @@ const splash = index =>
   })
 
 // create a server object:
-module.exports = (ops = {}) =>
-  si({
-    name: ops.index
-  })
+module.exports = (ops = {}) => {
+  return si(
+    Object.assign(
+      {
+        name: ops.index || 'norch-data',
+        storeVectors: false
+      },
+      ops
+    )
+  )
     .then(splash)
     .then(createServer)
     .then(server => {
       server.listen(ops.port || 3030)
       return server
     })
+}
