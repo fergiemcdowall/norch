@@ -42,7 +42,7 @@ test('start a norch', async t => {
     .then(res => res.json())
     .then(async json => {
       t.isEquivalent(json.slice(0, -2), [
-        { key: ['CREATED_WITH'], value: 'search-index@3.3.0' },
+        { key: ['CREATED_WITH'], value: 'search-index@4.0.0' },
         { key: ['DOCUMENT_COUNT'], value: 2 },
         {
           key: ['DOC_RAW', 'one'],

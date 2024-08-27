@@ -1,22 +1,27 @@
-const params = (req, name) =>
-  new URLSearchParams(new URL(req.url, `http://${req.headers.host}/`).search)
-    .getAll(name)
-    .map((item) => {
-      try {
-        item = JSON.parse(item);
-      } catch (e) {}
-      return item;
-    });
+export class API {
+  constructor(index, sendResponse) {
+    this.index = index
+    this.sendResponse = sendResponse
+  }
 
-const param = (req, name) => params(req, name)[0];
+  params = (req, name) =>
+    new URLSearchParams(new URL(req.url, `http://${req.headers.host}/`).search)
+      .getAll(name)
+      .map(item => {
+        try {
+          item = JSON.parse(item)
+        } catch (e) {}
+        return item
+      })
 
-const sendJSONResponse = (body, res) => {
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.writeHead(200);
-  res.end(JSON.stringify(body, null, 2));
-};
+  param = (req, name) => this.params(req, name)[0]
 
-module.exports = (index, sendResponse) => ({
+  sendJSONResponse = (body, res) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    res.writeHead(200)
+    res.end(JSON.stringify(body, null, 2))
+  }
+
   /**
    * @openapi
    * /ALL_DOCUMENTS:
@@ -29,10 +34,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of documents
    */
-  ALL_DOCUMENTS: (req, res) =>
-    index
-      .ALL_DOCUMENTS(+params(req, "LIMIT") || undefined)
-      .then((ad) => sendJSONResponse(ad, res)),
+  ALL_DOCUMENTS = (req, res) =>
+    this.index
+      .ALL_DOCUMENTS(+this.params(req, 'LIMIT') || undefined)
+      .then(ad => this.sendJSONResponse(ad, res))
 
   /**
    * @openapi
@@ -46,10 +51,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of buckets
    */
-  BUCKETS: (req, res) =>
-    index
-      .BUCKETS(...params(req, "TOKENSPACE"))
-      .then((b) => sendJSONResponse(b, res)),
+  BUCKETS = (req, res) =>
+    this.index
+      .BUCKETS(...this.params(req, 'TOKENSPACE'))
+      .then(b => this.sendJSONResponse(b, res))
 
   /**
    * @openapi
@@ -63,10 +68,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: Successfully deleted
    */
-  DELETE: (req, res) =>
-    index
-      .DELETE(...params(req, "ID"))
-      .then((idxRes) => sendJSONResponse(idxRes, res)),
+  DELETE = (req, res) =>
+    this.index
+      .DELETE(...this.params(req, 'ID'))
+      .then(idxRes => this.sendJSONResponse(idxRes, res))
 
   /**
    * @openapi
@@ -84,11 +89,11 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of tokens
    */
-  DICTIONARY: (req, res) =>
-    index
-      .DICTIONARY(...params(req, "TOKENSPACE"))
-      .then((d) => d.slice(0, +params(req, "LIMIT")))
-      .then((d) => sendJSONResponse(d, res)),
+  DICTIONARY = (req, res) =>
+    this.index
+      .DICTIONARY(...this.params(req, 'TOKENSPACE'))
+      .then(d => d.slice(0, +this.params(req, 'LIMIT')))
+      .then(d => this.sendJSONResponse(d, res))
 
   /**
    * @openapi
@@ -106,11 +111,11 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of field-token pairs
    */
-  DISTINCT: (req, res) =>
-    index
-      .DISTINCT(...params(req, "TOKENSPACE"))
-      .then((d) => d.slice(0, +params(req, "LIMIT")))
-      .then((d) => sendJSONResponse(d, res)),
+  DISTINCT = (req, res) =>
+    this.index
+      .DISTINCT(...this.params(req, 'TOKENSPACE'))
+      .then(d => d.slice(0, +this.params(req, 'LIMIT')))
+      .then(d => this.sendJSONResponse(d, res))
 
   /**
    * @openapi
@@ -124,8 +129,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of documents
    */
-  DOCUMENTS: (req, res) =>
-    index.DOCUMENTS(...params(req, "ID")).then((b) => sendJSONResponse(b, res)),
+  DOCUMENTS = (req, res) =>
+    this.index
+      .DOCUMENTS(...this.params(req, 'ID'))
+      .then(b => this.sendJSONResponse(b, res))
 
   /**
    * @openapi
@@ -138,8 +145,8 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: A dump of the index
    */
-  EXPORT: (req, res) =>
-    index.EXPORT().then((exp) => sendJSONResponse(exp, res)),
+  EXPORT = (req, res) =>
+    this.index.EXPORT().then(exp => this.sendJSONResponse(exp, res))
 
   /**
    * @openapi
@@ -156,10 +163,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of facets
    */
-  FACETS: (req, res) =>
-    index
-      .FACETS(...params(req, "TOKENSPACE"))
-      .then((b) => sendJSONResponse(b, res)),
+  FACETS = (req, res) =>
+    this.index
+      .FACETS(...this.params(req, 'TOKENSPACE'))
+      .then(b => this.sendJSONResponse(b, res))
 
   /**
    * @openapi
@@ -171,7 +178,8 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: An array of field names
    */
-  FIELDS: (req, res) => index.FIELDS().then((f) => sendJSONResponse(f, res)),
+  FIELDS = (req, res) =>
+    this.index.FIELDS().then(f => this.sendJSONResponse(f, res))
 
   /**
    * @openapi
@@ -183,8 +191,8 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: Successfully deleted
    */
-  FLUSH: (req, res) =>
-    index.FLUSH().then((idxRes) => sendJSONResponse(idxRes, res)),
+  FLUSH = (req, res) =>
+    this.index.FLUSH().then(idxRes => this.sendJSONResponse(idxRes, res))
 
   /**
    * @openapi
@@ -204,15 +212,15 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: Successfully imported
    */
-  IMPORT: (req, res) => {
-    let body = "";
-    req.on("data", (d) => (body += d.toString()));
-    req.on("end", () =>
-      index
+  IMPORT = (req, res) => {
+    let body = ''
+    req.on('data', d => (body += d.toString()))
+    req.on('end', () =>
+      this.index
         .IMPORT(JSON.parse(body))
-        .then((idxRes) => sendJSONResponse(idxRes, res))
-    );
-  },
+        .then(idxRes => this.sendJSONResponse(idxRes, res))
+    )
+  }
 
   /**
    * @openapi
@@ -226,10 +234,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: The maximum value
    */
-  MAX: (req, res) =>
-    index
-      .MAX(...params(req, "TOKENSPACE"))
-      .then((m) => sendJSONResponse(m, res)),
+  MAX = (req, res) =>
+    this.index
+      .MAX(...this.params(req, 'TOKENSPACE'))
+      .then(m => this.sendJSONResponse(m, res))
 
   /**
    * @openapi
@@ -243,10 +251,10 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: The minimum value
    */
-  MIN: (req, res) =>
-    index
-      .MIN(JSON.parse(params(req, "TOKENSPACE"))) // TODO: is this right?
-      .then((m) => sendJSONResponse(m, res)),
+  MIN = (req, res) =>
+    this.index
+      .MIN(JSON.parse(this.params(req, 'TOKENSPACE'))) // TODO: is this right?
+      .then(m => this.sendJSONResponse(m, res))
 
   /**
    * @openapi
@@ -315,15 +323,15 @@ module.exports = (index, sendResponse) => ({
    */
 
   // curl -H "Content-Type: application/json" --data @testdata.json http://localhost:8081/put
-  PUT: (req, res) => {
-    let body = "";
-    req.on("data", (d) => (body += d.toString()));
-    req.on("end", () =>
-      index
+  PUT = (req, res) => {
+    let body = ''
+    req.on('data', d => (body += d.toString()))
+    req.on('end', () =>
+      this.index
         .PUT(JSON.parse(body))
-        .then((idxRes) => sendJSONResponse(idxRes, res))
-    );
-  },
+        .then(idxRes => this.sendJSONResponse(idxRes, res))
+    )
+  }
 
   // TODO: how to deal with PUT pipelines?
 
@@ -345,15 +353,15 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: Successfully imported
    */
-  PUT_RAW: (req, res) => {
-    let body = "";
-    req.on("data", (d) => (body += d.toString()));
-    req.on("end", () =>
-      index
+  PUT_RAW = (req, res) => {
+    let body = ''
+    req.on('data', d => (body += d.toString()))
+    req.on('end', () =>
+      this.index
         .PUT_RAW(JSON.parse(body))
-        .then((idxRes) => sendJSONResponse(idxRes, res))
-    );
-  },
+        .then(idxRes => this.sendJSONResponse(idxRes, res))
+    )
+  }
 
   /**
    * @openapi
@@ -433,21 +441,21 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: A query result
    */
-  QUERY: (req, res) =>
-    index
-      .QUERY(param(req, "QUERY"), {
-        BUCKETS: params(req, "BUCKETS"),
-        DOCUMENTS: param(req, "DOCUMENTS"),
+  QUERY = (req, res) =>
+    this.index
+      .QUERY(this.param(req, 'QUERY'), {
+        BUCKETS: this.params(req, 'BUCKETS'),
+        DOCUMENTS: this.param(req, 'DOCUMENTS'),
         // // TODO: option to suppress empty facets?
-        FACETS: params(req, "FACETS").length
-          ? params(req, "FACETS")
+        FACETS: this.params(req, 'FACETS').length
+          ? this.params(req, 'FACETS')
           : undefined,
-        PAGE: param(req, "PAGE"),
+        PAGE: this.param(req, 'PAGE'),
         // //TODO: PIPELINE!
-        SCORE: param(req, "SCORE"),
-        SORT: param(req, "SORT"),
+        SCORE: this.param(req, 'SCORE'),
+        SORT: this.param(req, 'SORT')
       })
-      .then((r) => sendJSONResponse(r, res)),
+      .then(r => this.sendJSONResponse(r, res))
 
   /**
    * @openapi
@@ -477,12 +485,12 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: A search result
    */
-  SEARCH: (req, res) =>
-    index
-      .SEARCH(param(req, "STRING").trim().split(/\s+/), {
-        PAGE: param(req, "PAGE"),
+  SEARCH = (req, res) =>
+    this.index
+      .SEARCH(this.param(req, 'STRING').trim().split(/\s+/), {
+        PAGE: this.param(req, 'PAGE')
       })
-      .then((r) => sendJSONResponse(r, res)),
+      .then(r => this.sendJSONResponse(r, res))
 
   /**
    * @openapi
@@ -495,22 +503,22 @@ module.exports = (index, sendResponse) => ({
    *       200:
    *         description: Information about the index
    */
-  STATUS: (req, res) =>
+  STATUS = (req, res) =>
     Promise.all([
-      index.LAST_UPDATED(),
-      index.CREATED(),
-      index.DOCUMENT_COUNT(),
+      this.index.LAST_UPDATED(),
+      this.index.CREATED(),
+      this.index.DOCUMENT_COUNT()
     ]).then(([LAST_UPDATED, CREATED, DOCUMENT_COUNT]) =>
-      sendJSONResponse(
+      this.sendJSONResponse(
         {
           IS_ALIVE: true,
           DOCUMENT_COUNT,
           // Update these lines when https://github.com/fergiemcdowall/search-index/issues/600
           // is rolled out
           CREATED: new Date(CREATED),
-          LAST_UPDATED: new Date(LAST_UPDATED),
+          LAST_UPDATED: new Date(LAST_UPDATED)
         },
         res
       )
-    ),
-});
+    )
+}

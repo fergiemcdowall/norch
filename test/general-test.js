@@ -16,38 +16,29 @@ test('start a norch', async t => {
         data
           .toString()
           .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/g, 'A_DATE'),
-        `\n      ___           ___           ___           ___           ___      \n     /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\     \n    /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /     \n   /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/      \n  /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___  \n /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\ \n \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  / \n     |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /  \n     |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /   \n     /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /    \n     \\/__/         \\/__/         \\|__|         \\/__/         \\/__/   \n\n      (c) 2013-2021 \x1B[1mFergus McDowall\x1B[0m\n\n      index contains \x1B[1m0\x1B[0m documents\n      created A_DATE\n      last updated A_DATE\n\n  \n`
+        `\n      ___           ___           ___           ___           ___      \n     /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\     \n    /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /     \n   /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/      \n  /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___  \n /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\ \n \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  / \n     |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /  \n     |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /   \n     /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /    \n     \\/__/         \\/__/         \\|__|         \\/__/         \\/__/   \n\n      (c) 2013-2023 \x1B[1mFergus McDowall\x1B[0m\n\n      index contains \x1B[1m0\x1B[0m documents\n      created A_DATE\n      last updated A_DATE\n\n  \n`
       ),
-    data => {
-      t.equal(data.toString(), '/STATUS\n')
-    },
-    data => {
-      t.equal(data.toString(), '/PUT\n')
-    },
-    data => {
-      t.equal(data.toString(), '/SEARCH\n')
-    }
+    data => t.equal(data.toString(), '/STATUS\n'),
+    data => t.equal(data.toString(), '/PUT\n'),
+    data => t.equal(data.toString(), '/SEARCH\n')
   ]
 
-  t.plan(7)
+  t.plan(8)
 
-  proc = spawn('./bin/norch', [
-    '-i',
-    process.env.SANDBOX + '/' + __filename.split('/').pop()
-  ])
+    proc = spawn('./bin/norch', [
+      '-i',
+      process.env.SANDBOX + '/' + __filename.split('/').pop()
+    ])
 
-  proc.stderr.on('data', e => {
-    t.error(e)
-  })
+    proc.stderr.on('data', e => t.error(e))
 
-  proc.on('error', e => {
-    t.error(e)
-  })
+    proc.stdout.on('data', data => tests.shift()(data))
+    
+    proc.on('error', e => t.error(e))
 
-  proc.stdout.on('data', data => {
-    tests.shift()(data)
-  })
+    proc.on('close', e => t.ok('child_process closed'))
 
+  // magical delay to give norch time to spin up...
   await delay(500)
 
   await fetch('http://localhost:3030/STATUS')
@@ -103,10 +94,10 @@ test('start a norch', async t => {
       )
     )
     .catch(t.error)
+
+  proc.kill()
+  // magical timing needed to wait for proc.kill()
+  await delay(500)
+  
 })
 
-test('teardown', t => {
-  t.plan(1)
-  proc.kill()
-  t.ok(true)
-})

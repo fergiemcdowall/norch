@@ -5,8 +5,9 @@
   "main": "./src/main",
   "dependencies": {
     "commander": "^7.1.0",
+    "levelout": "^1.0.0",
     "mime": "^2.5.2",
-    "search-index": "^3.3.0"
+    "search-index": "5.1.0"
   },
   "devDependencies": {
     "level-out": "^1.0.1",
@@ -45,5 +46,6 @@
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"
   },
+  "type": "module",
   "license": "MIT"
 }

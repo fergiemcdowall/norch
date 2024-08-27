@@ -3,7 +3,8 @@ const fs = require('fs')
 const http = require('http')
 const mime = require('mime')
 const path = require('path')
-const si = require('search-index')
+// const si = require('search-index')
+import { SearchIndex } from 'search-index'
 
 // ("404: page not found")
 const _404 = (req, res) => {
@@ -79,11 +80,11 @@ const splash = index =>
      /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /    
      \\/__/         \\/__/         \\|__|         \\/__/         \\/__/   
 
-      (c) 2013-2021 \x1b[1mFergus McDowall\x1b[0m
+      (c) 2013-${new Date(res[0]).getFullYear()} \x1b[1mFergus McDowall\x1b[0m
 
       index contains \x1b[1m${res[2]}\x1b[0m documents
-      created ${new Date(res[1]).toISOString()}
-      last updated ${new Date(res[0]).toISOString()}
+      created ${res[1]}
+      last updated ${res[0]}
 
   `
     )

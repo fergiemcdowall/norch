@@ -1,0 +1,110 @@
+import mime from 'mime' // commonjs module: can't do named export for 'getType'
+import { API } from './API2.js'
+import { SearchIndex } from 'search-index'
+import { createServer } from 'node:http'
+import { fileURLToPath } from 'url'
+import { readdirSync, readFileSync } from 'node:fs'
+import { resolve, dirname } from 'path'
+
+export class Norch {
+  constructor(ops = {}) {
+    this.index = new SearchIndex(ops)
+    this.index.EVENTS.on('ready', () => {
+      this.splash(this.index, ops)
+        .then(() =>
+          this.createNorchServer(new API(this.index, this.sendResponse))
+        )
+        .then(server => {
+          server.listen(ops.port || 3030)
+          return server
+        })
+    })
+  }
+
+  splash = (index, ops) =>
+    Promise.all([
+      index.LAST_UPDATED(),
+      index.CREATED(),
+      index.DOCUMENT_COUNT()
+    ]).then(res =>
+      console.log(
+        `
+         ___           ___           ___           ___           ___
+        /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\
+       /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /
+      /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/
+     /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___
+    /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\
+    \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  /
+        |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /
+        |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /
+        /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /
+        \\/__/         \\/__/         \\|__|         \\/__/         \\/__/
+
+         (c) 2013-${new Date(
+           res[0]
+         ).getFullYear()} \x1b[1mFergus McDowall\x1b[0m
+
+         index contains \x1b[1m${res[2]}\x1b[0m documents
+         created \x1b[1m${res[1]}\x1b[0m
+         last updated \x1b[1m${res[0]}\x1b[0m
+         listening on port \x1b[1m${ops.port}\x1b[0m
+     `
+      )
+    )
+
+  sendResponse = (body, res, type) => {
+    res.setHeader('Content-Type', type + '; charset=utf-8')
+    res.writeHead(200)
+    res.end(body)
+  }
+
+  createNorchServer = api =>
+    createServer((req, res) => {
+      let pathname = new URL(req.url, `http://${req.headers.host}/`).pathname
+      console.info(pathname)
+
+      if (req.method === 'GET') {
+        const fileDirs = ['/']
+
+        // default to index.html when only file-directory is specified
+        if (fileDirs.includes(pathname)) pathname += 'index.html'
+
+        // Serve up static files files
+        if (this.files(fileDirs).includes(pathname)) {
+          console.log(dirname(fileURLToPath(import.meta.url)))
+          return this.sendFileResponse(pathname, res)
+        }
+      }
+
+      return api[pathname.slice(1)]
+        ? api[pathname.slice(1)](req, res)
+        : this._404(req, res)
+    })
+
+  files = dirs => {
+    const getFilesInDir = name =>
+      readdirSync('www_root' + name, {
+        withFileTypes: true
+      })
+        .filter(dirent => dirent.isFile())
+        .map(f => name + f.name)
+    return dirs.map(d => getFilesInDir(d)).flat()
+  }
+
+  sendFileResponse = (name, res) =>
+    this.sendResponse(
+      readFileSync(
+        resolve(dirname(fileURLToPath(import.meta.url)), '../www_root' + name)
+      ) + '',
+      res,
+      mime.getType(name)
+    )
+
+  // ("404: page not found")
+  _404 = (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    res.writeHead(404)
+    res.end('<html><h1>404</h1>nothing here bro!</html>')
+  }
+}

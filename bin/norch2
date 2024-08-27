@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+import { Norch } from '../src/Norch.js'
+import { Command } from 'commander'
+import fs from 'fs'
+
+const program = new Command()
+
+const version = JSON.parse(fs.readFileSync('package.json', 'utf8')).version
+
+program
+  .version(version)
+  .option('-p, --port <port>', 'specify the port', Number, 3030)
+  .option(
+    '-n, --name <name>',
+    'specify the name/location of the index',
+    String,
+    'norch-data'
+  )
+  .parse(process.argv)
+
+const n = new Norch(program.opts())
