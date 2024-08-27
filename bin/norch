@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 
-const norch = require('../src/main.js')
-const { Command } = require('commander')
+import { Norch } from '../src/Norch.js'
+import { Command } from 'commander'
+import { readFileSync } from 'fs'
 
 const program = new Command()
 
+const version = JSON.parse(readFileSync('package.json', 'utf8')).version
+
 program
-  .version(require('../package.json').version)
+  .version(version)
   .option('-p, --port <port>', 'specify the port', Number, 3030)
   .option(
-    '-i, --index <index>',
-    'specify the location of the index',
+    '-n, --name <name>',
+    'specify the name/location of the index',
     String,
     'norch-data'
   )
   .parse(process.argv)
 
-norch(program.opts())
+const n = new Norch(program.opts())

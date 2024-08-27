@@ -1,5 +1,5 @@
 import mime from 'mime' // commonjs module: can't do named export for 'getType'
-import { API } from './API2.js'
+import { API } from './API.js'
 import { SearchIndex } from 'search-index'
 import { createServer } from 'node:http'
 import { fileURLToPath } from 'url'
