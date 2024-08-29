@@ -1,11 +1,13 @@
-const test = require('tape')
-const { spawn } = require('child_process')
+import test from 'tape'
+import { spawn } from 'child_process'
+
+const filename = process.env.SANDBOX + '/general-test'
 
 let proc
 
 const delay = (t, v) => new Promise(resolve => setTimeout(resolve, t, v))
 
-test(__filename, t => {
+test(filename, t => {
   t.end()
 })
 
@@ -16,7 +18,7 @@ test('start a norch', async t => {
         data
           .toString()
           .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/g, 'A_DATE'),
-        `\n      ___           ___           ___           ___           ___      \n     /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\     \n    /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /     \n   /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/      \n  /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___  \n /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\ \n \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  / \n     |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /  \n     |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /   \n     /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /    \n     \\/__/         \\/__/         \\|__|         \\/__/         \\/__/   \n\n      (c) 2013-2023 \x1B[1mFergus McDowall\x1B[0m\n\n      index contains \x1B[1m0\x1B[0m documents\n      created A_DATE\n      last updated A_DATE\n\n  \n`
+        `\n         ___           ___           ___           ___           ___\n        /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\\n       /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /\n      /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/\n     /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___\n    /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\\n    \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  /\n        |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /\n        |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /\n        /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /\n        \\/__/         \\/__/         \\|__|         \\/__/         \\/__/\n\n         (c) 2013-2024 \x1B[1mFergus McDowall\x1B[0m\n\n         index contains \x1B[1m0\x1B[0m documents\n         created \x1B[1mA_DATE\x1B[0m\n         last updated \x1B[1mA_DATE\x1B[0m\n         listening on port \x1B[1m3030\x1B[0m\n     \n`
       ),
     data => t.equal(data.toString(), '/STATUS\n'),
     data => t.equal(data.toString(), '/PUT\n'),
@@ -25,18 +27,15 @@ test('start a norch', async t => {
 
   t.plan(8)
 
-    proc = spawn('./bin/norch', [
-      '-i',
-      process.env.SANDBOX + '/' + __filename.split('/').pop()
-    ])
+  proc = spawn('./bin/norch', ['-n', filename])
 
-    proc.stderr.on('data', e => t.error(e))
+  proc.stderr.on('data', e => t.error(e))
 
-    proc.stdout.on('data', data => tests.shift()(data))
-    
-    proc.on('error', e => t.error(e))
+  proc.stdout.on('data', data => tests.shift()(data))
 
-    proc.on('close', e => t.ok('child_process closed'))
+  proc.on('error', e => t.error(e))
+
+  proc.on('close', e => t.ok('child_process closed'))
 
   // magical delay to give norch time to spin up...
   await delay(500)
@@ -88,7 +87,8 @@ test('start a norch', async t => {
               _score: 2.2
             }
           ],
-          RESULT_LENGTH: 1
+          RESULT_LENGTH: 1,
+          PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
         },
         json
       )
@@ -98,6 +98,4 @@ test('start a norch', async t => {
   proc.kill()
   // magical timing needed to wait for proc.kill()
   await delay(500)
-  
 })
-

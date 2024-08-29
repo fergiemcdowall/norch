@@ -1,20 +1,26 @@
-const enableDestroy = require('server-destroy')
-const filename = process.env.SANDBOX + '/' + __filename.split('/').pop()
-const norch = require('../')
-const test = require('tape')
-const sw = require('stopword')
+import test from 'tape'
+import { Norch } from '../src/Norch.js'
+import { eng } from 'stopword'
 
-test(__filename, t => {
+const filename = process.env.SANDBOX + '/PUT-test'
+
+test(filename, t => {
   t.end()
 })
 
 test('start a norch', async t => {
-  const nrch = await norch({
-    index: filename,
-    stopwords: sw.eng
+  const nrch = new Norch({
+    name: filename,
+    stopwords: eng,
+    storeVectors: false
   })
 
-  enableDestroy(nrch)
+  await new Promise(resolve =>
+    nrch.events.on('ready', () => {
+      t.ok('server is ready')
+      resolve()
+    })
+  )
 
   await fetch('http://localhost:3030/PUT', {
     method: 'POST',
@@ -42,7 +48,7 @@ test('start a norch', async t => {
     .then(res => res.json())
     .then(async json => {
       t.isEquivalent(json.slice(0, -2), [
-        { key: ['CREATED_WITH'], value: 'search-index@4.0.0' },
+        { key: ['CREATED_WITH'], value: 'search-index@5.1.2' },
         { key: ['DOCUMENT_COUNT'], value: 2 },
         {
           key: ['DOC_RAW', 'one'],
@@ -66,24 +72,22 @@ test('start a norch', async t => {
   await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(
-        {
-          RESULT: [
-            {
-              _id: 'one',
-              _match: [
-                { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
-                { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
-              ],
-              _score: 2.2
-            }
-          ],
-          RESULT_LENGTH: 1
-        },
-        json
-      )
+      t.isEquivalent(json, {
+        RESULT: [
+          {
+            _id: 'one',
+            _match: [
+              { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
+              { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
+            ],
+            _score: 2.2
+          }
+        ],
+        RESULT_LENGTH: 1,
+        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
+      })
     )
     .catch(t.error)
 
-  nrch.destroy()
+  nrch.server.destroy()
 })

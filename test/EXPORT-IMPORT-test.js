@@ -1,21 +1,27 @@
-const enableDestroy = require('server-destroy')
-const filename = process.env.SANDBOX + '/' + __filename.split('/').pop()
-const fs = require('fs/promises')
-const norch = require('../')
-const sw = require('stopword')
-const test = require('tape')
+import sw from 'stopword'
+import test from 'tape'
+import { Norch } from '../src/Norch.js'
+import { writeFile, readFile } from 'fs/promises'
 
-test(__filename, t => {
+const filename = process.env.SANDBOX + '/IMPORT-EXPORT-test'
+
+test(filename, t => {
   t.end()
 })
 
 test('start a norch PUT and EXPORT contents', async t => {
-  const nrch = await norch({
-    index: filename,
-    stopwords: sw.eng
+  const nrch = new Norch({
+    name: filename,
+    stopwords: sw.eng,
+    storeVectors: false
   })
 
-  enableDestroy(nrch)
+  await new Promise(resolve =>
+    nrch.events.on('ready', () => {
+      t.ok('server is ready')
+      resolve()
+    })
+  )
 
   await fetch('http://localhost:3030/PUT', {
     method: 'POST',
@@ -42,22 +48,20 @@ test('start a norch PUT and EXPORT contents', async t => {
   await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(
-        {
-          RESULT: [
-            {
-              _id: 'one',
-              _match: [
-                { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
-                { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
-              ],
-              _score: 2.2
-            }
-          ],
-          RESULT_LENGTH: 1
-        },
-        json
-      )
+      t.isEquivalent(json, {
+        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 },
+        RESULT: [
+          {
+            _id: 'one',
+            _match: [
+              { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
+              { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
+            ],
+            _score: 2.2
+          }
+        ],
+        RESULT_LENGTH: 1
+      })
     )
     .catch(t.error)
 
@@ -65,7 +69,7 @@ test('start a norch PUT and EXPORT contents', async t => {
     .then(res => res.json())
     .then(async json => {
       t.isEquivalent(json.slice(0, -2), [
-        { key: ['CREATED_WITH'], value: 'search-index@4.0.0' },
+        { key: ['CREATED_WITH'], value: 'search-index@5.1.2' },
         { key: ['DOCUMENT_COUNT'], value: 2 },
         {
           key: ['DOC_RAW', 'one'],
@@ -83,22 +87,28 @@ test('start a norch PUT and EXPORT contents', async t => {
         },
         { key: ['IDX', 'content', ['interesting', '1.00']], value: ['one'] }
       ])
+
       return json
     })
-    .then(json => fs.writeFile(filename + '-export.json', JSON.stringify(json)))
+    .then(json => writeFile(filename + '-export.json', JSON.stringify(json)))
     .catch(t.error)
 
-  nrch.destroy()
+  nrch.server.destroy()
 })
 
 test('start another norch and IMPORT', async t => {
-  const nrch = await norch({
-    index: filename + '-2',
+  const nrch = new Norch({
+    name: filename + '-2',
     port: 3031,
     stopwords: sw.eng
   })
 
-  enableDestroy(nrch)
+  await new Promise(resolve =>
+    nrch.events.on('ready', () => {
+      t.ok('server is ready')
+      resolve()
+    })
+  )
 
   await fetch('http://localhost:3030/SEARCH?STRING=interesting document').catch(
     () => t.pass('correct- this index is no longer available')
@@ -107,42 +117,40 @@ test('start another norch and IMPORT', async t => {
   await fetch('http://localhost:3031/SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(
-        {
-          RESULT: [],
-          RESULT_LENGTH: 0
-        },
-        json
-      )
+      t.isEquivalent(json, {
+        RESULT: [],
+        RESULT_LENGTH: 0,
+        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 0, DOC_OFFSET: 0 }
+      })
     )
     .catch(t.error)
 
   await fetch('http://localhost:3031/IMPORT', {
     method: 'POST',
-    body: await fs.readFile(filename + '-export.json')
+    body: await readFile(filename + '-export.json')
   })
+
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
   await fetch('http://localhost:3031/SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(
-        {
-          RESULT: [
-            {
-              _id: 'one',
-              _match: [
-                { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
-                { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
-              ],
-              _score: 2.2
-            }
-          ],
-          RESULT_LENGTH: 1
-        },
-        json
-      )
+      t.isEquivalent(json, {
+        RESULT: [
+          {
+            _id: 'one',
+            _match: [
+              { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
+              { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
+            ],
+            _score: 2.2
+          }
+        ],
+        RESULT_LENGTH: 1,
+        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
+      })
     )
     .catch(t.error)
 
-  nrch.destroy()
+  nrch.server.destroy()
 })

@@ -1,7 +1,10 @@
 export class API {
-  constructor(index, sendResponse) {
+  constructor (index, sendResponse, events) {
     this.index = index
     this.sendResponse = sendResponse
+    this.events = events
+    this.ready = false
+    events.on('ready', () => (this.ready = true))
   }
 
   params = (req, name) =>
@@ -351,7 +354,7 @@ export class API {
    *               $ref: '#/components/schemas/Document'
    *     responses:
    *       200:
-   *         description: Successfully imported
+   *         description: Successfully written
    */
   PUT_RAW = (req, res) => {
     let body = ''
@@ -521,4 +524,11 @@ export class API {
         res
       )
     )
+
+  READY = (req, res) =>
+    this.ready
+      ? this.sendJSONResponse({ READY: true }, res)
+      : this.events.on('ready', () =>
+        this.sendJSONResponse({ READY: true }, res)
+      )
 }

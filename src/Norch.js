@@ -1,3 +1,5 @@
+import EventEmitter from 'events'
+import enableDestroy from 'server-destroy'
 import mime from 'mime' // commonjs module: can't do named export for 'getType'
 import { API } from './API.js'
 import { SearchIndex } from 'search-index'
@@ -7,21 +9,28 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { resolve, dirname } from 'path'
 
 export class Norch {
-  constructor(ops = {}) {
-    this.index = new SearchIndex(ops)
+  constructor (ops = {}) {
+    const configFile = JSON.parse(readFileSync('./src/config.json', 'utf8'))
+    this.options = Object.assign(configFile, ops)
+    this.index = new SearchIndex(this.options)
+    this.events = new EventEmitter()
     this.index.EVENTS.on('ready', () => {
-      this.splash(this.index, ops)
+      this.splash(this.index, this.options.port)
         .then(() =>
-          this.createNorchServer(new API(this.index, this.sendResponse))
+          this.createNorchServer(
+            new API(this.index, this.sendResponse, this.events)
+          )
         )
         .then(server => {
-          server.listen(ops.port || 3030)
-          return server
+          server.listen(this.options.port)
+          enableDestroy(server)
+          this.server = server
+          this.events.emit('ready')
         })
     })
   }
 
-  splash = (index, ops) =>
+  splash = (index, port) =>
     Promise.all([
       index.LAST_UPDATED(),
       index.CREATED(),
@@ -48,7 +57,7 @@ export class Norch {
          index contains \x1b[1m${res[2]}\x1b[0m documents
          created \x1b[1m${res[1]}\x1b[0m
          last updated \x1b[1m${res[0]}\x1b[0m
-         listening on port \x1b[1m${ops.port}\x1b[0m
+         listening on port \x1b[1m${port}\x1b[0m
      `
       )
     )
@@ -72,6 +81,7 @@ export class Norch {
 
         // Serve up static files files
         if (this.files(fileDirs).includes(pathname)) {
+          console.log('BOOOOOOM')
           console.log(dirname(fileURLToPath(import.meta.url)))
           return this.sendFileResponse(pathname, res)
         }

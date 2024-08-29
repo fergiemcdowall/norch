@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
-import { Norch } from '../src/Norch.js'
 import { Command } from 'commander'
-import { readFileSync } from 'fs'
+import { Norch } from '../src/Norch.js'
+import { readFileSync } from 'node:fs'
 
 const program = new Command()
 
+const configFile = JSON.parse(readFileSync('./src/config.json', 'utf8'))
 const version = JSON.parse(readFileSync('package.json', 'utf8')).version
 
 program
   .version(version)
-  .option('-p, --port <port>', 'specify the port', Number, 3030)
+  .option('-p, --port <port>', 'specify the port', Number, configFile.port)
   .option(
     '-n, --name <name>',
     'specify the name/location of the index',
     String,
-    'norch-data'
+    configFile.name
   )
   .parse(process.argv)
 

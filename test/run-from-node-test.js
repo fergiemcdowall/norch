@@ -1,18 +1,23 @@
-const enableDestroy = require('server-destroy')
-const filename = process.env.SANDBOX + '/' + __filename.split('/').pop()
-const norch = require('../')
-const test = require('tape')
+import test from 'tape'
+import { Norch } from '../src/Norch.js'
 
-test(__filename, t => {
+const filename = process.env.SANDBOX + '/run-from-node-test'
+
+test(filename, t => {
   t.end()
 })
 
 test('start a norch', async t => {
-  const nrch = await norch({
-    index: filename
+  const nrch = new Norch({
+    name: filename
   })
 
-  enableDestroy(nrch)
+  await new Promise(resolve =>
+    nrch.events.on('ready', () => {
+      t.ok('server is ready')
+      resolve()
+    })
+  )
 
   await fetch('http://localhost:3030/STATUS')
     .then(res => res.json())
@@ -49,24 +54,22 @@ test('start a norch', async t => {
   await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(
-        {
-          RESULT: [
-            {
-              _id: 'one',
-              _match: [
-                { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
-                { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
-              ],
-              _score: 2.2
-            }
-          ],
-          RESULT_LENGTH: 1
-        },
-        json
-      )
+      t.isEquivalent(json, {
+        RESULT: [
+          {
+            _id: 'one',
+            _match: [
+              { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
+              { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
+            ],
+            _score: 2.2
+          }
+        ],
+        RESULT_LENGTH: 1,
+        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
+      })
     )
     .catch(t.error)
 
-  nrch.destroy()
+  nrch.server.destroy()
 })
