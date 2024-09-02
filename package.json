@@ -42,7 +42,7 @@
   },
   "scripts": {
     "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js && npm run lint",
-    "lint": "standard --fix src build",
+    "lint": "standard --fix src build test",
     "test": "export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && tape test/*-test.js && npm run lint",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"

@@ -659,7 +659,7 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully imported"
+            "description": "Successfully written"
           }
         }
       }
@@ -771,6 +771,20 @@
         "responses": {
           "200": {
             "description": "Information about the index"
+          }
+        }
+      }
+    },
+    "/READY": {
+      "get": {
+        "tags": [
+          "READ"
+        ],
+        "summary": "Is index ready?",
+        "description": "Returns `{ READY: true }` when index is ready\n",
+        "responses": {
+          "200": {
+            "description": "Index is ready"
           }
         }
       }

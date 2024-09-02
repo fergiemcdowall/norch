@@ -23,7 +23,7 @@ test('start a norch', async t => {
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(
-        ['IS_ALIVE', 'DOCUMENT_COUNT', 'CREATED', 'LAST_UPDATED'],
+        ['READY', 'DOCUMENT_COUNT', 'CREATED', 'LAST_UPDATED'],
         Object.keys(json)
       )
     )

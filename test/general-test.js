@@ -55,13 +55,15 @@ test('start a norch', async t => {
   await fetch('http://localhost:3030/STATUS')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(
-        ['IS_ALIVE', 'DOCUMENT_COUNT', 'CREATED', 'LAST_UPDATED'],
-        Object.keys(json)
-      )
+      t.isEquivalent(Object.keys(json), [
+        'READY',
+        'DOCUMENT_COUNT',
+        'CREATED',
+        'LAST_UPDATED'
+      ])
     )
-    .catch(t.error)
 
+    .catch(t.error)
   await fetch('http://localhost:3030/PUT', {
     method: 'POST',
     body: JSON.stringify([

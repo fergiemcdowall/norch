@@ -1,6 +1,7 @@
-const fs = require('fs')
-const swaggerJsdoc = require('swagger-jsdoc')
-const norchVersion = require('../package.json').version
+import { readFileSync, writeFileSync } from 'node:fs'
+import swaggerJsdoc from 'swagger-jsdoc'
+
+const version = JSON.parse(readFileSync('./package.json', 'utf8')).version
 
 const swaggerDefinition = {
   openapi: '3.0.1',
@@ -8,7 +9,7 @@ const swaggerDefinition = {
     title: 'Norch',
     description:
       'This is the API documentation for `norch@' +
-      norchVersion +
+      version +
       '`. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than `localhost`, fill out the server variable below in the input box labeled `URL`',
     contact: {
       email: 'fergus@norch.io'
@@ -17,7 +18,7 @@ const swaggerDefinition = {
     //   name: 'MIT',
     //   url: 'https://github.com/fergiemcdowall/search-index/blob/master/LICENSE'
     // },
-    version: norchVersion
+    version
   },
   externalDocs: {
     description: 'Find out more about Swagger',
@@ -281,8 +282,8 @@ const swaggerDefinition = {
   }
 }
 
-fs.writeFileSync(
-  'www_root/openapi-norch-' + norchVersion + '.json',
+writeFileSync(
+  'www_root/openapi-norch-' + version + '.json',
   JSON.stringify(
     swaggerJsdoc({
       swaggerDefinition,

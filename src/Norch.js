@@ -10,7 +10,7 @@ import { resolve, dirname } from 'path'
 import figlet from 'figlet'
 
 export class Norch {
-  constructor(ops = {}) {
+  constructor (ops = {}) {
     const defaultConfigFile = JSON.parse(
       readFileSync('./src/defaultConfig.json', 'utf8')
     )

@@ -76,6 +76,8 @@ export class API {
       .DELETE(...this.params(req, 'ID'))
       .then(idxRes => this.sendJSONResponse(idxRes, res))
 
+  // TODO: DELETE_RAW?
+
   /**
    * @openapi
    * /DICTIONARY:
@@ -136,6 +138,8 @@ export class API {
     this.index
       .DOCUMENTS(...this.params(req, 'ID'))
       .then(b => this.sendJSONResponse(b, res))
+
+  // TODO: DOCUMENT_VECTORS?
 
   /**
    * @openapi
@@ -514,10 +518,8 @@ export class API {
     ]).then(([LAST_UPDATED, CREATED, DOCUMENT_COUNT]) =>
       this.sendJSONResponse(
         {
-          IS_ALIVE: true,
+          READY: true,
           DOCUMENT_COUNT,
-          // Update these lines when https://github.com/fergiemcdowall/search-index/issues/600
-          // is rolled out
           CREATED: new Date(CREATED),
           LAST_UPDATED: new Date(LAST_UPDATED)
         },
@@ -525,6 +527,18 @@ export class API {
       )
     )
 
+  /**
+   * @openapi
+   * /READY:
+   *   get:
+   *     tags: [READ]
+   *     summary: Is index ready?
+   *     description: |
+   *       Returns `{ READY: true }` when index is ready
+   *     responses:
+   *       200:
+   *         description: Index is ready
+   */
   READY = (req, res) =>
     this.ready
       ? this.sendJSONResponse({ READY: true }, res)
