@@ -5,6 +5,7 @@
   "main": "./src/main",
   "dependencies": {
     "commander": "^7.1.0",
+    "figlet": "^1.7.0",
     "levelout": "^1.0.0",
     "mime": "^2.5.2",
     "search-index": "5.1.3",

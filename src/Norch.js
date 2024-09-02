@@ -7,11 +7,15 @@ import { createServer } from 'node:http'
 import { fileURLToPath } from 'url'
 import { readdirSync, readFileSync } from 'node:fs'
 import { resolve, dirname } from 'path'
+import figlet from 'figlet'
 
 export class Norch {
   constructor (ops = {}) {
-    const configFile = JSON.parse(readFileSync('./src/config.json', 'utf8'))
-    this.options = Object.assign(configFile, ops)
+    const defaultConfigFile = JSON.parse(
+      readFileSync('./src/defaultConfig.json', 'utf8')
+    )
+    const userConfigFile = this.readUserConfigFile(ops.configFile)
+    this.options = Object.assign(defaultConfigFile, ops, userConfigFile)
     this.index = new SearchIndex(this.options)
     this.events = new EventEmitter()
     this.index.EVENTS.on('ready', () => {
@@ -30,6 +34,16 @@ export class Norch {
     })
   }
 
+  readUserConfigFile = location => {
+    // if no user config defined, simply return an empty object
+    if (!location) return {}
+    try {
+      return JSON.parse(readFileSync(location, 'utf8'))
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
   splash = (index, port) =>
     Promise.all([
       index.LAST_UPDATED(),
@@ -38,17 +52,9 @@ export class Norch {
     ]).then(res =>
       console.log(
         `
-         ___           ___           ___           ___           ___
-        /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\
-       /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /
-      /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/
-     /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___
-    /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\
-    \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  /
-        |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /
-        |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /
-        /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /
-        \\/__/         \\/__/         \\|__|         \\/__/         \\/__/
+   ${figlet
+     .textSync('NORCH', { font: 'isometric1', horizontalLayout: 'full' })
+     .replace(/(?:\n)/g, '\n   ')}
 
          (c) 2013-${new Date(
            res[0]
@@ -81,7 +87,6 @@ export class Norch {
 
         // Serve up static files files
         if (this.files(fileDirs).includes(pathname)) {
-          console.log('BOOOOOOM')
           console.log(dirname(fileURLToPath(import.meta.url)))
           return this.sendFileResponse(pathname, res)
         }

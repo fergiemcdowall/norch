@@ -1,5 +1,6 @@
 import test from 'tape'
 import { spawn } from 'child_process'
+import figlet from 'figlet'
 
 const filename = process.env.SANDBOX + '/general-test'
 
@@ -18,7 +19,18 @@ test('start a norch', async t => {
         data
           .toString()
           .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/g, 'A_DATE'),
-        `\n         ___           ___           ___           ___           ___\n        /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\__\\\n       /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /:/  /\n      /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\:\\  \\     /:/__/\n     /:/|:|  |__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/  \\:\\  \\   /::\\  \\ ___\n    /:/ |:| /\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/__/ \\:\\__\\ /:/\\:\\  /\\__\\\n    \\/__|:|/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\  \\/__/ \\/__\\:\\/:/  /\n        |:/:/  /   \\:\\  /:/  /     |:|::/  /   \\:\\  \\            \\::/  /\n        |::/  /     \\:\\/:/  /      |:|\\/__/     \\:\\  \\           /:/  /\n        /:/  /       \\::/  /       |:|  |        \\:\\__\\         /:/  /\n        \\/__/         \\/__/         \\|__|         \\/__/         \\/__/\n\n         (c) 2013-2024 \x1B[1mFergus McDowall\x1B[0m\n\n         index contains \x1B[1m0\x1B[0m documents\n         created \x1B[1mA_DATE\x1B[0m\n         last updated \x1B[1mA_DATE\x1B[0m\n         listening on port \x1B[1m3030\x1B[0m\n     \n`
+        `
+   ${figlet
+     .textSync('NORCH', { font: 'isometric1', horizontalLayout: 'full' })
+     .replace(/(?:\n)/g, '\n   ')}
+
+         (c) 2013-${new Date().getFullYear()} \x1b[1mFergus McDowall\x1b[0m
+
+         index contains \x1b[1m0\x1b[0m documents
+         created \x1b[1mA_DATE\x1b[0m
+         last updated \x1b[1mA_DATE\x1b[0m
+         listening on port \x1b[1m3030\x1b[0m
+     \n`
       ),
     data => t.equal(data.toString(), '/STATUS\n'),
     data => t.equal(data.toString(), '/PUT\n'),

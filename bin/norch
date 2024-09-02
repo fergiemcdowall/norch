@@ -6,17 +6,30 @@ import { readFileSync } from 'node:fs'
 
 const program = new Command()
 
-const configFile = JSON.parse(readFileSync('./src/config.json', 'utf8'))
+const defaultConfigFile = JSON.parse(
+  readFileSync('./src/defaultConfig.json', 'utf8')
+)
 const version = JSON.parse(readFileSync('package.json', 'utf8')).version
 
 program
   .version(version)
-  .option('-p, --port <port>', 'specify the port', Number, configFile.port)
+  .option(
+    '-c, --configFile <configFile>',
+    'specify a configuration file',
+    String,
+    undefined
+  )
   .option(
     '-n, --name <name>',
     'specify the name/location of the index',
     String,
-    configFile.name
+    defaultConfigFile.name
+  )
+  .option(
+    '-p, --port <port>',
+    'specify the port',
+    Number,
+    defaultConfigFile.port
   )
   .parse(process.argv)
 
