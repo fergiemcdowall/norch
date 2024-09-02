@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 
+import path from 'path'
 import { Command } from 'commander'
 import { Norch } from '../src/Norch.js'
+import { fileURLToPath } from 'url'
 import { readFileSync } from 'node:fs'
 
 const program = new Command()
 
 const defaultConfigFile = JSON.parse(
-  readFileSync('./src/defaultConfig.json', 'utf8')
+  readFileSync(new URL('../defaultConfig.json', import.meta.url))
 )
+
 const version = JSON.parse(readFileSync('package.json', 'utf8')).version
 
 program

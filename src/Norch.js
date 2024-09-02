@@ -12,7 +12,7 @@ import figlet from 'figlet'
 export class Norch {
   constructor (ops = {}) {
     const defaultConfigFile = JSON.parse(
-      readFileSync('./src/defaultConfig.json', 'utf8')
+      readFileSync(new URL('../defaultConfig.json', import.meta.url))
     )
     const userConfigFile = this.readUserConfigFile(ops.configFile)
     this.options = Object.assign(defaultConfigFile, ops, userConfigFile)
