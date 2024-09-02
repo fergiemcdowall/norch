@@ -21,7 +21,7 @@ test('start a norch', async t => {
           .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/g, 'A_DATE'),
         `
    ${figlet
-     .textSync('NORCH', { font: 'isometric1', horizontalLayout: 'full' })
+     .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
      .replace(/(?:\n)/g, '\n   ')}
 
          (c) 2013-${new Date().getFullYear()} \x1b[1mFergus McDowall\x1b[0m
