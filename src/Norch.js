@@ -10,7 +10,7 @@ import { resolve, dirname } from 'path'
 import figlet from 'figlet'
 
 export class Norch {
-  constructor (ops = {}) {
+  constructor(ops = {}) {
     const defaultConfigFile = JSON.parse(
       readFileSync('./src/defaultConfig.json', 'utf8')
     )
@@ -53,7 +53,7 @@ export class Norch {
       console.log(
         `
    ${figlet
-     .textSync('NORCH', { font: 'isometric1', horizontalLayout: 'full' })
+     .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
      .replace(/(?:\n)/g, '\n   ')}
 
          (c) 2013-${new Date(
