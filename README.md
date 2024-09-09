@@ -1,4 +1,4 @@
-[![NPM version][npm-version-image]][npm-url] [![MIT License][license-image]][license-url] [![Join the chat at https://gitter.im/fergiemcdowall/search-index](https://badges.gitter.im/fergiemcdowall/search-index.svg)](https://gitter.im/fergiemcdowall/search-index?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm-version-image]][npm-url] [![MIT License][license-image]][license-url] 
 
 
 ```
@@ -17,43 +17,43 @@
 ```
 
 
-# Installation
+# Installation and usage
 
-In the terminal type `npm i norch` (or install globally with `npm i -g norch`)
+## Terminal
 
-
-# Usage
-
-## Invoking from the terminal
-
-Simply type `norch` and a norch server will be available at
-http://localhost:3030 (or the port/url of your choosing)
-
+To install and invoke from the terminal type `npx norch`.
 
 The following options are available
 
 ```
-  -V, --version           output the version number
-  -p, --port              specify the port (default: 3030)
-  -i, --index             specify the location of the index (default: "norch-data")
-  -h, --help              display help
+  -V, --version                  output the version number
+  -c, --configFile <configFile>  specify a configuration file
+  -n, --name <name>              specify the name/location of the index (default: "norch-data")
+  -p, --port <port>              specify the port (default: 3030)
+  -h, --help                     display help for command
 ```
 
-## Invoking from a node application
+
+## Node
+
+To include norch in an existing node project, use `npm i norch`. Norch
+can then be invoked from within a node application like so:
 
 ```javascript
-const norch = require('norch')
+import { Norch } from 'norch'
 
-const myNorch = await norch(options)
+const myNorch = new Norch(ops) // same options as terminal
 ```
 
-## API
+# API
 
-See the online [API documentation](http://fergiemcdowall.github.io/norch/www_root/api.html), or open `/api.html` on your own norch server.
+Checkout the OpenAPI documentation
+[online](http://fergiemcdowall.github.io/norch/www_root/api.html), or
+at [`/api.html`](http://localhost:3030) on your own norch server.
 
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-url]: https://github.com/fergiemcdowall/norch/blob/master/README.md#license
 
 [npm-url]: https://npmjs.org/package/norch
-[npm-version-image]: http://img.shields.io/npm/v/norch.svg?style=flat
+[npm-version-image]: http://img.shields.io/npm/v/norch
