@@ -63,6 +63,7 @@ const swaggerDefinition = {
         },
         description: 'Describes one or many BUCKETs'
       },
+
       Documents: {
         in: 'query',
         name: 'DOCUMENTS',
@@ -283,7 +284,7 @@ const swaggerDefinition = {
 }
 
 writeFileSync(
-  'www_root/openapi-norch-' + version + '.json',
+  'www_root/api/openapi-norch-' + version + '.json',
   JSON.stringify(
     swaggerJsdoc({
       swaggerDefinition,
