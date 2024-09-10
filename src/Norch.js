@@ -80,7 +80,7 @@ export class Norch {
       console.info(pathname)
 
       if (req.method === 'GET') {
-        const fileDirs = ['/']
+        const fileDirs = ['/', '/api/']
 
         // default to index.html when only file-directory is specified
         if (fileDirs.includes(pathname)) pathname += 'index.html'
