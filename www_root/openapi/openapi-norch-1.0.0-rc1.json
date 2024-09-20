@@ -17,7 +17,7 @@
       "url": "{URL}",
       "variables": {
         "URL": {
-          "default": "http://localhost:3030"
+          "default": "http://localhost:3030/API"
         }
       }
     }

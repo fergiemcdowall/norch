@@ -3,6 +3,9 @@ import test from 'tape'
 import { Norch } from '../src/Norch.js'
 import { writeFile, readFile } from 'fs/promises'
 
+const urlRoot1 = 'http://localhost:3030/API/'
+const urlRoot2 = 'http://localhost:3031/API/'
+
 const filename = process.env.SANDBOX + '/IMPORT-EXPORT-test'
 
 test(filename, t => {
@@ -23,7 +26,7 @@ test('start a norch PUT and EXPORT contents', async t => {
     })
   )
 
-  await fetch('http://localhost:3030/PUT', {
+  await fetch(urlRoot1 + 'PUT', {
     method: 'POST',
     body: JSON.stringify([
       {
@@ -45,7 +48,7 @@ test('start a norch PUT and EXPORT contents', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
+  await fetch(urlRoot1 + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(json, {
@@ -65,7 +68,7 @@ test('start a norch PUT and EXPORT contents', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3030/EXPORT')
+  await fetch(urlRoot1 + 'EXPORT')
     .then(res => res.json())
     .then(async json => {
       t.isEquivalent(json.slice(0, -2), [
@@ -110,11 +113,11 @@ test('start another norch and IMPORT', async t => {
     })
   )
 
-  await fetch('http://localhost:3030/SEARCH?STRING=interesting document').catch(
-    () => t.pass('correct- this index is no longer available')
+  await fetch(urlRoot1 + 'SEARCH?STRING=interesting document').catch(() =>
+    t.pass('correct- this index is no longer available')
   )
 
-  await fetch('http://localhost:3031/SEARCH?STRING=interesting document')
+  await fetch(urlRoot2 + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(json, {
@@ -125,14 +128,16 @@ test('start another norch and IMPORT', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3031/IMPORT', {
+  await fetch(urlRoot2 + 'IMPORT', {
     method: 'POST',
     body: await readFile(filename + '-export.json')
   })
+    .then(res => {
+      if (!res.ok) t.error('fetch failed')
+    })
+    .catch(t.error)
 
-  await new Promise(resolve => setTimeout(resolve, 1000))
-
-  await fetch('http://localhost:3031/SEARCH?STRING=interesting document')
+  await fetch('http://localhost:3031/API/SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(json, {

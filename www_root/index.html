@@ -17,19 +17,26 @@
      /:/  /       \::/  /       |:|  |        \:\__\         /:/  /    
      \/__/         \/__/         \|__|         \/__/         \/__/   
 
-      (c) 2013-<span id="spanYear"></span> <b>Fergus McDowall</b>, <a href="https://github.com/fergiemcdowall/norch">Contribute or ask a question</a>
+      (c) 2013-<span id="spanYear"></span> <b>Fergus McDowall</b>, <a href="https://github.com/fergiemcdowall/norch" target="_blank">Contribute or ask a question</a>
 
-      index contains <a href="/STATUS" id="DOCUMENT_COUNT">0</a> documents
-      created <a href="/STATUS" id="CREATED"></a>
-      last updated <a href="/STATUS" id="LAST_UPDATED"></a>
+      index contains <a href="/API/ALL_DOCUMENTS" id="DOCUMENT_COUNT">0</a> documents
+      created <a href="/API/STATUS" id="CREATED"></a>
+      last updated <a href="/API/STATUS" id="LAST_UPDATED"></a>
 
-      Try out the <a href="/api/api.html">API</a>!
+      Try out the <a href="/openapi/">API</a>!
 
+
+      
+      <b>QUICKSTART</b>
+
+      <a href="/utils/uploader/">Upload documents from the browser</a>
+      
+      
     </pre>
 
     <script>
       
-      fetch('/STATUS')
+      fetch('/API/STATUS')
          .then(response => response.json())
          .then(({ CREATED, DOCUMENT_COUNT, LAST_UPDATED }) => {
            document.getElementById('DOCUMENT_COUNT').innerHTML = DOCUMENT_COUNT

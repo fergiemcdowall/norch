@@ -1,6 +1,8 @@
 import test from 'tape'
 import { Norch } from '../src/Norch.js'
 
+const urlRoot = 'http://localhost:3030/API/'
+
 const filename = process.env.SANDBOX + '/run-from-node-test'
 
 test(filename, t => {
@@ -19,7 +21,7 @@ test('start a norch', async t => {
     })
   )
 
-  await fetch('http://localhost:3030/STATUS')
+  await fetch(urlRoot + 'STATUS')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(
@@ -29,7 +31,7 @@ test('start a norch', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3030/PUT', {
+  await fetch(urlRoot + 'PUT', {
     method: 'POST',
     body: JSON.stringify([
       {
@@ -51,7 +53,7 @@ test('start a norch', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
+  await fetch(urlRoot + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(json, {

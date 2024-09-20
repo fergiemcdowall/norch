@@ -1,9 +1,10 @@
 export class API {
-  constructor (index, sendResponse, events) {
-    this.index = index
-    this.sendResponse = sendResponse
+  constructor(index, sendResponse, events, logResponse) {
     this.events = events
+    this.index = index
+    this.logResponse = logResponse
     this.ready = false
+    this.sendResponse = sendResponse
     events.on('ready', () => (this.ready = true))
   }
 
@@ -19,10 +20,20 @@ export class API {
 
   param = (req, name) => this.params(req, name)[0]
 
-  sendJSONResponse = (body, res) => {
+  sendJSONResponse = (body, req, res, statusCode) => {
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
-    res.writeHead(200)
+    res.writeHead(statusCode)
     res.end(JSON.stringify(body, null, 2))
+    this.logResponse(statusCode, req.url)
+  }
+
+  internalServerError = (e, req, res) => {
+    this.sendJSONResponse(
+      { status: 500, error: 'Internal Server Error' },
+      req,
+      res,
+      500
+    )
   }
 
   /**
@@ -40,7 +51,7 @@ export class API {
   ALL_DOCUMENTS = (req, res) =>
     this.index
       .ALL_DOCUMENTS(+this.params(req, 'LIMIT') || undefined)
-      .then(ad => this.sendJSONResponse(ad, res))
+      .then(ad => this.sendJSONResponse(ad, req, res, 200))
 
   /**
    * @openapi
@@ -57,7 +68,7 @@ export class API {
   BUCKETS = (req, res) =>
     this.index
       .BUCKETS(...this.params(req, 'TOKENSPACE'))
-      .then(b => this.sendJSONResponse(b, res))
+      .then(b => this.sendJSONResponse(b, req, res, 200))
 
   /**
    * @openapi
@@ -74,7 +85,7 @@ export class API {
   DELETE = (req, res) =>
     this.index
       .DELETE(...this.params(req, 'ID'))
-      .then(idxRes => this.sendJSONResponse(idxRes, res))
+      .then(idxRes => this.sendJSONResponse(idxRes, req, res, 200))
 
   // TODO: DELETE_RAW?
 
@@ -98,7 +109,7 @@ export class API {
     this.index
       .DICTIONARY(...this.params(req, 'TOKENSPACE'))
       .then(d => d.slice(0, +this.params(req, 'LIMIT')))
-      .then(d => this.sendJSONResponse(d, res))
+      .then(d => this.sendJSONResponse(d, req, res, 200))
 
   /**
    * @openapi
@@ -120,7 +131,7 @@ export class API {
     this.index
       .DISTINCT(...this.params(req, 'TOKENSPACE'))
       .then(d => d.slice(0, +this.params(req, 'LIMIT')))
-      .then(d => this.sendJSONResponse(d, res))
+      .then(d => this.sendJSONResponse(d, req, res, 200))
 
   /**
    * @openapi
@@ -137,7 +148,7 @@ export class API {
   DOCUMENTS = (req, res) =>
     this.index
       .DOCUMENTS(...this.params(req, 'ID'))
-      .then(b => this.sendJSONResponse(b, res))
+      .then(b => this.sendJSONResponse(b, req, res, 200))
 
   // TODO: DOCUMENT_VECTORS?
 
@@ -153,7 +164,7 @@ export class API {
    *         description: A dump of the index
    */
   EXPORT = (req, res) =>
-    this.index.EXPORT().then(exp => this.sendJSONResponse(exp, res))
+    this.index.EXPORT().then(exp => this.sendJSONResponse(exp, req, res, 200))
 
   /**
    * @openapi
@@ -173,7 +184,7 @@ export class API {
   FACETS = (req, res) =>
     this.index
       .FACETS(...this.params(req, 'TOKENSPACE'))
-      .then(b => this.sendJSONResponse(b, res))
+      .then(b => this.sendJSONResponse(b, req, res, 200))
 
   /**
    * @openapi
@@ -186,7 +197,7 @@ export class API {
    *         description: An array of field names
    */
   FIELDS = (req, res) =>
-    this.index.FIELDS().then(f => this.sendJSONResponse(f, res))
+    this.index.FIELDS().then(f => this.sendJSONResponse(f, req, res, 200))
 
   /**
    * @openapi
@@ -199,7 +210,9 @@ export class API {
    *         description: Successfully deleted
    */
   FLUSH = (req, res) =>
-    this.index.FLUSH().then(idxRes => this.sendJSONResponse(idxRes, res))
+    this.index
+      .FLUSH()
+      .then(idxRes => this.sendJSONResponse(idxRes, req, res, 200))
 
   /**
    * @openapi
@@ -225,7 +238,7 @@ export class API {
     req.on('end', () =>
       this.index
         .IMPORT(JSON.parse(body))
-        .then(idxRes => this.sendJSONResponse(idxRes, res))
+        .then(idxRes => this.sendJSONResponse(idxRes, req, res, 200))
     )
   }
 
@@ -244,7 +257,7 @@ export class API {
   MAX = (req, res) =>
     this.index
       .MAX(...this.params(req, 'TOKENSPACE'))
-      .then(m => this.sendJSONResponse(m, res))
+      .then(m => this.sendJSONResponse(m, req, res, 200))
 
   /**
    * @openapi
@@ -261,7 +274,7 @@ export class API {
   MIN = (req, res) =>
     this.index
       .MIN(JSON.parse(this.params(req, 'TOKENSPACE'))) // TODO: is this right?
-      .then(m => this.sendJSONResponse(m, res))
+      .then(m => this.sendJSONResponse(m, req, res, 200))
 
   /**
    * @openapi
@@ -331,12 +344,14 @@ export class API {
 
   // curl -H "Content-Type: application/json" --data @testdata.json http://localhost:8081/put
   PUT = (req, res) => {
+    console.log('I AM HEEEEEREEE IN PUT')
     let body = ''
     req.on('data', d => (body += d.toString()))
     req.on('end', () =>
       this.index
         .PUT(JSON.parse(body))
-        .then(idxRes => this.sendJSONResponse(idxRes, res))
+        .then(idxRes => this.sendJSONResponse(idxRes, req, res, 200))
+        .catch(e => this.internalServerError(e, req, res))
     )
   }
 
@@ -366,7 +381,7 @@ export class API {
     req.on('end', () =>
       this.index
         .PUT_RAW(JSON.parse(body))
-        .then(idxRes => this.sendJSONResponse(idxRes, res))
+        .then(idxRes => this.sendJSONResponse(idxRes, req, res, 200))
     )
   }
 
@@ -462,7 +477,7 @@ export class API {
         SCORE: this.param(req, 'SCORE'),
         SORT: this.param(req, 'SORT')
       })
-      .then(r => this.sendJSONResponse(r, res))
+      .then(r => this.sendJSONResponse(r, req, res, 200))
 
   /**
    * @openapi
@@ -497,7 +512,7 @@ export class API {
       .SEARCH(this.param(req, 'STRING').trim().split(/\s+/), {
         PAGE: this.param(req, 'PAGE')
       })
-      .then(r => this.sendJSONResponse(r, res))
+      .then(r => this.sendJSONResponse(r, req, res, 200))
 
   /**
    * @openapi
@@ -523,7 +538,9 @@ export class API {
           CREATED: new Date(CREATED),
           LAST_UPDATED: new Date(LAST_UPDATED)
         },
-        res
+        req,
+        res,
+        200
       )
     )
 
@@ -541,8 +558,8 @@ export class API {
    */
   READY = (req, res) =>
     this.ready
-      ? this.sendJSONResponse({ READY: true }, res)
+      ? this.sendJSONResponse({ READY: true }, req, res, 200)
       : this.events.on('ready', () =>
-        this.sendJSONResponse({ READY: true }, res)
-      )
+          this.sendJSONResponse({ READY: true }, req, res, 200)
+        )
 }

@@ -5,12 +5,12 @@ import { API } from './API.js'
 import { SearchIndex } from 'search-index'
 import { createServer } from 'node:http'
 import { fileURLToPath } from 'url'
-import { readdirSync, readFileSync } from 'node:fs'
+import { createReadStream, readdirSync, readFileSync } from 'node:fs'
 import { resolve, dirname } from 'path'
 import figlet from 'figlet'
 
 export class Norch {
-  constructor (ops = {}) {
+  constructor(ops = {}) {
     const defaultConfigFile = JSON.parse(
       readFileSync(new URL('../defaultConfig.json', import.meta.url))
     )
@@ -22,7 +22,12 @@ export class Norch {
       this.splash(this.index, this.options.port)
         .then(() =>
           this.createNorchServer(
-            new API(this.index, this.sendResponse, this.events)
+            new API(
+              this.index,
+              this.sendResponse,
+              this.events,
+              this.logResponse
+            )
           )
         )
         .then(server => {
@@ -33,6 +38,9 @@ export class Norch {
         })
     })
   }
+
+  logResponse = (statusCode, path) =>
+    console.info('[' + statusCode + '] ' + path)
 
   readUserConfigFile = location => {
     // if no user config defined, simply return an empty object
@@ -50,7 +58,7 @@ export class Norch {
       index.CREATED(),
       index.DOCUMENT_COUNT()
     ]).then(res =>
-      console.log(
+      console.info(
         `
    ${figlet
      .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
@@ -69,32 +77,26 @@ export class Norch {
     )
 
   sendResponse = (body, res, type) => {
-    res.setHeader('Content-Type', type + '; charset=utf-8')
+    res.setHeader('Content-Type', type)
     res.writeHead(200)
     res.end(body)
   }
 
   createNorchServer = api =>
     createServer((req, res) => {
+      // strip hostname, protocol, url-params, etc
       let pathname = new URL(req.url, `http://${req.headers.host}/`).pathname
-      console.info(pathname)
-
-      if (req.method === 'GET') {
-        const fileDirs = ['/', '/api/']
-
-        // default to index.html when only file-directory is specified
-        if (fileDirs.includes(pathname)) pathname += 'index.html'
-
-        // Serve up static files files
-        if (this.files(fileDirs).includes(pathname)) {
-          console.log(dirname(fileURLToPath(import.meta.url)))
-          return this.sendFileResponse(pathname, res)
-        }
+      // Serve up API requests
+      if (pathname.split('/')[1] === 'API') {
+        return api[pathname.split('/')[2]]
+          ? api[pathname.split('/')[2]](req, res)
+          : this._404(res, pathname)
       }
 
-      return api[pathname.slice(1)]
-        ? api[pathname.slice(1)](req, res)
-        : this._404(req, res)
+      // serve up file requests (default to index.html when only file-directory
+      // is specified)
+      if (/^\/.*\/$|^\/$/.test(pathname)) pathname += 'index.html'
+      return this.sendFileResponse(pathname, res)
     })
 
   files = dirs => {
@@ -107,17 +109,24 @@ export class Norch {
     return dirs.map(d => getFilesInDir(d)).flat()
   }
 
-  sendFileResponse = (name, res) =>
-    this.sendResponse(
-      readFileSync(
-        resolve(dirname(fileURLToPath(import.meta.url)), '../www_root' + name)
-      ) + '',
-      res,
-      mime.getType(name)
+  sendFileResponse = (pathname, res) => {
+    const s = createReadStream(
+      resolve(dirname(fileURLToPath(import.meta.url)), '../www_root' + pathname)
     )
+    s.on('open', () => {
+      res.setHeader('Content-Type', mime.getType(pathname))
+      s.pipe(res)
+      console.info('[200] ' + pathname)
+    })
+    s.on('error', e => {
+      // TODO: codes other than 404 here.
+      this._404(res, pathname)
+    })
+  }
 
   // ("404: page not found")
-  _404 = (req, res) => {
+  _404 = (res, pathname) => {
+    console.info('[404] ' + pathname)
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
     res.writeHead(404)
     res.end('<html><h1>404</h1>nothing here bro!</html>')

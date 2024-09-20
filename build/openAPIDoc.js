@@ -29,7 +29,7 @@ const swaggerDefinition = {
       url: '{URL}',
       variables: {
         URL: {
-          default: 'http://localhost:3030'
+          default: 'http://localhost:3030/API'
         }
       }
     }
@@ -284,7 +284,7 @@ const swaggerDefinition = {
 }
 
 writeFileSync(
-  'www_root/api/openapi-norch-' + version + '.json',
+  'www_root/openapi/openapi-norch-' + version + '.json',
   JSON.stringify(
     swaggerJsdoc({
       swaggerDefinition,

@@ -2,6 +2,8 @@ import test from 'tape'
 import { Norch } from '../src/Norch.js'
 import { eng } from 'stopword'
 
+const urlRoot = 'http://localhost:3030/API/'
+
 const filename = process.env.SANDBOX + '/PUT-test'
 
 test(filename, t => {
@@ -22,7 +24,32 @@ test('start a norch', async t => {
     })
   )
 
-  await fetch('http://localhost:3030/PUT', {
+  await fetch(urlRoot + 'DOESNOTEXIST_EFEWIHOIEWHFOIW', {
+    method: 'POST'
+  })
+    .then(res => t.equals(res.status, 404))
+    .catch(t.error)
+
+  await fetch(urlRoot + 'DOESNOTEXIST_SLDJSADOSA', {
+    method: 'GET'
+  })
+    .then(res => t.equals(res.status, 404))
+    .catch(t.error)
+
+  await fetch(urlRoot + 'PUT', {
+    method: 'POST',
+    body: JSON.stringify('THIS IS DEFINITELY NOT JSON')
+  })
+    .then(res => {
+      t.equals(res.status, 500)
+      return res.json()
+    })
+    .then(json =>
+      t.isEquivalent(json, { status: 500, error: 'Internal Server Error' })
+    )
+    .catch(t.error)
+
+  await fetch(urlRoot + 'PUT', {
     method: 'POST',
     body: JSON.stringify([
       {
@@ -44,7 +71,7 @@ test('start a norch', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3030/EXPORT')
+  await fetch(urlRoot + 'EXPORT')
     .then(res => res.json())
     .then(async json => {
       t.isEquivalent(json.slice(0, -2), [
@@ -69,7 +96,7 @@ test('start a norch', async t => {
     })
     .catch(t.error)
 
-  await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
+  await fetch(urlRoot + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(json, {

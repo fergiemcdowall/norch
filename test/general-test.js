@@ -3,6 +3,7 @@ import { spawn } from 'child_process'
 import figlet from 'figlet'
 
 const filename = process.env.SANDBOX + '/general-test'
+const urlRoot = 'http://localhost:3030/API/'
 
 let proc
 
@@ -32,9 +33,13 @@ test('start a norch', async t => {
          listening on port \x1b[1m3030\x1b[0m
      \n`
       ),
-    data => t.equal(data.toString(), '/STATUS\n'),
-    data => t.equal(data.toString(), '/PUT\n'),
-    data => t.equal(data.toString(), '/SEARCH\n')
+    data => t.equal(data.toString(), '[200] /API/STATUS\n'),
+    data => t.equal(data.toString(), '[200] /API/PUT\n'),
+    data =>
+      t.equal(
+        data.toString(),
+        '[200] /API/SEARCH?STRING=interesting%20document\n'
+      )
   ]
 
   t.plan(8)
@@ -52,7 +57,7 @@ test('start a norch', async t => {
   // magical delay to give norch time to spin up...
   await delay(500)
 
-  await fetch('http://localhost:3030/STATUS')
+  await fetch(urlRoot + 'STATUS')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(Object.keys(json), [
@@ -64,7 +69,7 @@ test('start a norch', async t => {
     )
 
     .catch(t.error)
-  await fetch('http://localhost:3030/PUT', {
+  await fetch(urlRoot + 'PUT', {
     method: 'POST',
     body: JSON.stringify([
       {
@@ -86,7 +91,7 @@ test('start a norch', async t => {
     )
     .catch(t.error)
 
-  await fetch('http://localhost:3030/SEARCH?STRING=interesting document')
+  await fetch(urlRoot + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(

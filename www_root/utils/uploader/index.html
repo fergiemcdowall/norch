@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>Uploader</title>
+    <style>
+      textarea:invalid {
+        border: 3px solid red;
+        background: pink;
+      }
+
+      textarea:valid {
+        border: 2px solid lime;
+      }
+
+      #loading {
+        align-items: center;      /* Vertically centers the image */
+        background-color: rgba(0, 0, 0, 0.3);
+        display: none;
+        height: 100%;            /* Full viewport height */
+        justify-content: center;  /* Horizontally centers the image */
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;             /* Full viewport width */
+        z-index: 9999;
+      }
+
+      #loading-img {
+        max-width: 400px;  /* Optional: Ensures the image is responsive */
+      }
+      
+    </style>
+  </head>
+  <body>
+
+    <div id="loading">
+      <img id="loading-img" src="loading.webp" alt="loading...">
+    </div>
+
+    <label for="server-root">Server root:</label><br>
+    <input id="server-root" />
+    <p />
+    <td>
+      <label for="json">Documents:</label>
+      <br>
+      <textarea id="json"
+                name="json"
+                oninput="validateInput()"
+                placeholder="Paste or type in an array of objects in json format"
+                rows=1
+                style="width:100%;"
+                type="text"></textarea>
+    </td>
+    <p />
+    <button onclick="PUT()" id="put">PUT</button>    
+  </body>
+  <script>
+
+    const el = id => document.getElementById(id)
+
+    const input = () => JSON.stringify(JSON.parse(el('json').value), null, 2)
+
+    // resize textarea to its contents
+    const resizeTextarea = () => el('json').setAttribute(
+      'rows', el('json')
+        .value.split(/\r|\r\n|\n/).length
+    )
+        
+    const PUT = () => {
+      el('loading').style['display'] = 'flex'
+      fetch(new Request(el('server-root').value + "/API/PUT", {
+        body: input(),
+        headers: {
+          "Access-Control-Allow-Origin":"*"
+        },
+        method: "POST"
+      })).then(res => res.json()).then(json => {
+        console.log(json)
+        el('loading').style['display'] = 'none'
+        el('json').value = ''
+        resizeTextarea()
+      }).catch(console.error)
+    }
+
+    const validateInput = () => {
+      // set invalid, not submittable as default
+      el('put').disabled = true
+      el('json').setCustomValidity('')
+      
+      validation: try {
+        if (el('json').value == '') break validation // valid, but not submittable
+        el('json').value = input()
+        el('put').disabled = false // if no error thrown, json is valid
+      }
+      catch (e) {
+        el('json').setCustomValidity(e.toString()) // JSON is invalid
+      }
+      finally {
+        resizeTextarea()
+      }
+    }
+    
+    window.onload = () => {
+      validateInput()
+      el('server-root').value = window.location.protocol + '//' + window.location.host
+    }
+      
+  </script>
+</html>
