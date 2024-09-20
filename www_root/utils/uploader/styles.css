@@ -1,0 +1,39 @@
+textarea:invalid {
+  border: 3px solid red;
+  background: pink;
+}
+
+textarea:valid {
+  border: 2px solid lime;
+}
+
+#loading {
+  align-items: center;      /* Vertically centers the image */
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  height: 100%;            /* Full viewport height */
+  justify-content: center;  /* Horizontally centers the image */
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;             /* Full viewport width */
+  z-index: 9999;
+}
+
+#loading-img {
+  max-width: 400px;  /* Optional: Ensures the image is responsive */
+}
+
+#server-response-details {
+  display: none;
+}
+
+label {
+  display: block;
+}
+
+summary {
+  cursor: pointer;
+}
+
+summary:hover { text-decoration: underline; }

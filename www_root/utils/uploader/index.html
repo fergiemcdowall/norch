@@ -1,34 +1,8 @@
 <html>
   <head>
     <title>Uploader</title>
-    <style>
-      textarea:invalid {
-        border: 3px solid red;
-        background: pink;
-      }
-
-      textarea:valid {
-        border: 2px solid lime;
-      }
-
-      #loading {
-        align-items: center;      /* Vertically centers the image */
-        background-color: rgba(0, 0, 0, 0.3);
-        display: none;
-        height: 100%;            /* Full viewport height */
-        justify-content: center;  /* Horizontally centers the image */
-        left: 0;
-        position: fixed;
-        top: 0;
-        width: 100%;             /* Full viewport width */
-        z-index: 9999;
-      }
-
-      #loading-img {
-        max-width: 400px;  /* Optional: Ensures the image is responsive */
-      }
-      
-    </style>
+    <script type="text/javascript" src="uploader.js"></script>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
 
@@ -36,12 +10,10 @@
       <img id="loading-img" src="loading.webp" alt="loading...">
     </div>
 
-    <label for="server-root">Server root:</label><br>
-    <input id="server-root" />
-    <p />
-    <td>
+    <details>
+      <summary>Click here to upload by manually inputting documents</summary>
+      <p>
       <label for="json">Documents:</label>
-      <br>
       <textarea id="json"
                 name="json"
                 oninput="validateInput()"
@@ -49,60 +21,74 @@
                 rows=1
                 style="width:100%;"
                 type="text"></textarea>
-    </td>
-    <p />
-    <button onclick="PUT()" id="put">PUT</button>    
-  </body>
-  <script>
+      </p>
 
-    const el = id => document.getElementById(id)
+      <p>
+        <button onclick="PUTFromTextArea()" id="put">/PUT</button>
+      </p>
+    </details>
 
-    const input = () => JSON.stringify(JSON.parse(el('json').value), null, 2)
+    <details>
+      <summary>Click here to upload from a file</summary>
+      <p>
+        <input type="file" id="file-upload">
+      </p>
 
-    // resize textarea to its contents
-    const resizeTextarea = () => el('json').setAttribute(
-      'rows', el('json')
-        .value.split(/\r|\r\n|\n/).length
-    )
-        
-    const PUT = () => {
-      el('loading').style['display'] = 'flex'
-      fetch(new Request(el('server-root').value + "/API/PUT", {
-        body: input(),
-        headers: {
-          "Access-Control-Allow-Origin":"*"
-        },
-        method: "POST"
-      })).then(res => res.json()).then(json => {
-        console.log(json)
-        el('loading').style['display'] = 'none'
-        el('json').value = ''
-        resizeTextarea()
-      }).catch(console.error)
-    }
+      <p>
+        <button onclick="PUTFromFile()" id="put">/PUT</button>
+      </p>
+    </details>
 
-    const validateInput = () => {
-      // set invalid, not submittable as default
-      el('put').disabled = true
-      el('json').setCustomValidity('')
-      
-      validation: try {
-        if (el('json').value == '') break validation // valid, but not submittable
-        el('json').value = input()
-        el('put').disabled = false // if no error thrown, json is valid
-      }
-      catch (e) {
-        el('json').setCustomValidity(e.toString()) // JSON is invalid
-      }
-      finally {
-        resizeTextarea()
-      }
-    }
+    <details>
+      <summary>Click here to upload via the openapi GUI</summary>
+      <p>
+        <a href="http://localhost:3030/openapi/#operations-WRITE-post_PUT">
+          Openapi docs
+        </a>
+      </p>
+    </details>
     
-    window.onload = () => {
-      validateInput()
-      el('server-root').value = window.location.protocol + '//' + window.location.host
-    }
+    <details>
+      <summary>Click here for cURL</summary>
+      <p>
+        (Assuming that you are running norch on http://localhost:3030).
+      </p>
       
-  </script>
+      <p>
+        Send data in curl command itself:
+        
+        <pre>
+curl -X 'POST' \
+  'http://localhost:3030/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '[
+  {
+    "_id": "string"
+  }
+]'
+        </pre>
+      </p>
+
+      <p>
+
+        Send file data from curl command:
+        
+        <pre>
+curl -X 'POST' \
+  'http://localhost:3030/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  --data '@myFile.json'
+        </pre>
+      </p>
+
+
+    </details>
+
+
+    
+    <pre id="server-response" />
+
+  </body>
 </html>
