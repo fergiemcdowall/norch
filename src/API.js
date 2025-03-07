@@ -24,12 +24,12 @@ export class API {
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
     res.writeHead(statusCode)
     res.end(JSON.stringify(body, null, 2))
-    this.logResponse(statusCode, req.url)
+    this.logResponse(statusCode, req.url, req.timestamp)
   }
 
   internalServerError = (e, req, res) => {
     this.sendJSONResponse(
-      { status: 500, error: 'Internal Server Error' },
+      { status: 500, error: e.toString() || 'Internal Server Error' },
       req,
       res,
       500
@@ -344,15 +344,20 @@ export class API {
 
   // curl -H "Content-Type: application/json" --data @testdata.json http://localhost:8081/put
   PUT = (req, res) => {
-    console.log('I AM HEEEEEREEE IN PUT')
     let body = ''
     req.on('data', d => (body += d.toString()))
-    req.on('end', () =>
-      this.index
-        .PUT(JSON.parse(body))
+    req.on('end', () => {
+      let parsedData
+      try {
+        parsedData = JSON.parse(body)
+      } catch (e) {
+        return this.internalServerError(e, req, res)
+      }
+      return this.index
+        .PUT(parsedData)
         .then(idxRes => this.sendJSONResponse(idxRes, req, res, 200))
         .catch(e => this.internalServerError(e, req, res))
-    )
+    })
   }
 
   // TODO: how to deal with PUT pipelines?
@@ -467,8 +472,11 @@ export class API {
     this.index
       .QUERY(this.param(req, 'QUERY'), {
         BUCKETS: this.params(req, 'BUCKETS'),
-        DOCUMENTS: this.param(req, 'DOCUMENTS'),
-        // // TODO: option to suppress empty facets?
+        DOCUMENTS:
+          this.param(req, 'DOCUMENTS') === undefined
+            ? true // if not specified, default to true
+            : this.param(req, 'DOCUMENTS'),
+        // TODO: option to suppress empty facets?
         FACETS: this.params(req, 'FACETS').length
           ? this.params(req, 'FACETS')
           : undefined,
@@ -510,7 +518,8 @@ export class API {
   SEARCH = (req, res) =>
     this.index
       .SEARCH(this.param(req, 'STRING').trim().split(/\s+/), {
-        PAGE: this.param(req, 'PAGE')
+        PAGE: this.param(req, 'PAGE') || undefined,
+        DOCUMENTS: true
       })
       .then(r => this.sendJSONResponse(r, req, res, 200))
 
@@ -533,6 +542,7 @@ export class API {
     ]).then(([LAST_UPDATED, CREATED, DOCUMENT_COUNT]) =>
       this.sendJSONResponse(
         {
+          VERSION: process.env.npm_package_version,
           READY: true,
           DOCUMENT_COUNT,
           CREATED: new Date(CREATED),

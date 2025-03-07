@@ -50,16 +50,13 @@
     
     <details>
       <summary>Click here for cURL</summary>
-      <p>
-        (Assuming that you are running norch on http://localhost:3030).
-      </p>
       
       <p>
         Send data in curl command itself:
         
         <pre>
 curl -X 'POST' \
-  'http://localhost:3030/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
+'<script>document.write(window.location.protocol + '//' + window.location.host)</script>/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '[
@@ -76,7 +73,7 @@ curl -X 'POST' \
         
         <pre>
 curl -X 'POST' \
-  'http://localhost:3030/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
+  '<script>document.write(window.location.protocol + '//' + window.location.host)</script>/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   --data '@myFile.json'

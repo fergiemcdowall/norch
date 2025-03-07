@@ -15,21 +15,20 @@
      |:/:/  /   \:\  /:/  /     |:|::/  /   \:\  \            \::/  /  
      |::/  /     \:\/:/  /      |:|\/__/     \:\  \           /:/  /   
      /:/  /       \::/  /       |:|  |        \:\__\         /:/  /    
-     \/__/         \/__/         \|__|         \/__/         \/__/   
-
+     \/__/         \/__/         \|__|         \/__/         \/__/   <a href="https://www.npmjs.com/package/norch/v/" id="VERSION">0</a>
+      
       (c) 2013-<span id="spanYear"></span> <b>Fergus McDowall</b>, <a href="https://github.com/fergiemcdowall/norch" target="_blank">Contribute or ask a question</a>
 
-      index contains <a href="/API/ALL_DOCUMENTS" id="DOCUMENT_COUNT">0</a> documents
+      index contains <a href="/API/ALL_DOCUMENTS?LIMIT=10" id="DOCUMENT_COUNT">0</a> documents
       created <a href="/API/STATUS" id="CREATED"></a>
       last updated <a href="/API/STATUS" id="LAST_UPDATED"></a>
 
-      Try out the <a href="/openapi/">API</a>!
-
-
       
-      <b>QUICKSTART</b>
+      <span style="font-weight:bold;text-decoration:underline;">QUICKSTART</span>
 
-      <a href="/utils/uploader/">Upload documents from the browser</a>
+      <a href="/utils/uploader/">Upload</a>
+      <a href="/utils/search/">Search</a>
+      <a href="/openapi/">Full API</a>
       
       
     </pre>
@@ -37,12 +36,15 @@
     <script>
       
       fetch('/API/STATUS')
-         .then(response => response.json())
-         .then(({ CREATED, DOCUMENT_COUNT, LAST_UPDATED }) => {
-           document.getElementById('DOCUMENT_COUNT').innerHTML = DOCUMENT_COUNT
-           document.getElementById('CREATED').innerHTML = new Date(CREATED).toString()
-           document.getElementById('LAST_UPDATED').innerHTML = new Date(LAST_UPDATED).toString()
-         })
+        .then(response => response.json())
+        .then(({ CREATED, DOCUMENT_COUNT, LAST_UPDATED, VERSION }) => {
+          document.getElementById('VERSION').innerHTML = "v" + VERSION.toString()
+          document.getElementById('VERSION').href = "https://www.npmjs.com/package/norch/v/"
+            + VERSION.toString()
+          document.getElementById('DOCUMENT_COUNT').innerHTML = DOCUMENT_COUNT.toString()
+          document.getElementById('CREATED').innerHTML = new Date(CREATED).toString()
+          document.getElementById('LAST_UPDATED').innerHTML = new Date(LAST_UPDATED).toString()
+        })
 
       window.onload = () => document.getElementById("spanYear").innerHTML = new Date().getFullYear();
             

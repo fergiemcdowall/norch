@@ -39,8 +39,13 @@ export class Norch {
     })
   }
 
-  logResponse = (statusCode, path) =>
-    console.info('[' + statusCode + '] ' + path)
+  // logResponse = (statusCode, path) =>
+  //   console.info('[' + statusCode + '] ' + path)
+
+  logResponse = (statusCode, path, reqTimestamp) =>
+    console.info(
+      '[' + statusCode + '] ' + (Date.now() - reqTimestamp) + 'ms ' + path
+    )
 
   readUserConfigFile = location => {
     // if no user config defined, simply return an empty object
@@ -62,7 +67,9 @@ export class Norch {
         `
    ${figlet
      .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
-     .replace(/(?:\n)/g, '\n   ')}
+     .replace(/(?:\n)/g, '\n   ')}\x1b[1m${
+          process.env.npm_package_version
+        }\x1b[0m
 
          (c) 2013-${new Date(
            res[0]
@@ -84,6 +91,8 @@ export class Norch {
 
   createNorchServer = api =>
     createServer((req, res) => {
+      req.timestamp = Date.now()
+
       // strip hostname, protocol, url-params, etc
       let pathname = new URL(req.url, `http://${req.headers.host}/`).pathname
       // Serve up API requests
