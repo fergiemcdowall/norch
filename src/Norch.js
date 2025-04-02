@@ -8,8 +8,11 @@ import { fileURLToPath } from 'url'
 import { createReadStream, readdirSync, readFileSync } from 'node:fs'
 import { resolve, dirname } from 'path'
 import figlet from 'figlet'
+import { packageVersion } from './version.js'
 
 export class Norch {
+  static version = packageVersion
+
   constructor(ops = {}) {
     const defaultConfigFile = JSON.parse(
       readFileSync(new URL('../defaultConfig.json', import.meta.url))
@@ -39,9 +42,6 @@ export class Norch {
     })
   }
 
-  // logResponse = (statusCode, path) =>
-  //   console.info('[' + statusCode + '] ' + path)
-
   logResponse = (statusCode, path, reqTimestamp) =>
     console.info(
       '[' + statusCode + '] ' + (Date.now() - reqTimestamp) + 'ms ' + path
@@ -67,9 +67,7 @@ export class Norch {
         `
    ${figlet
      .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
-     .replace(/(?:\n)/g, '\n   ')}\x1b[1m${
-          process.env.npm_package_version
-        }\x1b[0m
+     .replace(/(?:\n)/g, '\n   ')}\x1b[1m${packageVersion}\x1b[0m
 
          (c) 2013-${new Date(
            res[0]
@@ -105,7 +103,7 @@ export class Norch {
       // serve up file requests (default to index.html when only file-directory
       // is specified)
       if (/^\/.*\/$|^\/$/.test(pathname)) pathname += 'index.html'
-      return this.sendFileResponse(pathname, res)
+      return this.sendFileResponse(pathname, req.timestamp, res)
     })
 
   files = dirs => {
@@ -118,14 +116,14 @@ export class Norch {
     return dirs.map(d => getFilesInDir(d)).flat()
   }
 
-  sendFileResponse = (pathname, res) => {
+  sendFileResponse = (pathname, timestamp, res) => {
     const s = createReadStream(
       resolve(dirname(fileURLToPath(import.meta.url)), '../www_root' + pathname)
     )
     s.on('open', () => {
       res.setHeader('Content-Type', mime.getType(pathname))
       s.pipe(res)
-      console.info('[200] ' + pathname)
+      this.logResponse(200, pathname, timestamp)
     })
     s.on('error', e => {
       // TODO: codes other than 404 here.
@@ -135,7 +133,8 @@ export class Norch {
 
   // ("404: page not found")
   _404 = (res, pathname) => {
-    console.info('[404] ' + pathname)
+    this.logResponse(404, pathname, Date.now())
+    // console.info('[404] ' + pathname)
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
     res.writeHead(404)
     res.end('<html><h1>404</h1>nothing here bro!</html>')

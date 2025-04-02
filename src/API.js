@@ -1,3 +1,5 @@
+import { packageVersion } from './version.js'
+
 export class API {
   constructor(index, sendResponse, events, logResponse) {
     this.events = events
@@ -347,6 +349,7 @@ export class API {
     let body = ''
     req.on('data', d => (body += d.toString()))
     req.on('end', () => {
+      console.log(body.length)
       let parsedData
       try {
         parsedData = JSON.parse(body)
@@ -542,7 +545,7 @@ export class API {
     ]).then(([LAST_UPDATED, CREATED, DOCUMENT_COUNT]) =>
       this.sendJSONResponse(
         {
-          VERSION: process.env.npm_package_version,
+          VERSION: packageVersion,
           READY: true,
           DOCUMENT_COUNT,
           CREATED: new Date(CREATED),

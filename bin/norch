@@ -1,4 +1,4 @@
-#!/usr/bin/env node --inspect
+#!/usr/bin/env node
 
 import path from 'path'
 import { Command } from 'commander'
@@ -12,10 +12,8 @@ const defaultConfigFile = JSON.parse(
   readFileSync(new URL('../defaultConfig.json', import.meta.url))
 )
 
-const version = JSON.parse(readFileSync('package.json', 'utf8')).version
-
 program
-  .version(version)
+  .version(Norch.version)
   .option(
     '-c, --configFile <configFile>',
     'specify a configuration file',
