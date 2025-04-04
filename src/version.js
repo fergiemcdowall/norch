@@ -1,1 +1,1 @@
-export const packageVersion = '1.0.0-rc1'
+export const packageVersion = '1.0.0-rc2'

@@ -23,7 +23,7 @@ test('start a norch', async t => {
         `
    ${figlet
      .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
-     .replace(/(?:\n)/g, '\n   ')}\x1B[1m1.0.0-rc1\x1B[0m
+     .replace(/(?:\n)/g, '\n   ')}\x1B[1m1.0.0-rc2\x1B[0m
 
          (c) 2013-${new Date().getFullYear()} \x1b[1mFergus McDowall\x1b[0m
 
