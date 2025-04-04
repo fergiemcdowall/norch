@@ -25,7 +25,7 @@ test('start a norch', async t => {
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(
-        ['READY', 'DOCUMENT_COUNT', 'CREATED', 'LAST_UPDATED'],
+        ['VERSION', 'READY', 'DOCUMENT_COUNT', 'CREATED', 'LAST_UPDATED'],
         Object.keys(json)
       )
     )
@@ -56,20 +56,27 @@ test('start a norch', async t => {
   await fetch(urlRoot + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
     .then(json =>
-      t.isEquivalent(json, {
-        RESULT: [
-          {
-            _id: 'one',
-            _match: [
-              { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
-              { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
-            ],
-            _score: 2.2
-          }
-        ],
-        RESULT_LENGTH: 1,
-        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
-      })
+      t.isEquivalent(
+        json,
+
+        {
+          QUERY: { AND: ['interesting', 'document'] },
+          OPTIONS: { SCORE: { TYPE: 'TFIDF' }, SORT: true, DOCUMENTS: true },
+          RESULT_LENGTH: 1,
+          RESULT: [
+            {
+              _id: 'one',
+              _match: [
+                { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
+                { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
+              ],
+              _score: 2.2,
+              _doc: { _id: 'one', content: 'this is an interesting document' }
+            }
+          ],
+          PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
+        }
+      )
     )
     .catch(t.error)
 

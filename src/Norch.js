@@ -13,7 +13,7 @@ import { packageVersion } from './version.js'
 export class Norch {
   static version = packageVersion
 
-  constructor(ops = {}) {
+  constructor (ops = {}) {
     const defaultConfigFile = JSON.parse(
       readFileSync(new URL('../defaultConfig.json', import.meta.url))
     )

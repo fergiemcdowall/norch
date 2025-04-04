@@ -38,10 +38,10 @@
     "node": ">=18"
   },
   "scripts": {
-    "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js && npm run lint",
+    "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js",
     "generateVersionModule": "echo export const packageVersion = \\\"${npm_package_version}\\\" > src/version.js",
     "lint": "standard --fix src build test",
-    "test": "export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && tape test/*-test.js && npm run lint",
+    "test": "npm run generateVersionModule && npm run lint && export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && tape test/*-test.js && npm run build-openapi-docs",
     "test-cli": "./bin/norch -p 9090 -i test/sandbox/norch-cli & sleep 5s && bats test/test.bats && kill $!",
     "start": "./bin/norch"
   },

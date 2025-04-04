@@ -45,7 +45,10 @@ test('start a norch', async t => {
       return res.json()
     })
     .then(json =>
-      t.isEquivalent(json, { status: 500, error: 'Internal Server Error' })
+      t.isEquivalent(json, {
+        status: 500,
+        error: 'TypeError: docs.map is not a function'
+      })
     )
     .catch(t.error)
 
@@ -75,7 +78,7 @@ test('start a norch', async t => {
     .then(res => res.json())
     .then(async json => {
       t.isEquivalent(json.slice(0, -2), [
-        { key: ['CREATED_WITH'], value: 'search-index@5.1.3' },
+        { key: ['CREATED_WITH'], value: 'search-index@6.0.1' },
         { key: ['DOCUMENT_COUNT'], value: 2 },
         {
           key: ['DOC_RAW', 'one'],
@@ -100,6 +103,9 @@ test('start a norch', async t => {
     .then(res => res.json())
     .then(json =>
       t.isEquivalent(json, {
+        QUERY: { AND: ['interesting', 'document'] },
+        OPTIONS: { SCORE: { TYPE: 'TFIDF' }, SORT: true, DOCUMENTS: true },
+        RESULT_LENGTH: 1,
         RESULT: [
           {
             _id: 'one',
@@ -107,10 +113,10 @@ test('start a norch', async t => {
               { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
               { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
             ],
-            _score: 2.2
+            _score: 2.2,
+            _doc: { _id: 'one', content: 'this is an interesting document' }
           }
         ],
-        RESULT_LENGTH: 1,
         PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
       })
     )

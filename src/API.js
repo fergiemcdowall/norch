@@ -1,7 +1,7 @@
 import { packageVersion } from './version.js'
 
 export class API {
-  constructor(index, sendResponse, events, logResponse) {
+  constructor (index, sendResponse, events, logResponse) {
     this.events = events
     this.index = index
     this.logResponse = logResponse
@@ -349,7 +349,6 @@ export class API {
     let body = ''
     req.on('data', d => (body += d.toString()))
     req.on('end', () => {
-      console.log(body.length)
       let parsedData
       try {
         parsedData = JSON.parse(body)
@@ -573,6 +572,6 @@ export class API {
     this.ready
       ? this.sendJSONResponse({ READY: true }, req, res, 200)
       : this.events.on('ready', () =>
-          this.sendJSONResponse({ READY: true }, req, res, 200)
-        )
+        this.sendJSONResponse({ READY: true }, req, res, 200)
+      )
 }

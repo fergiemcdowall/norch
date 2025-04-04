@@ -23,7 +23,7 @@ test('start a norch', async t => {
         `
    ${figlet
      .textSync('NORCH', { font: 'Isometric1', horizontalLayout: 'full' })
-     .replace(/(?:\n)/g, '\n   ')}
+     .replace(/(?:\n)/g, '\n   ')}\x1B[1m1.0.0-rc1\x1B[0m
 
          (c) 2013-${new Date().getFullYear()} \x1b[1mFergus McDowall\x1b[0m
 
@@ -33,12 +33,11 @@ test('start a norch', async t => {
          listening on port \x1b[1m3030\x1b[0m
      \n`
       ),
-    data => t.equal(data.toString(), '[200] /API/STATUS\n'),
-    data => t.equal(data.toString(), '[200] /API/PUT\n'),
+    data => t.ok(/\[200\] \d+ms \/API\/STATUS\n/.test(data)),
+    data => t.ok(/\[200\] \d+ms \/API\/PUT\n/.test(data)),
     data =>
-      t.equal(
-        data.toString(),
-        '[200] /API/SEARCH?STRING=interesting%20document\n'
+      t.ok(
+        /\[200\] \d+ms \/API\/SEARCH\?STRING=interesting%20document/.test(data)
       )
   ]
 
@@ -59,16 +58,17 @@ test('start a norch', async t => {
 
   await fetch(urlRoot + 'STATUS')
     .then(res => res.json())
-    .then(json =>
-      t.isEquivalent(Object.keys(json), [
+    .then(json => {
+      return t.isEquivalent(Object.keys(json), [
+        'VERSION',
         'READY',
         'DOCUMENT_COUNT',
         'CREATED',
         'LAST_UPDATED'
       ])
-    )
-
+    })
     .catch(t.error)
+
   await fetch(urlRoot + 'PUT', {
     method: 'POST',
     body: JSON.stringify([
@@ -93,25 +93,25 @@ test('start a norch', async t => {
 
   await fetch(urlRoot + 'SEARCH?STRING=interesting document')
     .then(res => res.json())
-    .then(json =>
-      t.isEquivalent(
-        {
-          RESULT: [
-            {
-              _id: 'one',
-              _match: [
-                { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
-                { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
-              ],
-              _score: 2.2
-            }
-          ],
-          RESULT_LENGTH: 1,
-          PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
-        },
-        json
-      )
-    )
+    .then(json => {
+      t.isEquivalent(json, {
+        QUERY: { AND: ['interesting', 'document'] },
+        OPTIONS: { SCORE: { TYPE: 'TFIDF' }, SORT: true, DOCUMENTS: true },
+        RESULT_LENGTH: 1,
+        RESULT: [
+          {
+            _id: 'one',
+            _match: [
+              { FIELD: 'content', VALUE: 'document', SCORE: '1.00' },
+              { FIELD: 'content', VALUE: 'interesting', SCORE: '1.00' }
+            ],
+            _score: 2.2,
+            _doc: { _id: 'one', content: 'this is an interesting document' }
+          }
+        ],
+        PAGING: { NUMBER: 0, SIZE: 20, TOTAL: 1, DOC_OFFSET: 0 }
+      })
+    })
     .catch(t.error)
 
   proc.kill()
