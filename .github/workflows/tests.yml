@@ -2,7 +2,7 @@ name: tests
 on: [pull_request, push]
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: ['18.x', '20.x', '22.x']
