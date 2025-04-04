@@ -8,7 +8,7 @@
     "commander": "^12.1.0",
     "figlet": "^1.7.0",
     "mime": "^2.5.2",
-    "search-index": "file:../search-index",
+    "search-index": "6.0.1",
     "server-destroy": "^1.0.1"
   },
   "devDependencies": {
