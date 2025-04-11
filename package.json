@@ -38,7 +38,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build-openapi-docs": "node build/mirrorUnpkg.js && node build/openAPIDoc.js",
+    "build-openapi-docs": "rm www_root/openapi/openapi-norch* && node build/mirrorUnpkg.js && node build/openAPIDoc.js && ln -s openapi-norch-${npm_package_version}.json www_root/openapi/openapi-norch.json",
     "generateVersionModule": "echo export const packageVersion = \\\"${npm_package_version}\\\" > src/version.js",
     "lint": "standard --fix src build test",
     "test": "npm run generateVersionModule && npm run lint && export SANDBOX=test/sandbox && rm -rf $SANDBOX && mkdir $SANDBOX && date && tape test/*-test.js && npm run build-openapi-docs",

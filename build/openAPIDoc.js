@@ -10,7 +10,7 @@ const swaggerDefinition = {
     description:
       'This is the API documentation for `norch@' +
       version +
-      '`. You can use this page to get familiar with what Norch can do. If you want to try out the API calls on a server other than `localhost`, fill out the server variable below in the input box labeled `URL`',
+      '`. You can use this page to get familiar with what Norch can do. By default this OpenAPI app queries the instance of Norch running on the same root URL',
     contact: {
       email: 'fergus@norch.io'
     },
@@ -26,12 +26,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: '{URL}',
-      variables: {
-        URL: {
-          default: 'http://localhost:3030/API'
-        }
-      }
+      url: '/API'
     }
   ],
   tags: [
