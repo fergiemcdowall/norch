@@ -1,7 +1,18 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Uploader</title>
-    <script type="text/javascript" src="uploader.js"></script>
+    <script type="module">
+      import { PUTFromFile, validateInput, PUTFromTextArea } from "./uploader.js"
+      putFromFileBtn.addEventListener('click', PUTFromFile)
+      freehandJsonInput.addEventListener('input', validateInput)
+      putFromTextAreaBtn.addEventListener('click', e => {
+        PUTFromTextArea(freehandJsonInput.value)
+      })
+      // if browser initialises wit content in textarea- validate!
+      validateInput(freehandJsonInput.value)
+    </script>
+    <link rel="stylesheet" href="/node_modules/@highlightjs/cdn-assets/styles/github.min.css">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -14,9 +25,8 @@
       <summary>Click here to upload by manually inputting documents</summary>
       <p>
       <label for="json">Documents:</label>
-      <textarea id="json"
+      <textarea id="freehandJsonInput"
                 name="json"
-                oninput="validateInput()"
                 placeholder="Paste or type in an array of objects in json format"
                 rows=1
                 style="width:100%;"
@@ -24,18 +34,18 @@
       </p>
 
       <p>
-        <button onclick="PUTFromTextArea()" id="put">/PUT</button>
+        <button id="putFromTextAreaBtn">/PUT</button>
       </p>
     </details>
 
     <details>
       <summary>Click here to upload from a file</summary>
       <p>
-        <input type="file" id="file-upload">
+        <input type="file" id="fileUpload">
       </p>
 
       <p>
-        <button onclick="PUTFromFile()" id="put">/PUT</button>
+        <button id="putFromFileBtn">/PUT</button>
       </p>
     </details>
 
@@ -85,7 +95,7 @@ curl -X 'POST' \
 
 
     
-    <pre id="server-response" />
+    <pre><code id="serverResponse" class="language-json"/></pre>
 
   </body>
 </html>
