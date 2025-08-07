@@ -1,22 +1,70 @@
 #!/usr/bin/env node
 
-var program = require('commander')
-program.version(require('../package.json').version)
-  .option('-o, --siOptions <siOptions>', 'specify search-index options', String, '{}')
-  .option('-p, --port <port>', 'specify the port, defaults to PORT or 3030', Number, process.env.PORT || 3030)
-  .option('-i, --norchHome <norchHome>', 'specify the name of the directory that stores the data and the logs, defaults to norch-index', String, 'norch-index')
-  .option('-l, --logLevel <logLevel>', 'specify the loglevel- silly | debug | verbose | info | warn | error', String, 'info')
-  .option('-m, --machineReadable', 'machine readable, logo not printed, all stdout/stderr is JSON')
+import path from 'path'
+import { Command } from 'commander'
+import { Norch } from '../src/Norch.js'
+import { fileURLToPath } from 'url'
+import { readFileSync } from 'node:fs'
+
+const program = new Command()
+
+// internal defaults
+const defaultConfigFile = JSON.parse(
+  readFileSync(new URL('../defaultConfig.json', import.meta.url))
+)
+
+program
+  .version(Norch.version)
+  .option(
+    '-c, --configFile <configFile>',
+    'specify a configuration file',
+    String,
+    undefined
+  )
+  .option(
+    '-n, --name <name>',
+    'specify the name/location of the index',
+    String,
+    defaultConfigFile.name
+  )
+  .option(
+    '-p, --port <port>',
+    'specify the port',
+    Number,
+    defaultConfigFile.port
+  )
   .parse(process.argv)
 
-var options = {}
-options.norchHome = program.norchHome
-options.logLevel = program.logLevel
-options.port = program.port
-options.machineReadable = program.machineReadable || false
-options.siOptions = JSON.parse(program.siOptions)
+// if user has provided a config file name. Attempt to find file and read
+// contents in:
+const userConfigFile = program.opts().configFile
+  ? JSON.parse(
+      readFileSync(
+        new URL(
+          process.cwd() + '/' + program.opts().configFile,
+          import.meta.url
+        )
+      )
+    )
+  : {}
 
-require('../lib/norch.js')(options, function(err, norch) {
-  //what to do here?
-  return norch
+// parse out CLI options that user has actually specified (disregard commander
+// defaults)
+const userSpecifiedCLIOptions = Object.entries(program.opts()).reduce(
+  (acc, [key, value]) =>
+    program.getOptionValueSource(key) === 'cli'
+      ? { ...acc, [key]: value }
+      : acc,
+  {}
+)
+
+// console.log(userConfigFile)
+// console.log(userSpecifiedCLIOptions)
+// console.log(program.opts())
+// console.log({ ...program.opts(), ...userConfigFile, ...userSpecifiedCLIOptions })
+
+const n = new Norch({
+  ...program.opts(), // 3rd priority: commander.js defaults
+  ...userConfigFile, // 2nd priority: user config file
+  ...userSpecifiedCLIOptions // 1st priority: user command line options
 })

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Uploader</title>
+    <script type="module">
+      import { PUTFromFile, validateInput, PUTFromTextArea } from "./uploader.js"
+      putFromFileBtn.addEventListener('click', PUTFromFile)
+      freehandJsonInput.addEventListener('input', validateInput)
+      putFromTextAreaBtn.addEventListener('click', e => {
+        PUTFromTextArea(freehandJsonInput.value)
+      })
+      // if browser initialises wit content in textarea- validate!
+      validateInput(freehandJsonInput.value)
+    </script>
+    <link rel="stylesheet" href="/node_modules/@highlightjs/cdn-assets/styles/github.min.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+
+    <div id="loading">
+      <img id="loading-img" src="loading.webp" alt="loading...">
+    </div>
+
+    <details>
+      <summary>Click here to upload by manually inputting documents</summary>
+      <p>
+      <label for="json">Documents:</label>
+      <textarea id="freehandJsonInput"
+                name="json"
+                placeholder="Paste or type in an array of objects in json format"
+                rows=1
+                style="width:100%;"
+                type="text"></textarea>
+      </p>
+
+      <p>
+        <button id="putFromTextAreaBtn">/PUT</button>
+      </p>
+    </details>
+
+    <details>
+      <summary>Click here to upload from a file</summary>
+      <p>
+        <input type="file" id="fileUpload">
+      </p>
+
+      <p>
+        <button id="putFromFileBtn">/PUT</button>
+      </p>
+    </details>
+
+    <details>
+      <summary>Click here to upload via the openapi GUI</summary>
+      <p>
+        <a href="http://localhost:3030/openapi/#operations-WRITE-post_PUT">
+          Openapi docs
+        </a>
+      </p>
+    </details>
+    
+    <details>
+      <summary>Click here for cURL</summary>
+      
+      <p>
+        Send data in curl command itself:
+        
+        <pre>
+curl -X 'POST' \
+'<script>document.write(window.location.protocol + '//' + window.location.host)</script>/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '[
+  {
+    "_id": "string"
+  }
+]'
+        </pre>
+      </p>
+
+      <p>
+
+        Send file data from curl command:
+        
+        <pre>
+curl -X 'POST' \
+  '<script>document.write(window.location.protocol + '//' + window.location.host)</script>/API/PUT?caseSensitive=true&nGrams=%7B%0A%20%20%22lengths%22%3A%20%5B%0A%20%20%20%201%0A%20%20%5D%2C%0A%20%20%22join%22%3A%20%22%20%22%2C%0A%20%20%22fields%22%3A%20%5B%5D%0A%7D&replace=%7B%0A%20%20%22fields%22%3A%20%5B%5D%2C%0A%20%20%22values%22%3A%20%7B%7D%0A%7D&tokenSplitRegex=%2F%5B%5Cp%7BL%7D%5Cd%5D%2B%2Fgu' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  --data '@myFile.json'
+        </pre>
+      </p>
+
+
+    </details>
+
+
+    
+    <pre><code id="serverResponse" class="language-json"/></pre>
+
+  </body>
+</html>

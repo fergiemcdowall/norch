@@ -1,8 +1,10 @@
-.vagrant
 .DS_Store
-node_modules
-si
-test/sandbox
+.vagrant
 log-*
-snapshots
+node_modules
+norch-data
 norch-index
+si
+snapshots
+test/sandbox
+tmp

@@ -1,0 +1,39 @@
+<!--
+
+    ref:
+
+    https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+    https://github.com/swagger-api/swagger-ui/issues/3229#issuecomment-396442225
+    
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Norch API (open API format)"
+      />
+    <title>Norch API</title>
+    <link rel="stylesheet" href="./swagger-ui.css" />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="./swagger-ui-bundle.js" crossorigin></script>
+    <script src="./swagger-ui-standalone-preset.js" crossorigin></script>
+    <script>
+      window.onload = () => {
+        window.ui = SwaggerUIBundle({
+          url: './openapi-norch.json',
+          dom_id: '#swagger-ui',
+          presets: [
+            SwaggerUIBundle.presets.apis
+          ]
+        });
+      };
+    </script>
+  </body>
+</html>
+
