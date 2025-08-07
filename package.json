@@ -1,6 +1,6 @@
 {
   "name": "norch",
-  "version": "1.0.0-rc5",
+  "version": "1.0.1",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./src/main",
   "files": [
