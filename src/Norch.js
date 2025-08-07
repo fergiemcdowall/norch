@@ -92,6 +92,10 @@ export class Norch {
     createServer((req, res) => {
       req.timestamp = Date.now()
 
+      // TODO: at some point in the future allow http headers to be set in
+      // startup options
+      res.setHeader('Access-Control-Allow-Origin', '*') // Allow any origin (CORS)
+
       // strip hostname, protocol, url-params, etc
       let pathname = new URL(req.url, `http://${req.headers.host}/`).pathname
       // Serve up API requests
