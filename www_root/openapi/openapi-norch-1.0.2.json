@@ -2,11 +2,11 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Norch",
-    "description": "This is the API documentation for `norch@1.0.1`. You can use this page to get familiar with what Norch can do. In order to actually run the queries, spin up your own server on `http://localhost:3030` using `npx norch`",
+    "description": "This is the API documentation for `norch@1.0.2`. You can use this page to get familiar with what Norch can do. By default this OpenAPI app queries the instance of Norch running on the same root URL",
     "contact": {
       "email": "fergus@norch.io"
     },
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "externalDocs": {
     "description": "Find out more about Swagger",
@@ -14,12 +14,7 @@
   },
   "servers": [
     {
-      "url": "localhost:3030/API",
-      "description": "Local development server"
-    },
-    {
-      "url": "/API",
-      "description": "Use if browsing these docs on an existing Norch server"
+      "url": "/API"
     }
   ],
   "tags": [
@@ -151,7 +146,10 @@
                 },
                 "DIRECTION": {
                   "type": "string",
-                  "enum": ["ASCENDING", "DESCENDING"],
+                  "enum": [
+                    "ASCENDING",
+                    "DESCENDING"
+                  ],
                   "default": "DESCENDING"
                 },
                 "FIELD": {
@@ -295,7 +293,9 @@
   "paths": {
     "/ALL_DOCUMENTS": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Return all documents in the index",
         "parameters": [
           {
@@ -311,7 +311,9 @@
     },
     "/BUCKETS": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Aggregate documents into predefined buckets",
         "parameters": [
           {
@@ -327,7 +329,9 @@
     },
     "/DELETE": {
       "delete": {
-        "tags": ["DELETE"],
+        "tags": [
+          "DELETE"
+        ],
         "summary": "Delete specified documents by id",
         "parameters": [
           {
@@ -343,7 +347,9 @@
     },
     "/DICTIONARY": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Returns tokens described by TOKENSPACE",
         "description": "If no TOKENSPACE is described, return all tokens in index. DICTIONARY returns only the tokens, whereas DISTINCT returns field-token pairs",
         "parameters": [
@@ -363,7 +369,9 @@
     },
     "/DISTINCT": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Returns all field-token pairs in the given TOKENSPACE",
         "description": "If no TOKENSPACE is described, return all field-token pairs in the index. DICTIONARY returns only the tokens, whereas DISTINCT returns field-token pairs.",
         "parameters": [
@@ -383,7 +391,9 @@
     },
     "/DOCUMENTS": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Returns all documents with the given ids",
         "parameters": [
           {
@@ -399,7 +409,9 @@
     },
     "/EXPORT": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Dumps the index to text",
         "description": "See also IMPORT",
         "responses": {
@@ -411,7 +423,9 @@
     },
     "/FACETS": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Aggregate documents into their distinct values",
         "description": "Take every unique field-value pair of a TOKENSPACE and return every document for which that field-value pair is present",
         "parameters": [
@@ -428,7 +442,9 @@
     },
     "/FIELDS": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Return all field names known to the index",
         "responses": {
           "200": {
@@ -439,7 +455,9 @@
     },
     "/FLUSH": {
       "delete": {
-        "tags": ["DELETE"],
+        "tags": [
+          "DELETE"
+        ],
         "summary": "Delete everything in the index",
         "responses": {
           "200": {
@@ -450,7 +468,9 @@
     },
     "/IMPORT": {
       "post": {
-        "tags": ["WRITE"],
+        "tags": [
+          "WRITE"
+        ],
         "summary": "Import an index",
         "requestBody": {
           "description": "An index dump to be imported (generate this dump using EXPORT)",
@@ -474,7 +494,9 @@
     },
     "/MAX": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Get maximum value from the given TOKENSPACE",
         "parameters": [
           {
@@ -490,7 +512,9 @@
     },
     "/MIN": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Get minimum value from the given TOKENSPACE",
         "parameters": [
           {
@@ -506,7 +530,9 @@
     },
     "/PUT": {
       "post": {
-        "tags": ["WRITE"],
+        "tags": [
+          "WRITE"
+        ],
         "summary": "Add documents to the index",
         "requestBody": {
           "description": "An array of objects (documents). If objects contain a property called `_id` then that will be used to identify the document, if not then an `_id` field with be automatically assigned.",
@@ -539,7 +565,9 @@
                 "schema": {
                   "type": "object",
                   "default": {
-                    "lengths": [1],
+                    "lengths": [
+                      1
+                    ],
                     "join": " ",
                     "fields": []
                   }
@@ -607,7 +635,9 @@
     },
     "/PUT_RAW": {
       "post": {
-        "tags": ["WRITE"],
+        "tags": [
+          "WRITE"
+        ],
         "summary": "Add documents to the index",
         "requestBody": {
           "description": "Adds a raw file that is not tokenized or indexed",
@@ -631,7 +661,9 @@
     },
     "/QUERY": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Query the index",
         "description": "Query objects can be composed of any combination of boolean verbs (AND, OR, NOT) combined with query options",
         "parameters": [
@@ -681,7 +713,9 @@
     },
     "/SEARCH": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Search the index",
         "description": "This is a utility endpoint equivalent to\n`?QUERY={AND:[\"search\",\"terms\"]}&SCORE=TFIDF&SORT=true`\n",
         "parameters": [
@@ -724,7 +758,9 @@
     },
     "/STATUS": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Display information about the index",
         "description": "Display information about the index",
         "responses": {
@@ -736,7 +772,9 @@
     },
     "/READY": {
       "get": {
-        "tags": ["READ"],
+        "tags": [
+          "READ"
+        ],
         "summary": "Is index ready?",
         "description": "Returns `{ READY: true }` when index is ready\n",
         "responses": {
