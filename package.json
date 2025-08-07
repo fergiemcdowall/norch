@@ -1,8 +1,13 @@
 {
   "name": "norch",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0-rc4",
   "description": "A search engine based on Node.js and LevelDB",
   "main": "./src/main",
+  "files": [
+    "bin/*",
+    "src/*",
+    "www_root/*"
+  ],
   "dependencies": {
     "@highlightjs/cdn-assets": "^11.11.1",
     "commander": "^12.1.0",
