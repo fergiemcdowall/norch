@@ -2,11 +2,11 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Norch",
-    "description": "This is the API documentation for `norch@1.0.2`. You can use this page to get familiar with what Norch can do. By default this OpenAPI app queries the instance of Norch running on the same root URL",
+    "description": "This is the API documentation for `norch@1.0.1`. You can use this page to get familiar with what Norch can do. In order to try out the endpoints run norch on `http://localhost:3030` using `npx norch`.",
     "contact": {
       "email": "fergus@norch.io"
     },
-    "version": "1.0.2"
+    "version": "1.0.1"
   },
   "externalDocs": {
     "description": "Find out more about Swagger",
@@ -14,7 +14,12 @@
   },
   "servers": [
     {
-      "url": "/API"
+      "url": "http://localhost:3030/API",
+      "description": "local development version of Norch"
+    },
+    {
+      "url": "/API",
+      "description": "Queries the instance of Norch running on the same domain as this documentation (if it exists)"
     }
   ],
   "tags": [

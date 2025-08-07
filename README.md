@@ -48,7 +48,7 @@ const myNorch = new Norch(ops) // same options as terminal
 # API
 
 Checkout the OpenAPI documentation
-[online](http://fergiemcdowall.github.io/norch/www_root/api/api.html),
+[online](https://fergiemcdowall.github.io/norch/www_root/openapi/),
 or [on your own norch server](http://localhost:3030).
 
 

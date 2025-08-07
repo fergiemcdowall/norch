@@ -10,7 +10,7 @@ const swaggerDefinition = {
     description:
       'This is the API documentation for `norch@' +
       version +
-      '`. You can use this page to get familiar with what Norch can do. By default this OpenAPI app queries the instance of Norch running on the same root URL',
+      '`. You can use this page to get familiar with what Norch can do. In order to try out the endpoints run norch on `http://localhost:3030` using `npx norch`.',
     contact: {
       email: 'fergus@norch.io'
     },
@@ -26,7 +26,13 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: '/API'
+      url: 'http://localhost:3030/API',
+      description: 'local development version of Norch'
+    },
+    {
+      url: '/API',
+      description:
+        'Queries the instance of Norch running on the same domain as this documentation (if it exists)'
     }
   ],
   tags: [
