@@ -17,8 +17,9 @@ export class Norch {
     const defaultConfigFile = JSON.parse(
       readFileSync(new URL('../defaultConfig.json', import.meta.url))
     )
-    const userConfigFile = this.readUserConfigFile(ops.configFile)
-    this.options = Object.assign(defaultConfigFile, ops, userConfigFile)
+
+    this.options = Object.assign(defaultConfigFile, ops)
+
     this.index = new SearchIndex(this.options)
     this.events = new EventEmitter()
     this.index.EVENTS.on('ready', () => {

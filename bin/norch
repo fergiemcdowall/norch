@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs'
 
 const program = new Command()
 
+// internal defaults
 const defaultConfigFile = JSON.parse(
   readFileSync(new URL('../defaultConfig.json', import.meta.url))
 )
@@ -34,4 +35,36 @@ program
   )
   .parse(process.argv)
 
-const n = new Norch(program.opts())
+// if user has provided a config file name. Attempt to find file and read
+// contents in:
+const userConfigFile = program.opts().configFile
+  ? JSON.parse(
+      readFileSync(
+        new URL(
+          process.cwd() + '/' + program.opts().configFile,
+          import.meta.url
+        )
+      )
+    )
+  : {}
+
+// parse out CLI options that user has actually specified (disregard commander
+// defaults)
+const userSpecifiedCLIOptions = Object.entries(program.opts()).reduce(
+  (acc, [key, value]) =>
+    program.getOptionValueSource(key) === 'cli'
+      ? { ...acc, [key]: value }
+      : acc,
+  {}
+)
+
+// console.log(userConfigFile)
+// console.log(userSpecifiedCLIOptions)
+// console.log(program.opts())
+// console.log({ ...program.opts(), ...userConfigFile, ...userSpecifiedCLIOptions })
+
+const n = new Norch({
+  ...program.opts(), // 3rd priority: commander.js defaults
+  ...userConfigFile, // 2nd priority: user config file
+  ...userSpecifiedCLIOptions // 1st priority: user command line options
+})
