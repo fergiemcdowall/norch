@@ -17,8 +17,11 @@
 ```
 
 Norch is a stand alone search server that can be installed with
-npm. It uses the `search-index` query language which integrates easily
+npm. It uses the [`search-index`](https://github.com/fergiemcdowall/search-index) query language which integrates easily
 with JavaScript.
+
+Use Norch when you need a fast and lightweight backend to your search
+applications.
 
 # Quickstart
 
