@@ -16,40 +16,40 @@
 
 ```
 
+Norch is a stand alone search server that can be installed with
+npm. It uses the `search-index` query language which integrates easily
+with JavaScript.
 
-# Installation and usage
+# Quickstart
 
-## Terminal
+ - In a terminal type `npx norch`
+ - Add documents by going to quickstart on your
+   [locally installed norch](http://localhost:3030/utils/uploader/)
+   and upload. (here is
+   some [test data](/data/movies.json)) 
+ - Search by going to quickstart on your
+   [locally installed norch](http://localhost:3030/utils/search/)
+ - For advanced use check out the [openapi endpoints](http://localhost:3030/openapi/) 
 
-To install and invoke from the terminal type `npx norch`.
+# Terminal
 
-The following options are available
+Type `npx norch` (append `-h` to display help) 
 
-```
-  -V, --version                  output the version number
-  -c, --configFile <configFile>  specify a configuration file
-  -n, --name <name>              specify the name/location of the index (default: "norch-data")
-  -p, --port <port>              specify the port (default: 3030)
-  -h, --help                     display help for command
-```
+# Node
 
-
-## Node
-
-To include norch in an existing node project, use `npm i norch`. Norch
-can then be invoked from within a node application like so:
+To use norch programatically within a node project, install with `npm i
+norch` and invoke like so:
 
 ```javascript
 import { Norch } from 'norch'
-
-const myNorch = new Norch(ops) // same options as terminal
+const myNorch = new Norch(ops)
 ```
 
 # API
 
 Checkout the OpenAPI documentation
 [online](https://fergiemcdowall.github.io/norch/www_root/openapi/),
-or [on your own norch server](http://localhost:3030).
+or [on your own norch server](http://localhost:3030/openapi/).
 
 
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
