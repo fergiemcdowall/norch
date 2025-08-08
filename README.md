@@ -26,7 +26,7 @@ with JavaScript.
  - Add documents by going to quickstart on your
    [locally installed norch](http://localhost:3030/utils/uploader/)
    and upload. (here is
-   some [test data](/data/movies.json)) 
+   some [test data](/test/data/movies.json)) 
  - Search by going to quickstart on your
    [locally installed norch](http://localhost:3030/utils/search/)
  - For advanced use check out the [openapi endpoints](http://localhost:3030/openapi/) 
